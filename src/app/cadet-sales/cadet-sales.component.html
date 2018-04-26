@@ -1,0 +1,136 @@
+<div class="container">
+<h2>Sales for {{cadetName}}</h2>
+<div class="ui statistic">
+    <div class="value">
+      {{totalSales}}
+    </div>
+    <div class="label">
+      Sales
+    </div>
+  </div>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui card fluid">
+        <div class="content">
+          <a class="ui red right ribbon label">New Sale</a>
+        </div>
+        <form class="ui form">
+            <div class="field">
+              <label>Buyer Last Name</label>
+              <input type="text" name="purchaser-last" placeholder="Buyer Last Name" id="buyerLast" [(ngModel)]="buyerLast">
+            </div>
+            <div class="field">
+                <label>Buyer First Name</label>
+                <input type="text" name="purchaser" placeholder="Buyer First Name" [(ngModel)]="buyerFirst">
+              </div>
+              <br/>
+              <label>Ticket Number: </label>
+                <div class="ui action input">
+                    <input type="number" name="buyer-ticket" placeholder="Ticket Purchased" [(ngModel)]="ticketNumber">
+                    <button class="ui right labeled icon button" (click)="initBulkOrder()">
+                      <i class="boxes icon"></i>
+                      Bulk Order
+                    </button>
+                  </div>
+                  <br/>
+                  <br/>
+            <div class="field">
+                <label>Phone Number</label>
+                <input type="tel" pattern="^\d{4}-\d{3}-\d{4}$" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="buyerPhone">
+              </div>
+          </form>
+        <div class="extra content">
+          <button class="ui button" (click)="addSale(currentCadet)">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <br/>
+    <br/>
+    <div class="ui icon input">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search Sales..." [(ngModel)]="query">
+      </div>
+    <table class="ui center aligned striped tablet stackable table">
+        <thead>
+          <tr>
+            <th>TicketNumber</th>
+            <th>Buyer</th>
+            <th>BuyerPhone</th>
+            <th>SaleCompletedDate</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of sales | async | search:'TicketNumber,Buyer':query">
+            <td>{{sale.TicketNumber}}</td>
+            <td>{{sale.Buyer}}</td>
+            <td>{{sale.BuyerPhone}}</td>
+            <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
+            <td>
+            <button class="ui basic button">
+              <i class="pencil alternate icon"></i>
+                Edit
+              </button>
+              <button class="ui basic button" (click)="removeSale($event, sale)">
+                <i class="trash alternate outline icon"></i>
+                  Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br/>
+      <br/>
+      <br/>
+      <div class="ui modal" id="bulkOrderModal">
+          <i class="close icon"></i>
+          <div class="header">
+            Bulk Order
+          </div>
+          <div class="image content">
+            <div class="description">
+                <form class="ui form">
+                    <div class="field">
+                      <label>Buyer Last Name</label>
+                      <input type="text" name="bulk-purchaser-last" placeholder="Buyer Last Name" [(ngModel)]="bulk_buyerLast">
+                    </div>
+                    <div class="field">
+                        <label>Buyer First Name</label>
+                        <input type="text" name="bulk-purchaser-first" placeholder="Buyer First Name" [(ngModel)]="bulk_buyerFirst">
+                      </div>
+                      <div class="ui stackable two column grid">
+                          <div class="column">
+                            <div class="field">
+                                <label>Starting Ticket Number</label>
+                                <input type="number" name="bulk-ticket-start" placeholder="Ticket Purchased" [(ngModel)]="bulk_ticketNumberStart">
+                            </div>
+                          </div>
+                          <div class="column">
+                              <div class="field">
+                                  <label>Ending Ticket Number</label>
+                                  <input type="number" name="bulk-ticket-end" placeholder="Ticket Purchased" [(ngModel)]="bulk_ticketNumberEnd">
+                              </div>
+                          </div>
+                        </div>
+                        <br/>
+                    <div class="field">
+                        <label>Phone Number</label>
+                        <input type="tel" pattern="^\d{4}-\d{3}-\d{4}$" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="bulk_buyerPhone" required>
+                      </div>
+                  </form>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="ui black deny button">
+              Cancel
+            </div>
+            <div class="ui ok right labeled icon button" (click)="submitBulkOrder(currentCadet)">
+              Submit Orders
+              <i class="checkmark icon"></i>
+            </div>
+          </div>
+        </div>
+      

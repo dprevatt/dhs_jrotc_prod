@@ -1,0 +1,62 @@
+<div class="ui icon message">
+    <label for="file-upload" class="custom-file-upload">
+        <i class="cloud upload icon"></i> Cadet Upload
+    </label>
+    <input id="file-upload" type="file" (change)="fileChanged($event)"/>&nbsp;&nbsp;&nbsp;
+  <div class="content">
+    <div class="header">
+      Upload a list of Cadets here!
+    </div>
+    <p>Upload results will appear in the below tables ones completed.</p>
+  </div>
+</div>
+<div class="ui icon input">
+    <i class="search icon"></i>
+    <input type="text" placeholder="Search Cadets..." [(ngModel)]="query">
+  </div>
+<table class="ui striped tablet stackable table">
+  <thead>
+    <tr>
+      <th>Cadet</th>
+      <th>Company</th>
+      <!-- <th>CadetId</th> -->
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cadet of cadets | async | search:'Cadet,Company':query">
+      <td>{{cadet.Cadet}}</td>
+      <td>{{cadet.Company}}</td>
+      <!-- <td>{{cadet.CadetId}}</td>
+      <td>{{cadet.id}}</td> -->
+      <td>
+      <button class="ui basic button">
+          <i class="icon user"></i>
+          Edit
+        </button>
+        <button class="ui basic button" (click)="removeCadet($event, cadet)">
+            <i class="icon user"></i>
+            Delete
+        </button>
+        <button class="ui basic button" [routerLink]="['/CadetSales', cadet.CadetId]">
+            <i class="icon user"></i>
+            View Sales
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="ui grid">
+  <!-- <div class="one wide column">
+    Grid 1
+  </div> -->
+  <!-- <div class="four wide column">
+    Grid 2
+  </div>
+  <div class="four wide column">
+    Grid 3
+  </div>
+  <div class="four wide column">
+    Grid 4
+  </div> -->
+</div>

@@ -1,0 +1,79 @@
+<h2>Ticket Assignment</h2>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui card fluid">
+        <div class="content">
+          <a class="ui red right ribbon label">Assign Tickets</a>
+        </div>
+        <form class="ui form" name="ticketAssignmentForm">
+          <div class="ui sub header">Select a Cadet</div>
+          <div class="ui search normal dropdown" id="selectedCadet">
+            <input name="cadetSelection" type="hidden">
+            <i class="dropdown icon"></i>
+            <div class="default text">Select a Cadet</div>
+            <div class="menu">
+                <div class="item" name="selectedCadet" *ngFor="let cadet of cadets | async" [attr.data-value]="cadet.Cadet">{{cadet.Cadet}}</div>
+            </div>
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <p>Please enter a ticket range:</p>
+          <br/>
+          <div class="ui two column very relaxed grid">
+              <div class="column">
+                <!-- <p>Hello</p> -->
+                <div class="ui input" style="padding-left: 110px">
+                    <input type="number" name="ticket-start" [(ngModel)]="ticketStart">
+                  </div>
+              </div>
+              <div class="ui vertical divider">
+                thru
+              </div>
+              <div class="column">
+                <div class="ui input" style="padding-right: 80px">
+                    <input type="number" name="ticket-end" [(ngModel)]="ticketEnd">
+                  </div>
+              </div>
+            </div>
+          </form>
+          <br/>
+        <div class="extra content center aligned">
+          <button class="ui button" (click)= "assignTickets(ticketStart, ticketEnd)">Assign Tickets</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <!-- <table class="ui striped table">
+      <thead>
+        <tr>
+          <th>Cadet</th>
+          <th>Company</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cadet of cadets | async | search:'Cadet,Company':query">
+          <td>{{cadet.Cadet}}</td>
+          <td>{{cadet.Company}}</td>
+          <td>
+          <button class="ui basic button">
+              <i class="icon user"></i>
+              Edit
+            </button>
+            <button class="ui basic button" (click)="removeCadet($event, cadet)">
+                <i class="icon user"></i>
+                Delete
+            </button>
+            <button class="ui basic button" [routerLink]="['/CadetSales', cadet.CadetId]">
+                <i class="icon user"></i>
+                View Sales
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table> -->
+
+
+  

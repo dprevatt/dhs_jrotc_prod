@@ -1,0 +1,58 @@
+<div class="ui grid">
+        <div class="four wide column">
+            <form class="ui form">
+                <div class="field">
+                  <label>Cadet</label>
+                  <input type="text" name="Cadet" placeholder="Cadet Name"[(ngModel)]="CadetName">
+                </div>
+                <div class="inline fields">
+                    <label for="company-radio">Company:</label>
+                    <div class="field">
+                      <div class="ui radio checkbox" (click)="setCompany('A')">
+                        <input type="radio" name="company-radio" tabindex="0" data-value="A" class="hidden">
+                        <label>A</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui radio checkbox" (click)="setCompany('B')">
+                        <input type="radio" name="company-radio" tabindex="0" data-value="B" class="hidden">
+                        <label>B</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui radio checkbox" (click)="setCompany('C')">
+                        <input type="radio" name="company-radio" tabindex="0" data-value="C" class="hidden">
+                        <label>C</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui radio checkbox" (click)="setCompany('D')">
+                        <input type="radio" name="company-radio" tabindex="0" data-value="D" class="hidden">
+                        <label>D</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox" (click)="setCompany('E')">
+                          <input type="radio" name="company-radio" tabindex="0" data-value="E" class="hidden">
+                          <label>E</label>
+                        </div>
+                      </div>
+                  </div>
+                  <hr/>
+                <button class="ui button" (click)="enrollCadet()">Submit</button>
+                <br/>
+                <div class="Block">
+                    <input type='file' (change)="fileChanged($event)">
+                </div>
+                <br/>
+                <button class="ui button" (click)="uploadCadets()">Upload</button>
+                <br/>
+                <button class="ui button" (click)="postData()">Post Data</button>
+              </form>
+        </div>
+        <div class="four wide column"></div>
+        <div class="four wide column"></div>
+        <div class="four wide column"></div>
+      </div>
+    
+    

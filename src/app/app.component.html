@@ -1,0 +1,49 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="container">
+<div class="ui tablet stackable menu">
+    <div class="header item" [routerLink]="['/']">
+      Dothan High JROTC
+    </div>
+    <a class="item" [routerLink]="['/about']">
+      About Us
+    </a>
+    <a class="item" [routerLink]="['/TicketAssignment']">
+        Ticket Assignment
+    </a>
+    <a class="item" [routerLink]="['/CadetManagement']">
+      Cadet Management
+  </a>
+  </div>
+</div>
+  <router-outlet></router-outlet>
+<!-- <br/>
+<br/>
+<br/>
+<div *ngFor="let cad of cadets | async">
+  {{cad | json}}
+</div>
+<br/>
+<br/>
+<br/>
+<div *ngFor="let sale of singleCadetSales | async">
+    {{sale | json}}
+  </div>
+  <br/>
+  <br/>
+  <table class="ui fixed single line celled table">
+      <thead>
+        <th>Ticket Number</th>
+        <th>Buyer</th>
+        <th>Phone Number</th>
+        <th>Email Address</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of singleCadetSales | async">
+          <td>{{sale.TicketNumber}}</td>
+          <td>{{sale.Buyer.Name}}</td>
+          <td>{{sale.Buyer.ContactInformation.Phone}}</td>
+          <td>{{sale.Buyer.ContactInformation.Email}}</td>
+        </tr>
+      </tbody>
+    </table> -->
+
