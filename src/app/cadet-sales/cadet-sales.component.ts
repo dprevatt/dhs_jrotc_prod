@@ -94,7 +94,7 @@ setCurrentCadet(x) {
   console.log(collString);
 
  this.salesCollection = this.afs.collection(collString, ref => {
-   return ref.orderBy('TicketNumber');
+   return ref.orderBy('TicketNumber', 'asc');
  });
  this.sales = this.salesCollection.valueChanges();
  

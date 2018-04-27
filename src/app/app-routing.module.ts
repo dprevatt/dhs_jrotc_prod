@@ -1,3 +1,4 @@
+import { TicketLookupComponent } from './ticket-lookup/ticket-lookup.component';
 import { TicketAssignmentComponent } from './ticket-assignment/ticket-assignment.component';
 import { CadetSalesComponent } from './cadet-sales/cadet-sales.component';
 import { CadetManagementComponent } from './cadet-management/cadet-management.component';
@@ -29,6 +30,10 @@ const routes: Routes = [
     {
       path: 'TicketAssignment',
        component: TicketAssignmentComponent
+    },
+    {
+      path: 'TicketLookup',
+       component: TicketLookupComponent
     }
 ];
 

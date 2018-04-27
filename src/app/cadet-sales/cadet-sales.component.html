@@ -12,9 +12,20 @@
     <div class="ten wide column">
       <div class="ui card fluid">
         <div class="content">
-          <a class="ui red right ribbon label">New Sale</a>
+          <a class="ui red right ribbon label">New Sale for {{currentCadet}}</a>
         </div>
         <form class="ui form">
+          <div class="ui right aligned">
+              <div class="ui steps" (click)="initBulkOrder()" style="cursor: pointer;">
+                  <div class="step">
+                    <i class="boxes icon"></i>
+                    <div class="content">
+                      <div class="title">Multiple Orders</div>
+                      <div class="description">Click here to submit multiple orders for the same buyer.</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
             <div class="field">
               <label>Buyer Last Name</label>
               <input type="text" name="purchaser-last" placeholder="Buyer Last Name" id="buyerLast" [(ngModel)]="buyerLast">
@@ -25,12 +36,8 @@
               </div>
               <br/>
               <label>Ticket Number: </label>
-                <div class="ui action input">
+                <div class="ui input">
                     <input type="number" name="buyer-ticket" placeholder="Ticket Purchased" [(ngModel)]="ticketNumber">
-                    <button class="ui right labeled icon button" (click)="initBulkOrder()">
-                      <i class="boxes icon"></i>
-                      Bulk Order
-                    </button>
                   </div>
                   <br/>
                   <br/>
@@ -38,8 +45,15 @@
                 <label>Phone Number</label>
                 <input type="tel" pattern="^\d{4}-\d{3}-\d{4}$" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="buyerPhone">
               </div>
+              <div class="ui right aligned">
+              <a class="ui red image label">
+                  <i class="user outline icon"></i>
+                  {{currentCadet}}
+                  <div class="detail">Seller</div>
+                </a>
+              </div>
           </form>
-        <div class="extra content">
+        <div class="extra content center aligned">
           <button class="ui button" (click)="addSale(currentCadet)">Submit</button>
         </div>
       </div>

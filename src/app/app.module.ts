@@ -15,6 +15,7 @@ import { CadetSalesComponent } from './cadet-sales/cadet-sales.component';
 
 import { CadetService } from './services/cadet.service';
 import { TicketAssignmentComponent } from './ticket-assignment/ticket-assignment.component';
+import { TicketLookupComponent } from './ticket-lookup/ticket-lookup.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { TicketAssignmentComponent } from './ticket-assignment/ticket-assignment
     CadetManagementComponent,
     SearchPipe,
     CadetSalesComponent,
-    TicketAssignmentComponent
+    TicketAssignmentComponent,
+    TicketLookupComponent
   ],
   imports: [
     BrowserModule,
