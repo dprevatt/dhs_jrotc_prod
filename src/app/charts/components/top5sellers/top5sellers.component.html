@@ -1,0 +1,28 @@
+
+      <div class="ui raised blue segment">
+          <h4 class="ui header">Top 5 Ticket Sellers</h4>
+          <table class="ui very basic collapsing celled table">
+              <thead>
+                <tr><th>Cadet</th>
+                <th>Tickets Sold</th>
+              </tr></thead>
+              <tbody>
+                <tr *ngFor="let xs of top5Sellers">
+                  <td>
+                    <h4 class="ui image header">
+                        <i class="star outline icon"></i>
+                      <div class="content">
+                        {{xs.Cadet}}
+                        <div class="sub header">{{xs.Company}}
+                      </div>
+                    </div>
+                  </h4></td>
+                  <td>
+                    {{xs.TicketsSold}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+

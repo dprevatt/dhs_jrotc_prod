@@ -1,3 +1,4 @@
+import { CadetSales } from './../models/CadetSales';
 import { Sale } from './../models/Sale';
 import { Buyer } from './../models/Buyer';
 import { Cadets } from './../models/Cadets';
@@ -25,47 +26,33 @@ export class TicketLookupComponent implements OnInit {
 
   constructor(private afs: AngularFirestore) { }
 
-  cadetCollection: AngularFirestoreCollection<Cadets>;
+  cadetSalesCollection: AngularFirestoreCollection<any>;
   cadets: Subscription;
   ticketSearch: string;
-  salesCollection: AngularFirestoreCollection<Sale>;
+  salesCollection: AngularFirestoreCollection<any>;
   sale: Subscription;
   seller: string;
   salesDoc: Subscription;
-  found: Boolean;
-  notFound: Boolean;
+  ticketNumber: number;
 
   ngOnInit() {
-    this.cadetCollection = this.afs.collection('Cadets');
+    this.cadetSalesCollection = this.afs.collection('CadetSales');
 
   }
 
-  findTicket(ticketNum){
-    this.cadetCollection = this.afs.collection('Cadets');
-    let x = 0;
-    this.cadets = this.cadetCollection.valueChanges().subscribe(allCadets => {
-        // console.log(allCadets);
-        for (x = 0; x < allCadets.length; x++) {
-          const docPath = 'Cadets/' + allCadets[x].Cadet.toString() + '/Sales/' + ticketNum;
-          this.salesDoc = this.afs.doc(docPath).snapshotChanges().subscribe(mdoc => {
-            if (mdoc.payload.data()) {
-              console.log(mdoc.payload.data());
-              console.log(docPath.split('/')[1]);
-              this.seller = docPath.split('/')[1];
-              this.found = true;
-            }
-          });
-        }
-        if (x === allCadets.length) {
-          {
-            if(this.found !== true)
-            {
-              this.notFound = true;
-            }
-          }
-        }
-    });
-    return this.found;
+  findTicket(){
+    // jQuery('#ticketSearch').addClass('loading');
+    // const ticketNum = this.ticketNumber;
+    // this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
+    //   return ref.where('TicketNumber', '==', ticketNum).limit(1);
+    // });
+    // this.seller = this.cadetSalesCollection.valueChanges().subscribe(s => {
+    //   return s.Seller;
+    // });
+    // // Do something with Seller data
+    // // ...
+    // // stop spinner
+    // jQuery('#ticketSearch').removeClass('loading');
   }
 
 

@@ -1,0 +1,76 @@
+
+        <div class="ui red raised segment">
+          <div class="content" *ngIf="enteredSale">
+              <a class="ui red right ribbon label">New Sale for {{enteredSale.Seller}}</a>
+            </div>
+              <div class="image content">
+                <div class="description">
+                    <form class="ui form" (keydown.enter)="submitSale()">
+                        <div class="ui stackable two column grid">
+                            <div class="column">
+                              <div class="field">
+                                  <label>Starting Ticket Number</label>
+                                  <div class="ui labeled input">
+                                      <div class="ui label">
+                                        <i class="ticket alternate icon"></i>
+                                      </div>
+                                      <input type="number" placeholder="Ticket Purchased" id="ticketNumberStart" tabindex="1" name="ticket-start" [(ngModel)]="enteredTicket" (blur)=findTicketOwner() (keydown.enter)="sendTab()">
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label>Ending Ticket Number</label>
+                                    <div class="ui labeled input" data-tooltip="This field is for multiple orders only." data-position="bottom right" data-inverted="">
+                                        <div class="ui label">
+                                          <i class="sort numeric down icon"></i>
+                                        </div>
+                                        <input type="number" placeholder="Ticket Purchased" name="ticket-end" [(ngModel)]="sale_ticketNumberEnd">
+                                      </div>
+                                </div>
+                            </div>
+                          </div>
+                          <br><br>
+                        <div class="field">
+                          <label>Buyer Last Name</label>
+                          <input type="text" name="purchaser-last" id="buyerLast" class="titleCaseMask" tabindex="2" placeholder="Buyer Last Name" [(ngModel)]="sale_buyerLast" data-validate="purchaser-last">
+                        </div>
+                        <div class="field">
+                            <label>Buyer First Name</label>
+                            <input type="text" name="bulk-purchaser-first" id="buyerFirst" class="titleCaseMask" tabindex="3" placeholder="Buyer First Name" [(ngModel)]="sale_buyerFirst">
+                          </div>
+                            <br/>
+                        <div class="field">
+                            <label>Phone Number</label>
+                            <input class="myPhone" id="phone-number" type="text" maxlength="14" tabindex="4''" placeholder="(XXX) XXX-XXXX" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="sale_buyerPhone" required>
+                          </div>
+                      </form>
+                </div>
+              </div>
+              <br>
+              <hr>
+              <br>
+              <div class="ui grid">
+              <div class="eight wide left aligned column" *ngIf="enteredSale">
+                <a class="ui red image label">
+                    <i class="user outline icon"></i>
+                    {{enteredSale.Seller}}
+                    <div class="detail">Seller</div>
+                  </a>
+              </div>
+              <div class="eight wide right aligned column">
+                <div class="ui positive right labeled icon button" (click)="submitSale()">
+                    Submit Order(s)
+                    <i class="checkmark icon"></i>
+                  </div>
+              </div>
+              <div class="ui negative message" *ngIf="previouslyEntered">
+                  <i class="close icon"></i>
+                  <div class="header">
+                    This sale has been previously entered!
+                  </div>
+                  <p>Submitting again will overwrite the existing values.
+                </p>
+              </div>
+            </div>
+        </div>

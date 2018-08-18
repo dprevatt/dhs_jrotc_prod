@@ -1,0 +1,68 @@
+<div class="ui red segment">
+    <div class="ui grid">
+        <div class="four wide column">
+            <div class="ui statistic float left">
+                <div class="value">
+                    <img src="../assets/images/if_Money-Increase_379342.png" class="ui circular inline image">
+                  {{totalSalesCount | async}}
+                </div>
+                <div class="label">
+                  Tickets Sold
+                </div>
+              </div>
+        </div>
+        <div class="six wide column">
+            <h4 class="ui header">Average Sold Per Cadet</h4>
+            <table class="ui very basic collapsing celled table">
+                <thead>
+                  <tr><th>Company</th>
+                  <th>Total Sales</th>
+                </tr></thead>
+                <tbody>
+                  <tr *ngFor="let avg of companySales">
+                    <td>
+                      <h4 class="ui image header">
+                        <div class="content">
+                          {{avg.Company}}
+                          <div class="sub header">{{avg.AvgSoldPerCadet}}
+                        </div>
+                      </div>
+                    </h4></td>
+                    <td>
+                      {{avg.count}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <hr>
+          <table class="ui very basic collapsing celled table">
+              <tbody>
+              <tr *ngFor="let nc of otherSales">
+                <td>
+                  <h4 class="ui image header">
+                    <div class="content">
+                      {{nc.Company}}
+                      <div class="sub header">{{nc.AvgSoldPerCadet}}
+                    </div>
+                  </div>
+                </h4></td>
+                <td>
+                  {{nc.count}}
+                </td>
+              </tr>
+              </tbody>
+              </table>
+        </div>
+        <div class="four wide column">
+            <div class="ui statistic">
+                <div class="value">
+                  <img src="../assets/images/if_39_Trophy_2064514 (1).png" class="ui circular inline image">
+                  {{salesGoal - (totalSalesCount | async)}}
+                </div>
+                <div class="label">
+                  Till Goal
+                </div>
+              </div>
+        </div>
+      </div>
+  </div>

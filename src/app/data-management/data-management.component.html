@@ -1,0 +1,140 @@
+
+<!-- 
+<div class="ui segment">
+    <p>Please select a ticket range:</p>
+    <div class="ui stackable two column grid">
+        <div class="column">
+          <div class="field">
+              <label>Starting Ticket Number</label>
+              <div class="ui labeled input">
+                  <div class="ui label">
+                    <i class="ticket alternate icon"></i>
+                  </div>
+                  <input type="number" placeholder="Ticket Purchased" id="ticketNumberStart" tabindex="1" name="ticket-start" [(ngModel)]="ticketStartParam">
+                </div>
+          </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label>Ending Ticket Number</label>
+                <div class="ui labeled input" data-tooltip="This field is for multiple orders only." data-position="bottom right" data-inverted="">
+                    <div class="ui label">
+                      <i class="sort numeric down icon"></i>
+                    </div>
+                    <input type="number" placeholder="Ticket Purchased" name="ticket-end" [(ngModel)]="endTicketParam">
+                  </div>
+            </div>
+        </div>
+      </div>
+  </div>
+  <div class="ui labeled button" tabindex="0" (click)=initializeDataTable(cadetSales)>
+      <div class="ui red button">
+        <i class="heart icon"></i> Like
+      </div>
+      <a class="ui basic red left pointing label">
+        1,048
+      </a>
+    </div> -->
+    <!-- <input type="number" [(ngModel)]="startTicketParam">
+    <input type="number" [(ngModel)]="endTicketParam">
+    <button (click)="export()">Export</button>
+    <button (click)="clickMe()" id="myButton">Click Me</button> -->
+
+    <div class="ui grid">
+      <div class="two wide column"></div>
+      <div class="four wide column">
+          <div class="ui raised yellow segment">
+            <h2>Please enter a ticket range:</h2>
+        <form class="ui form">
+          <div class="field">
+            <label>Starting TicketNumber</label>
+            <input type="number" name="ticket-start" placeholder="Starting TicketNumber" [(ngModel)]="startTicketParam">
+          </div>
+          <div class="field">
+            <label>Ending TicketNumber</label>
+            <input type="number" name="ticket-end" placeholder="Ending TicketNumber" [(ngModel)]="endTicketParam">
+          </div>
+          <button class="ui primary button" type="submit" (click)="clickMe()" >Search Tickets</button>
+          <button class="ui button" type="submit" (click)="showAllTickets()">Show All</button>
+        </form>
+        </div>
+      </div>
+      <div class="four wide column">
+          <div style="height: 220px"></div>
+          <div class="ui labeled button" tabindex="0">
+              <div class="ui red button" (click)="export()">
+                <i class="download icon"></i>Export Data
+              </div>
+            </div>
+      </div>
+    </div>
+    <br><br>
+    <table class="ui celled table" id="mytable" *ngIf="showResults">
+      <thead>
+          <tr>
+            <th>TicketNumber</th>
+            <th>Cadet</th>
+            <th>Company</th>
+            <th>Buyer</th>
+            <th>BuyerPhone</th>
+            <th>SaleCompletedDate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cs of myData">
+            <td>{{cs.TicketNumber}}</td>
+            <td>{{cs.Seller}}</td>
+            <td>{{cs.SellerCompany}}</td>
+            <td>{{cs.BuyerLastName + ', ' + cs.BuyerFirstName}}</td>
+            <td>{{cs.BuyerPhone}}</td>
+            <td>{{cs.SaleCompletedDate}}</td>
+          </tr>
+        </tbody>
+    </table>
+
+
+
+    <!-- <div class="ui modal" id="rangeParams"> 
+        <i class="close icon"></i>
+        <div class="header">
+          Select Ticket Range:
+        </div>
+          <div class="description">
+              <div class="ui stackable two column grid">
+                  <div class="column">
+                    <div class="field">
+                        <label>Starting Ticket Number</label>
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                              <i class="ticket alternate icon"></i>
+                            </div>
+                            <input type="number" placeholder="Ticket Purchased" id="ticketNumberStart" tabindex="1" name="ticket-start" [(ngModel)]="ticketStartParam">
+                          </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                      <div class="field">
+                          <label>Ending Ticket Number</label>
+                          <div class="ui labeled input" data-tooltip="This field is for multiple orders only." data-position="bottom right" data-inverted="">
+                              <div class="ui label">
+                                <i class="sort numeric down icon"></i>
+                              </div>
+                              <input type="number" placeholder="Ticket Purchased" name="ticket-end" [(ngModel)]="endTicketParam">
+                            </div>
+                      </div>
+                  </div>
+                </div>
+          </div>
+        <div class="actions">
+          <div class="ui black deny button">
+            Nope
+          </div>
+          <div class="ui positive right labeled icon button" (click)="setQuery(ticketStartParam, endTicketParam)">
+            Yep, that's me
+            <i class="checkmark icon"></i>
+          </div>
+        </div>
+      </div> -->
+        
+      <!-- </table> -->
+  

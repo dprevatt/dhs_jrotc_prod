@@ -1,0 +1,18 @@
+
+<div class="ui segment">
+    <a class="ui red ribbon label">Top 25 Sellers</a>
+    <table class="ui yellow table">
+        <thead>
+          <tr><th>Sales Rank</th>
+          <th>Cadet</th>
+          <th>Sales</th>
+        </tr></thead><tbody>
+          <tr *ngFor="let d of Rpt_CadetSales; let i = index">
+            <td>{{i + 1}}</td>
+            <td><i class="star icon" *ngIf="i <= 4"></i>
+              {{d.Name}}</td>
+            <td>{{d.count}}</td>
+          </tr>
+        </tbody>
+        </table>
+  </div>

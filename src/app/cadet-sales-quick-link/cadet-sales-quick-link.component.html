@@ -1,0 +1,31 @@
+
+<div class="ui grid">
+    <div class="ten wide right aligned column">
+
+            <a class="item">
+                <div class="ui floating dropdown labeled icon positive button" id="dp" tabindex="0" (keydown.enter)="onKeydown()">
+                    <i class="money bill alternate outline icon"></i>
+                    <span class="text">Cadet Sales Quick View</span>
+                    <div class="menu">
+                      <div class="ui icon search input">
+                        <i class="search icon"></i>
+                        <input type="text" placeholder="Search Cadets...">
+                      </div>
+                      <div class="divider"></div>
+                      <div class="header">
+                        <i class="us flag"></i>
+                        Cadets
+                      </div>
+                      <div class="scrolling menu">
+                        <div class="item" *ngFor="let cadet of (cadets | async) let i = index" [attr.data-value]="cadet.CadetId" (click)="routeToSales(cadet.CadetId)">
+                          <div class="ui red empty circular label"></div>
+                          {{cadet.Cadet}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </a>
+
+    </div>
+  </div>
+

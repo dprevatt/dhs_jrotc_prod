@@ -4,20 +4,51 @@
     <div class="header item" [routerLink]="['/']">
       Dothan High JROTC
     </div>
-    <a class="item" [routerLink]="['/about']">
-      About Us
-    </a>
-    <a class="item" [routerLink]="['/TicketAssignment']">
+    <a class="item" [routerLink]="['/TicketAssignment']" id="" *ngIf="userLoggedIn">
         Ticket Assignment
     </a>
-    <a class="item" [routerLink]="['/CadetManagement']">
+    <a class="item" [routerLink]="['/CadetManagement']" id="cadetSales">
       Cadet Sales
   </a>
-  <a class="item" [routerLink]="['/TicketLookup']">
-    Ticket Finder
+<a class="item" [routerLink]="['/SalesEntry']" *ngIf="userLoggedIn" id="salesEntry">
+  Sales Entry
 </a>
+<div class="ui dropdown icon item">
+    <i class="chart bar icon"> Reporting</i>
+    <div class="menu">
+      <div class="item">
+        <i class="dropdown icon"></i>
+        <span class="text">Companies</span>
+        <div class="menu">
+          <div class="item" (click)="navigateToAlphaReports()">Alpha</div>
+          <div class="item" (click)="navigateToBravoReports()">Bravo</div>
+          <div class="item" (click)="navigateToCharlieReports()">Charlie</div>
+          <div class="item" (click)="navigateToDeltaReports()">Delta</div>
+          <div class="item" (click)="navigateToEchoReports()">Echo</div>
+          <div class="item">Foxtrot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="item" [routerLink]="['/DataManagement']" *ngIf="userLoggedIn" id="dataManagement">
+    Data Management
+  </a>
+  <a class="item" [routerLink]="['/PlatePickup']" *ngIf="userLoggedIn" id="dataManagement"><i class="utensils icon"></i>
+    Plate Pickup
+  </a>
+<div class="right menu">
+    <a class="item" (click)="displaySignIn()" *ngIf="!userLoggedIn">
+        <i class="sign in alternate icon"></i>
+        Sign In
+      </a>
+      <a class="item" (click)="displaySignIn()" *ngIf="userLoggedIn">
+          Welcome {{currentUser}}
+    </a>
+  </div>
   </div>
 </div>
+<br><br><br>
+<app-sold-per-comapny-chart *ngIf="route.children.length === 0"></app-sold-per-comapny-chart>
   <router-outlet></router-outlet>
 <!-- <br/>
 <br/>
@@ -49,4 +80,53 @@
         </tr>
       </tbody>
     </table> -->
+    <div class="ui modal" id="loginModal">
+        <i class="close icon"></i>
+        <div class="header" *ngIf="userLoggedIn">
+            <i class="lock icon"></i>
+          Sign Out
+        </div>
+        <div class="header" *ngIf="!userLoggedIn">
+            <i class="lock icon"></i>
+            Sign In
+        </div>
+        <div class="image content" *ngIf="!userLoggedIn">
+          <div class="description">
+              <form class="ui form">
+                  <div class="field">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Email" [(ngModel)]="userEmail">
+                  </div>
+                  <div class="field">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Password" [(ngModel)]="userPassword" (keydown.enter)="login(userEmail, userPassword)">
+                  </div>
+                </form>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="ui black deny button">
+            Cancel
+          </div>
+          <div class="ui ok right labeled positive icon button" (click)="login(userEmail, userPassword)" *ngIf="!userLoggedIn">
+            Sign In
+            <i class="checkmark icon"></i>
+          </div>
+          <div class="ui ok right labeled positive icon button" (click)="logout()" *ngIf="userLoggedIn">
+              Sign Out
+              <i class="checkmark icon"></i>
+            </div>
+        </div>
+      </div>
 
+
+
+      <!-- Footer Code -->
+      <div class="ui vertical footer segment"
+       style="background-color: azure"
+       *ngIf="currentUser == 'dprevatt27@gmail.com'">
+        <div class="ui container" >
+            <a [routerLink]="['/Site-Administration']">Administration</a>
+        </div>
+    </div>
+   

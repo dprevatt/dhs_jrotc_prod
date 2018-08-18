@@ -9,7 +9,9 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "firebase-messaging-sw.js",
+        "manifest.json"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -24,6 +26,7 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/plotly.js/dist/plotly.js",
         "../semantic/dist/semantic.min.js"
       ],
       "environmentSource": "environments/environment.ts",

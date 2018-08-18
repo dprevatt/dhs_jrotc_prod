@@ -1,20 +1,4 @@
-<div class="container center aligned">
-    <div class="ui right labeled input">
-        <label for="ticketNumber" class="ui label">
-            <i class="ticket alternate icon"></i>
-        </label>
-        <input type="text" placeholder="TicketNumber" id="ticketNumber" [(ngModel)]="ticketSearch">
-        <button class="ui green button" (click)="findTicket(ticketSearch)">Search</button>
+<div class="ui left icon input" id="ticketSearch" (blur)="findTicket()">
+        <input type="number" placeholder="Ticket Number" name="ticketNumber" [(ngModel)]="ticketNumber">
+        <i class="ticket icon"></i>
       </div>
-      <br>
-      <br>
-      <br>
-      <div class="ui right aligned" *ngIf="found">
-          <a class="ui red image label">
-              <i class="user outline icon"></i>
-              {{seller}}
-              <div class="detail">Seller</div>
-            </a>
-          </div>
-          <h2 *ngIf="notFound">Ticket Number Not Found</h2>
-</div>

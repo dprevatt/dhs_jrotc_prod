@@ -1,79 +1,88 @@
-<h2>Ticket Assignment</h2>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui card fluid">
-        <div class="content">
-          <a class="ui red right ribbon label">Assign Tickets</a>
-        </div>
-        <form class="ui form" name="ticketAssignmentForm">
-          <div class="ui sub header">Select a Cadet</div>
-          <div class="ui search normal dropdown" id="selectedCadet">
-            <input name="cadetSelection" type="hidden">
-            <i class="dropdown icon"></i>
-            <div class="default text">Select a Cadet</div>
-            <div class="menu">
-                <div class="item" name="selectedCadet" *ngFor="let cadet of cadets | async" [attr.data-value]="cadet.Cadet">{{cadet.Cadet}}</div>
+<br><br>
+<div class="conatiner">
+<div class="ui grid">
+  <div class="one wide column"></div>
+  <div class="six wide column">
+      <h2>Ticket Assignment</h2>
+      <div class="ui red raised segment">
+          <div class="image content">
+            <div class="description">
+                <form class="ui form" (keyup.enter)="assignTickets()">
+                    <div class="ui grid">
+                        <div class="ten wide aligned column">
+                            <div class="ui floating dropdown labeled icon button" id="dp" tabindex="1" (keydown.enter)="setCadet()">
+                                <i class="us flag"></i>
+                                <span class="text">Select a Cadet</span>
+                                <div class="menu">
+                                  <div class="ui icon search input">
+                                    <i class="search icon"></i>
+                                    <input type="text" placeholder="Search Cadets...">
+                                  </div>
+                                  <div class="divider"></div>
+                                  <div class="header">
+                                    <i class="us flag"></i>
+                                    Cadets
+                                  </div>
+                                  <div class="scrolling menu">
+                                    <div class="item" *ngFor="let cadet of (cadets | async); let i = index" attr.data-value="{{cadet.CadetId +'|'+ cadet.Cadet +'|'+ cadet.Company}}" (click)="setCadetClick(cadet.Cadet, cadet.CadetId, cadet.Company)">
+                                      <div class="ui red empty circular label"></div>
+                                      {{cadet.Cadet}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
+                      </div>
+                      <br><hr> <br>
+                      <div class="ui stackable two column grid">
+                          <div class="column">
+                            <div class="field">
+                                <label>Starting Ticket Number</label>
+                                <div class="ui labeled input">
+                                    <div class="ui label">
+                                      <i class="ticket alternate icon"></i>
+                                    </div>
+                                    <input type="number" placeholder="Ticket Assigned" tabindex="2" id="ticketNumberStart" name="ticket-start" [(ngModel)]="ticketStart">
+                                  </div>
+                            </div>
+                          </div>
+                          <div class="column">
+                              <div class="field">
+                                  <label>Ending Ticket Number</label>
+                                  <div class="ui labeled input">
+                                      <div class="ui label">
+                                        <i class="sort numeric down icon"></i>
+                                      </div>
+                                      <input type="number" placeholder="Ticket Assigned" tabindex="3" name="ticket-end" [(ngModel)]="ticketEnd">
+                                    </div>
+                              </div>
+                          </div>
+                        </div>
+                        <br/>
+                  </form>
             </div>
           </div>
-          <br/>
-          <br/>
-          <br/>
-          <p>Please enter a ticket range:</p>
-          <br/>
-          <div class="ui two column very relaxed grid">
-              <div class="column">
-                <!-- <p>Hello</p> -->
-                <div class="ui input" style="padding-left: 110px">
-                    <input type="number" name="ticket-start" [(ngModel)]="ticketStart">
-                  </div>
+          <br>
+          <hr>
+          <br>
+          <div class="ui grid">
+          <div class="eight wide left aligned column">
+            <a class="ui red image label">
+                <i class="user outline icon"></i>
+                {{selectedCadet}}
+                <div class="detail">Seller</div>
+              </a>
+          </div>
+          <div class="eight wide right aligned column">
+            <div class="ui positive right labeled icon button" (click)="assignTickets()">
+                Assign Ticket(s)
+                <i class="checkmark icon"></i>
               </div>
-              <div class="ui vertical divider">
-                thru
-              </div>
-              <div class="column">
-                <div class="ui input" style="padding-right: 80px">
-                    <input type="number" name="ticket-end" [(ngModel)]="ticketEnd">
-                  </div>
-              </div>
-            </div>
-          </form>
-          <br/>
-        <div class="extra content center aligned">
-          <button class="ui button" (click)= "assignTickets(ticketStart, ticketEnd)">Assign Tickets</button>
+          </div>
         </div>
-      </div>
     </div>
   </div>
-  <br/>
-  <!-- <table class="ui striped table">
-      <thead>
-        <tr>
-          <th>Cadet</th>
-          <th>Company</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cadet of cadets | async | search:'Cadet,Company':query">
-          <td>{{cadet.Cadet}}</td>
-          <td>{{cadet.Company}}</td>
-          <td>
-          <button class="ui basic button">
-              <i class="icon user"></i>
-              Edit
-            </button>
-            <button class="ui basic button" (click)="removeCadet($event, cadet)">
-                <i class="icon user"></i>
-                Delete
-            </button>
-            <button class="ui basic button" [routerLink]="['/CadetSales', cadet.CadetId]">
-                <i class="icon user"></i>
-                View Sales
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
-
+</div>
+</div>
 
   

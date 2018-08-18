@@ -1,0 +1,43 @@
+<div class="ui message">
+    <i class="close icon"></i>
+    <div class="header"><i class="utensils icon"></i>
+      Plate Pickup
+    </div>
+    <br>
+    <div class="ui icon input">
+        <i class="barcode icon"></i>
+        <input type="text" placeholder="Scan..." [(ngModel)]="query" style="width: 500px;">
+      </div>
+    <br><br>
+    <div class="container" *ngIf="showTable">
+        <table class="ui center aligned striped tablet stackable table">
+            <thead>
+              <tr>
+                <th>Ticket Number</th>
+                <th>Buyer</th>
+                <th>Buyer Phone</th>
+                <th>Seller</th>
+                <th>Company</th>
+                <th>Sale Completed Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sale of allCadetSales | async | search:'TicketNumber':query">
+                <td>{{sale.TicketNumber}}</td>
+                <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
+                <td>{{sale.BuyerPhone}}</td>
+                <td>{{sale.Seller}}</td>
+                <td>{{sale.SellerCompany}}</td>
+                <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
+                <td>
+                <button class="ui basic button" (click)="markOrderReceived()">
+                    <i class="handshake outline icon"></i>
+                    Order Received
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+  </div>

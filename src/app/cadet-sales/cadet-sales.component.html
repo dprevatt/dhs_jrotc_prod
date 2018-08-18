@@ -1,71 +1,117 @@
 <div class="container">
-<h2>Sales for {{cadetName}}</h2>
-<div class="ui statistic">
-    <div class="value">
-      {{totalSales}}
-    </div>
-    <div class="label">
-      Sales
-    </div>
-  </div>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui card fluid">
-        <div class="content">
-          <a class="ui red right ribbon label">New Sale for {{currentCadet}}</a>
+    <div class="container">
+      <br><br>
+      <div class="ui grid">
+        <div class="twelve wide center aligned column">
+            <h1 class="ui header">
+                <i class="money bill alternate outline ui green circular icon"></i>
+                Sales for {{currentCadet}}
+              </h1>
         </div>
-        <form class="ui form">
-          <div class="ui right aligned">
-              <div class="ui steps" (click)="initBulkOrder()" style="cursor: pointer;">
-                  <div class="step">
-                    <i class="boxes icon"></i>
-                    <div class="content">
-                      <div class="title">Multiple Orders</div>
-                      <div class="description">Click here to submit multiple orders for the same buyer.</div>
+      </div>
+        <br>
+        <br>
+        <div class="ui grid">
+          <div class="six wide center aligned column">
+              <div class="ui right aligned statistics">
+                  <div class="statistic">
+                    <div class="value">
+                      {{ticketsAssigned}}
+                    </div>
+                    <div class="label">
+                      Tickets Assigned
+                    </div>
+                  </div>
+                  <div class="statistic">
+                    <div class="value">
+                      {{ticketsSold}}
+                    </div>
+                    <div class="label">
+                      Tickets Sold
+                    </div>
+                  </div>
+                  <div class="statistic">
+                    <div class="value">
+                      {{ticketsAssigned - ticketsSold | number}}
+                    </div>
+                    <div class="label">
+                      Tickets Remaining
                     </div>
                   </div>
                 </div>
-            </div>
-            <div class="field">
-              <label>Buyer Last Name</label>
-              <input type="text" name="purchaser-last" placeholder="Buyer Last Name" id="buyerLast" [(ngModel)]="buyerLast">
-            </div>
-            <div class="field">
-                <label>Buyer First Name</label>
-                <input type="text" name="purchaser" placeholder="Buyer First Name" [(ngModel)]="buyerFirst">
-              </div>
-              <br/>
-              <label>Ticket Number: </label>
-                <div class="ui input">
-                    <input type="number" name="buyer-ticket" placeholder="Ticket Purchased" [(ngModel)]="ticketNumber">
+          </div>
+          <div class="four wide column"></div>
+            <div class="four wide column">
+                <div class="ui segment">
+                    <h4>Awards Earned</h4>
+                    <div class="ui statistics">
+                        <div class="statistic" *ngIf="ticketsSold >= 5">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            <img src="..\assets\images\badge1_t2.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Bronze Level (5 +)
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 15">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                              <img src="..\assets\images\badge2.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Silver Level ( 15 +)
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 25">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                              <img src="..\assets\images\gold_trophy1.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Gold Level (25 +)
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 50">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                              <img src="..\assets\images\icons8-medal-48.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Platinum Level (50 +)
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 100">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            <img src="..\assets\images\star_trophy.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            100th Club
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 125">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            <img src="..\assets\images\badge3.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            125th Club
+                          </font></font></div>
+                        </div>
+                        <div class="statistic" *ngIf="ticketsSold >= 150">
+                          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                              <img src="..\assets\images\icons8-medal-48_red.png">
+                          </font></font></div>
+                          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            150th Club
+                          </font></font></div>
+                        </div>
+                      </div>
                   </div>
-                  <br/>
-                  <br/>
-            <div class="field">
-                <label>Phone Number</label>
-                <input type="tel" pattern="^\d{4}-\d{3}-\d{4}$" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="buyerPhone">
-              </div>
-              <div class="ui right aligned">
-              <a class="ui red image label">
-                  <i class="user outline icon"></i>
-                  {{currentCadet}}
-                  <div class="detail">Seller</div>
-                </a>
-              </div>
-          </form>
-        <div class="extra content center aligned">
-          <button class="ui button" (click)="addSale(currentCadet)">Submit</button>
-        </div>
+            </div>
+          </div>
       </div>
-    </div>
-  </div>
-</div>
-
+  <br>
     <br/>
     <br/>
     <div class="ui icon input">
         <i class="search icon"></i>
-        <input type="text" placeholder="Search Sales..." [(ngModel)]="query">
+        <input type="text" placeholder="Search Sales..." [(ngModel)]="query" style="width: 500px;">
       </div>
     <table class="ui center aligned striped tablet stackable table">
         <thead>
@@ -78,17 +124,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let sale of sales | async | search:'TicketNumber,Buyer':query">
+          <tr *ngFor="let sale of sales | async | search:'TicketNumber,BuyerFirstName,BuyerLastName':query">
             <td>{{sale.TicketNumber}}</td>
-            <td>{{sale.Buyer}}</td>
+            <td>{{sale.BuyerFirstName + ' ' + sale.BuyerLastName}}</td>
             <td>{{sale.BuyerPhone}}</td>
             <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
             <td>
-            <button class="ui basic button">
+            <button class="ui basic button" (click)="editSale(sale)" *ngIf="userLoggedIn">
               <i class="pencil alternate icon"></i>
                 Edit
               </button>
-              <button class="ui basic button" (click)="removeSale($event, sale)">
+              <button class="ui basic button" (click)="removeSale($event, sale)" *ngIf="userLoggedIn">
                 <i class="trash alternate outline icon"></i>
                   Delete
               </button>
@@ -99,41 +145,34 @@
       <br/>
       <br/>
       <br/>
-      <div class="ui modal" id="bulkOrderModal">
+      <div class="ui modal" id="editModal">
           <i class="close icon"></i>
           <div class="header">
-            Bulk Order
+            Edit Sale
           </div>
           <div class="image content">
             <div class="description">
                 <form class="ui form">
                     <div class="field">
+                        <label>TicketNumber</label>
+                        <input type="text" name="edit-ticket-number" placeholder="TicketNumber" [(ngModel)]="edit_TicketNumber" disabled>
+                      </div>
+                    <div class="field">
                       <label>Buyer Last Name</label>
-                      <input type="text" name="bulk-purchaser-last" placeholder="Buyer Last Name" [(ngModel)]="bulk_buyerLast">
+                      <input type="text" name="edit-purchaser-last" placeholder="Buyer Last Name" [(ngModel)]="edit_BuyerFirst">
                     </div>
                     <div class="field">
                         <label>Buyer First Name</label>
-                        <input type="text" name="bulk-purchaser-first" placeholder="Buyer First Name" [(ngModel)]="bulk_buyerFirst">
+                        <input type="text" name="edit-purchaser-first" placeholder="Buyer First Name" [(ngModel)]="edit_BuyerLast">
                       </div>
-                      <div class="ui stackable two column grid">
-                          <div class="column">
-                            <div class="field">
-                                <label>Starting Ticket Number</label>
-                                <input type="number" name="bulk-ticket-start" placeholder="Ticket Purchased" [(ngModel)]="bulk_ticketNumberStart">
-                            </div>
-                          </div>
-                          <div class="column">
-                              <div class="field">
-                                  <label>Ending Ticket Number</label>
-                                  <input type="number" name="bulk-ticket-end" placeholder="Ticket Purchased" [(ngModel)]="bulk_ticketNumberEnd">
-                              </div>
-                          </div>
-                        </div>
-                        <br/>
                     <div class="field">
-                        <label>Phone Number</label>
-                        <input type="tel" pattern="^\d{4}-\d{3}-\d{4}$" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="bulk_buyerPhone" required>
+                        <label>Buyer Phone Number</label>
+                        <input type="text" maxlength="14" placeholder="(XXX) XXX-XXXX" class="myPhone" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]=edit_BuyerPhone>
                       </div>
+                      <div class="field">
+                          <label>Seller</label>
+                          <input type="text" name="edit-seller" placeholder="Seller" [(ngModel)]="edit_Seller" disabled>
+                        </div>
                   </form>
             </div>
           </div>
@@ -141,8 +180,8 @@
             <div class="ui black deny button">
               Cancel
             </div>
-            <div class="ui ok right labeled icon button" (click)="submitBulkOrder(currentCadet)">
-              Submit Orders
+            <div class="ui ok right labeled positive icon button" (click)="updateSale(edit_TicketNumber)">
+              Update Sale
               <i class="checkmark icon"></i>
             </div>
           </div>

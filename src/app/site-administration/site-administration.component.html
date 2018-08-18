@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="ui segment">
+    <p>Initialize Cadet Count</p>
+    <button class="ui primary button" (click)="initializeCadetCount()">
+      Set Cadet Count
+    </button>
+  </div>
+  <div class="ui segment">
+    <p>Initialize Cadet Count</p>
+    <button class="ui primary button" (click)="incrementTotalSales()">Increment Total Sales</button>
+    <button class="ui primary button" (click)="Create_RptCadetSales()">Test Create</button>
+    <button class="ui primary button"></button>
+      Total Sales: {{totalSalesCount | async}}
+  </div>
+  <ul *ngFor="let cs of companySales">
+    <li>{{cs.Company}}</li>
+    <li>{{cs.count}}</li>
+  </ul>
+  <hr>
+  <ul *ngFor="let cs of Rpt_CadetSales">
+    <li>{{cs.Name}}</li>
+    <li>{{cs.count}}</li>
+  </ul>
+</div>

@@ -1,9 +1,13 @@
 
 export interface Sale {
-    Buyer: String;
+    BuyerFirstName: String;
+    BuyerLastName: String;
     BuyerPhone: String;
     TicketNumber: String;
-    SaleCompleted: Boolean;
+    SaleComplete: Boolean;
     SaleCompletedDate: Date;
+    Seller: string;
+    SellerCompany: string;
+    SellerId: string;
   }
 

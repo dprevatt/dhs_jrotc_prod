@@ -1,0 +1,24 @@
+<br><br>
+<div class="ui red segment">
+  <h2 class="ui header">
+    Bravo
+    <div class="sub header">Cadet sales by number of tickets sold.</div>
+  </h2>
+</div>
+<br><br>
+<table class="ui center aligned striped tablet stackable table">
+  <thead>
+    <tr>
+      <th>Sales Rank</th>
+      <th>Cadet</th>
+      <th>Tickets Sold</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of (cadets | async); let i = index" >
+      <td>{{i + 1}}</td>
+      <td>{{c.Name}}</td>
+      <td>{{c.count}}</td>
+    </tr>
+  </tbody>
+</table>

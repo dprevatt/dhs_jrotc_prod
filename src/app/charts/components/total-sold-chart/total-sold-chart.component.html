@@ -1,0 +1,48 @@
+
+
+        <div class="ui raised blue segment">
+            <h4 class="ui header float left">Sales Statistics</h4>
+            <!-- <div #chart> -->
+                <!-- Chart will appear here -->
+              <!-- </div> -->
+              <div style="height: 25px;" class="float left">
+                    <app-cadet-sales-counter></app-cadet-sales-counter>
+              </div>
+              <div class="container" style="height: 385px">
+                  <h4 class="ui header float left">Sales Percentage By Company</h4>
+                  <table class="ui very basic collapsing celled table" style="height: 20px">
+                        <thead>
+                          <tr><th>Company</th>
+                          <th>Sales</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr *ngFor="let cs of companySales">
+                            <td>
+                              <h4 class="ui image header">
+                                <i class="users icon"></i>
+                                <div class="content">
+                                  {{cs.Company}}
+                                  <div class="sub header">{{cs.SalesPerCadet | number }}
+                                </div>
+                              </div>
+                            </h4></td>
+                            <td>
+                              {{cs.TotalSales}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+              </div>
+              <!-- <div class="float right">
+                <div class="ui celled list">
+                    <app-alpha-average></app-alpha-average>
+                    <app-bravo-average></app-bravo-average>
+                    <app-charlie-average></app-charlie-average>
+                    <app-delta-average></app-delta-average>
+                    <app-echo-average></app-echo-average>
+                    <app-foxtrot-average></app-foxtrot-average>
+                  </div>
+              </div> -->
+          </div>
+
+

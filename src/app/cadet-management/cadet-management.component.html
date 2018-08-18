@@ -1,4 +1,5 @@
-<div class="ui icon message">
+
+<!-- <div class="ui icon message">
     <label for="file-upload" class="custom-file-upload">
         <i class="cloud upload icon"></i> Cadet Upload
     </label>
@@ -9,18 +10,32 @@
     </div>
     <p>Upload results will appear in the below tables ones completed.</p>
   </div>
-</div>
-<div class="ui icon input">
-    <i class="search icon"></i>
-    <input type="text" placeholder="Search Cadets..." [(ngModel)]="query">
+</div> -->
+<app-cadet-data-upload></app-cadet-data-upload>
+<br><br>
+<div class="ui grid">
+  <div class="six wide column">
+      <div class="ui icon input">
+          <i class="search icon"></i>
+          <input type="text" placeholder="Search Cadets..." [(ngModel)]="query">
+        </div>
   </div>
+  <div class="four wide right aligned column">
+      <app-cadet-sales-quick-link></app-cadet-sales-quick-link>
+  </div>
+</div>
 <table class="ui striped tablet stackable table">
   <thead>
     <tr>
       <th>Cadet</th>
       <th>Company</th>
       <!-- <th>CadetId</th> -->
-      <th></th>
+      <th>
+          <button class="ui basic button" (click)="displayAddCadetModal()" *ngIf="userLoggedIn">
+              <i class="icon plus"></i>
+              Add Cadet
+          </button>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -30,16 +45,16 @@
       <!-- <td>{{cadet.CadetId}}</td>
       <td>{{cadet.id}}</td> -->
       <td>
-      <button class="ui basic button">
-          <i class="icon user"></i>
+      <button class="ui basic button" (click)="editCadet(cadet)" *ngIf="userLoggedIn">
+          <i class="icon edit outline"></i>
           Edit
         </button>
-        <button class="ui basic button" (click)="removeCadet($event, cadet)">
-            <i class="icon user"></i>
+        <button class="ui basic button" (click)="removeCadet($event, cadet)" *ngIf="userLoggedIn">
+            <i class="icon trash alternate outline"></i>
             Delete
         </button>
         <button class="ui basic button" [routerLink]="['/CadetSales', cadet.CadetId]">
-            <i class="icon user"></i>
+            <i class="icon money bill alternate outline"></i>
             View Sales
         </button>
       </td>
@@ -47,16 +62,96 @@
   </tbody>
 </table>
 <div class="ui grid">
-  <!-- <div class="one wide column">
-    Grid 1
-  </div> -->
-  <!-- <div class="four wide column">
-    Grid 2
-  </div>
-  <div class="four wide column">
-    Grid 3
-  </div>
-  <div class="four wide column">
-    Grid 4
-  </div> -->
 </div>
+<br>
+<br>
+<!-- edit Cadet modal -->
+<div class="ui modal" id="editCadetModal">
+    <i class="close icon"></i>
+    <div class="header">
+      Edit Cadet
+    </div>
+    <div class="image content">
+      <div class="description">
+          <form class="ui form">
+              <div class="field">
+                  <label>Cadet Name</label>
+                  <input type="text" name="edit-cadet-name" placeholder="Cadet Name" [(ngModel)]="cadetName">
+                </div>
+              <div class="field">
+                  <label>Company</label>
+                  <div class="ui selection dropdown" id="company_Drop">
+                      <input type="hidden" name="company">
+                      <i class="dropdown icon"></i>
+                      <div class="default text">Company</div>
+                      <div class="menu">
+                        <div class="item" data-value="Alpha">Alpha</div>
+                        <div class="item" data-value="Bravo">Bravo</div>
+                        <div class="item" data-value="Charlie">Charlie</div>
+                        <div class="item" data-value="Delta">Delta</div>
+                        <div class="item" data-value="Echo">Echo</div>
+                        <div class="item" data-value="Bn Staff">Bn Staff</div>
+                        <div class="item" data-value="SGM">SGM</div>
+                        <div class="item" data-value="Other">Other</div>
+                      </div>
+                    </div>
+                </div>
+            </form>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div>
+      <div class="ui ok right labeled positive icon button" (click)="updateCadet()">
+        Update Cadet
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Cadet Modal End -->
+  <!-- Add Cadet Modal -->
+  <div class="ui modal" id="addCadetModal">
+      <i class="close icon"></i>
+      <div class="header">
+        Add Cadet
+      </div>
+      <div class="image content">
+        <div class="description">
+            <form class="ui form">
+                <div class="field">
+                    <label>Cadet Name</label>
+                    <input type="text" name="add-cadet-name" placeholder="Cadet Name" [(ngModel)]="add_cadetName">
+                  </div>
+                <div class="field">
+                    <label>Company</label>
+                    <div class="ui selection dropdown" id="company_Drop_add">
+                        <input type="hidden" name="company">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Company</div>
+                        <div class="menu">
+                          <div class="item" data-value="Alpha">Alpha</div>
+                          <div class="item" data-value="Bravo">Bravo</div>
+                          <div class="item" data-value="Charlie">Charlie</div>
+                          <div class="item" data-value="Delta">Delta</div>
+                          <div class="item" data-value="Echo">Echo</div>
+                          <div class="item" data-value="Bn Staff">Bn Staff</div>
+                          <div class="item" data-value="SGM">SGM</div>
+                          <div class="item" data-value="Other">Other</div>
+                        </div>
+                      </div>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          Cancel
+        </div>
+        <div class="ui ok right labeled positive icon button" (click)="addCadet()">
+          Add Cadet
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+    <!-- End of Add Cadet Modal -->

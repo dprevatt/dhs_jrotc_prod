@@ -1,0 +1,134 @@
+        <div class="ui negative icon message" id="errNotification" style="z-index: 1000;" *ngIf="message | async">
+                <i class="close icon" id="closeNotification" (click)="closeNotification()"></i>
+                <img src=".././../assets/images/if_Error_64.png" alt="Error">&nbsp;&nbsp;
+                <div class="header">
+                {{ (message | async)?.notification.title }}
+                </div>
+                <p>{{ (message | async)?.notification.body }}
+              </p></div>
+        <div class="ui three column relaxed grid">
+                <div class="six wide column">
+                    <app-cadet-sales-entry></app-cadet-sales-entry>
+                </div>
+                <div class="six wide column">
+                    <app-sales-statistics></app-sales-statistics>
+                </div>
+                <div class="four wide column" style="height: 10px">
+                    <app-top25sellers></app-top25sellers>
+                </div>
+                <div class="two column row">
+                        <div class="ten wide column">
+                          <div class="ui red segment" style="z-index: 1000;">
+                                  <app-cadet-sales-list></app-cadet-sales-list>
+                              </div>
+                        </div>
+                      </div>
+              </div>
+        
+        
+        
+        
+        
+        <!-- <div class="ui three column grid">
+            <div class="row">
+              <div class="column">
+                  <app-cadet-sales-entry></app-cadet-sales-entry>
+                  <br><br>
+                  <div class="container">
+                      <div class="ui red segment" style="width: 1700px; height: 100%; z-index: 1000;">
+                          <app-cadet-sales-list></app-cadet-sales-list>
+                      </div>
+                  </div>
+              </div>
+              <div class="column">
+                  <app-total-sold-chart></app-total-sold-chart>
+              </div>
+              <div class="column" style="z-index: 2000;">
+                  <app-top25sellers></app-top25sellers>
+              </div>
+            </div>
+          </div> -->
+
+
+
+<!-- <div class="ui grid">
+    <div class="ten column row">
+      <div class="left floated column">
+          <app-total-sold-chart></app-total-sold-chart>
+      </div>
+      <div class="six wide column">
+          <app-cadet-sales-entry></app-cadet-sales-entry>
+      </div>
+      <div class="right floated column">
+          <app-top25sellers></app-top25sellers>
+      </div>
+    </div>
+      <div class="ten wide column">
+          <app-cadet-sales-list></app-cadet-sales-list>
+      </div>
+  </div> -->
+
+    <!-- <div class="container">
+        <div class="ui grid">
+            <div class="one wide column"></div>
+            <div class="six wide column">
+              <app-cadet-sales-list></app-cadet-sales-list>
+            </div>
+          </div>
+      </div> -->
+  <!-- <br>
+  <br>
+  <br>
+  <br> -->
+    <!-- <div class="ui grid">
+        <div class="six wide column">
+            <app-cadet-sales-list></app-cadet-sales-list>
+          </div>
+    </div> -->
+
+      <!-- <div class="ui modal" id="editModal">
+          <i class="close icon"></i>
+          <div class="header">
+            Edit Sale
+          </div>
+          <div class="image content">
+            <div class="description">
+                <form class="ui form">
+                    <div class="field">
+                        <label>TicketNumber</label>
+                        <input type="text" name="edit-ticket-number" placeholder="TicketNumber" tabindex="1" [(ngModel)]="edit_TicketNumber" disabled>
+                      </div>
+                    <div class="field">
+                      <label>Buyer Last Name</label>
+                      <input type="text" name="edit-purchaser-last" placeholder="Buyer Last Name" tabindex="2" [(ngModel)]="edit_BuyerFirst">
+                    </div>
+                    <div class="field">
+                        <label>Buyer First Name</label>
+                        <input type="text" name="edit-purchaser-first" placeholder="Buyer First Name" tabindex="3" [(ngModel)]="edit_BuyerLast">
+                      </div>
+                    <div class="field">
+                        <label>Buyer Phone Number</label>
+                        <input class="myPhone" name="buyer-phone" placeholder="Buyer Phone" id="phone-number-edit" tabindex="4" type="text" maxlength="14" placeholder="(XXX) XXX-XXXX" [(ngModel)]=edit_BuyerPhone>
+                      </div>
+                      <div class="field">
+                          <label>Seller</label>
+                          <input type="text" name="edit-seller" placeholder="Seller" tabindex="5" [(ngModel)]="edit_Seller" disabled>
+                        </div>
+                  </form>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="ui black deny button">
+              Cancel
+            </div>
+            <div class="ui ok right labeled positive icon button" (click)="updateSale(edit_TicketNumber)">
+              Update Sale
+              <i class="checkmark icon"></i>
+            </div>
+          </div>
+        </div> -->
+ 
+
+
+
+      

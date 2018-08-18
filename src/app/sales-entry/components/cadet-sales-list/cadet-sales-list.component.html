@@ -1,0 +1,143 @@
+
+    <h4 class="ui header">Entered Tickets</h4>
+    <br>
+    <div class="ui icon input">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search Sales..." [(ngModel)]="query" style="width: 500px;">
+      </div>
+      <br><br>
+      <div class="container">
+          <table class="ui center aligned striped tablet stackable table">
+              <thead>
+                <tr>
+                  <th>Ticket Number</th>
+                  <th>Buyer</th>
+                  <th>Buyer Phone</th>
+                  <th>Seller</th>
+                  <th>Company</th>
+                  <th>Sale Completed Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sale of allCadetSales | async | search:'TicketNumber':query">
+                  <td>{{sale.TicketNumber}}</td>
+                  <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
+                  <td>{{sale.BuyerPhone}}</td>
+                  <td>{{sale.Seller}}</td>
+                  <td>{{sale.SellerCompany}}</td>
+                  <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
+                  <td>
+                  <button class="ui basic button" (click)="editSale(sale)">
+                    <i class="pencil alternate icon"></i>
+                      Edit
+                    </button>
+                    <button class="ui basic button" (click)="deleteSale(sale)">
+                      <i class="trash alternate outline icon"></i>
+                        Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+
+
+
+
+  <!-- Modals -->
+  <div class="container">
+      <div class="ui two column centered grid">
+          <div class="column">
+              <div class="ui basic modal" id="deleteSaleModal">
+                  <div class="ui icon header">
+                      <i class="trash icon"></i>
+                      Remove Sale
+                    </div>
+                    <div class="content">
+                      <h3>Are you sure you want to delete this sale?   This cannot be undone.</h3>
+                    </div>
+                    <div class="actions">
+                      <div class="ui red basic cancel inverted button">
+                        <i class="remove icon"></i>
+                        No
+                      </div>
+                      <div class="ui green ok inverted button" (click)="PurgeSale()">
+                        <i class="checkmark icon"></i>
+                        Yes
+                      </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+  </div>
+
+        <div class="ui modal" id="editModal">
+          <i class="close icon"></i>
+          <div class="header">
+              Edit Sale
+            </div>
+          <div class="ui raised segment">
+                  <div class="image content">
+                    <div class="description">
+                        <form class="ui form" id="editForm">
+                            <div class="ui stackable two column grid">
+                                <div class="column">
+                                  <div class="field">
+                                      <label>Starting Ticket Number</label>
+                                      <div class="ui labeled input">
+                                          <div class="ui label">
+                                            <i class="ticket alternate icon"></i>
+                                          </div>
+                                          <input type="number" placeholder="Ticket Purchased" id="edit_ticketNumberStart" tabindex="11" name="edit_TicketNumberStart" [(ngModel)]="edit_TicketNumberStart">
+                                        </div>
+                                  </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label>Ending Ticket Number</label>
+                                        <div class="ui labeled input" data-tooltip="This field is for multiple orders only." data-position="bottom right" data-inverted="">
+                                            <div class="ui label">
+                                              <i class="sort numeric down icon"></i>
+                                            </div>
+                                            <input type="number" placeholder="Ticket Purchased" name="edit_TicketNumberEnd" id="edit_TicketNumberEnd" [(ngModel)]="edit_TicketNumberEnd">
+                                          </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <br><br>
+                            <div class="field">
+                              <label>Buyer Last Name</label>
+                              <input type="text" name="edit_buyerLast" id="edit_buyerLast" class="titleCaseMask" tabindex="13" placeholder="Buyer Last Name" [(ngModel)]="edit_BuyerLast">
+                            </div>
+                            <div class="field">
+                                <label>Buyer First Name</label>
+                                <input type="text" name="edit_buyerFirst" id="edit_buyerFirst" class="titleCaseMask" tabindex="14" placeholder="Buyer First Name" [(ngModel)]="edit_BuyerFirst">
+                              </div>
+                                <br/>
+                            <div class="field">
+                                <label>Phone Number</label>
+                                <input class="myPhone" id="edit_phone-number" type="text" maxlength="14"  tabindex="15" placeholder="(XXX) XXX-XXXX" name="edit_buyerPhone" placeholder="Buyer Phone" [(ngModel)]="edit_BuyerPhone" required>
+                              </div>
+                              <div class="field">
+                                  <label>Seller</label>
+                                  <input type="text" name="edit_Seller" placeholder="Seller"  [(ngModel)]="edit_Seller" disabled>
+                                </div>
+                          </form>
+                    </div>
+                  </div>
+                  <br>
+                  <hr>
+                  <br>
+                  <div class="ui grid">
+                  <div class="ten wide right aligned column">
+                    <div class="actions">
+                        <div class="ui positive right labeled icon submit button" (click)="vUpdateSale()">
+                            Update Order(s)
+                            <i class="checkmark icon"></i>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
