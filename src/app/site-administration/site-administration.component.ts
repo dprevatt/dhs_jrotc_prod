@@ -37,10 +37,17 @@ Rpt_CadetSales: Array<any>;
     this.set_Other_CadetCount();
     //
     this.initializeTotalSalesCounter();
+    this.initializeTotalPickedUpCounter();
   }
 
   initializeTotalSalesCounter () {
     this.db.object<any>('counters/totalSales').set({
+      count: 0
+    });
+  }
+
+  initializeTotalPickedUpCounter () {
+    this.db.object<any>('counters/PlatesPickedUp').set({
       count: 0
     });
   }

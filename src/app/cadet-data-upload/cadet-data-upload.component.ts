@@ -130,12 +130,12 @@ this.myCounter = 0;
 
           cadetList.push(cadetData);
           cadetSalesList.push(cadetSalesData);
-          
+
           //this.afs.collection('Cadets').doc(col2 + ', ' + col1).set(postData, {merge: true});
 
         } // End of if headerRow
       } // End of csv loop
-      
+
 
     this.importData('Cadets', cadetList);
     this.importData('CadetSales', cadetSalesList);
@@ -195,6 +195,7 @@ importData(type, arr) {
           BuyerPhone: '',
           SaleComplete: false,
           SaleCompletedDate: '',
+          PlatePickedUp: false,
           Seller: arr[cs].Seller,
           SellerCompany: arr[cs].SellerCompany,
           SellerId: arr[cs].SellerId,
@@ -209,9 +210,9 @@ importData(type, arr) {
       }
     }
     // this.setIncompleteCount();
-    
+
   }
-  
+
 
 } // end of import-data function
 

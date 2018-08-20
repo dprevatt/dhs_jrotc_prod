@@ -53,6 +53,7 @@ import { DataManagementComponent } from './data-management/data-management.compo
 import { PlatePickupPageComponent } from './plate-pickup-page/plate-pickup-page.component';
 import { PlatePickupTableComponent } from './plate-pickup-table/plate-pickup-table.component';
 import { PlatePickupCounterComponent } from './plate-pickup-counter/plate-pickup-counter.component';
+import { ExactFilterPipe } from './exact-filter.pipe';
 
 
 
@@ -99,7 +100,8 @@ import { PlatePickupCounterComponent } from './plate-pickup-counter/plate-pickup
     DataManagementComponent,
     PlatePickupPageComponent,
     PlatePickupTableComponent,
-    PlatePickupCounterComponent
+    PlatePickupCounterComponent,
+    ExactFilterPipe
   ],
   imports: [
     BrowserModule,

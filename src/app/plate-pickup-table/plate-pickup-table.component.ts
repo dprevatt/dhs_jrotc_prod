@@ -1,8 +1,10 @@
+import { ExactFilterPipe } from './../exact-filter.pipe';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
-import { Sale } from '../../../models/Sale';
+import { WriteTreeCompleteChildSource } from '@firebase/database/dist/esm/src/core/view/CompleteChildSource';
+
 
 
 @Component({
@@ -17,12 +19,17 @@ export class PlatePickupTableComponent implements OnInit {
   allCadetSalesCollection: AngularFirestoreCollection<any[]>;
   allCadetSales: Observable<any[]>;
   showTable: boolean;
+  startingTicket: any;
+  endingTicket: any;
+  query: any;
 
   ngOnInit() {
 
     this.showTable = true;
     this.allCadetSalesCollection = this.afs.collection('CadetSales', ref => {
-      return ref.where('SaleComplete', '==', true).orderBy('TicketNumber', 'asc');
+      return ref.where('SaleComplete', '==', true)
+                .where('PlatePickedUp', '==', false)
+                .orderBy('TicketNumber', 'asc');
     });
 
     this.allCadetSales = this.allCadetSalesCollection.valueChanges();
@@ -40,8 +47,47 @@ export class PlatePickupTableComponent implements OnInit {
     this.showTable = false;
   }
 
-  markOrderReceived() {
+  markOrderReceived(sale) {
   console.log('Marking as received');
+  const ticketNumber = sale.TicketNumber;
+  console.log(ticketNumber);
+  const doc = this.afs.doc('CadetSales/' + ticketNumber);
+  doc.set({
+    PlatePickedUp: true
+  }, {merge: true});
+  this.query = '';
+  this.dp_incrementPlatePickedUpCounter();
 }
+
+  markBulkOrderReceived() {
+    console.log('Marking bulk order received.');
+    for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
+      const saleDoc = this.afs.doc('CadetSales/' + z.toString());
+      saleDoc.set({
+        PlatePickedUp: true
+      }, {merge: true})
+      .then(res => {
+        console.log('Marked as picked up!');
+        this.dp_incrementPlatePickedUpCounter();
+        this.startingTicket = '';
+        this.endingTicket = '';
+        return res;
+      })
+      .catch(err => {
+        alert('Error occurred while setting order received: ' + err);
+        return err;
+      });
+    }
+  }
+
+  dp_incrementPlatePickedUpCounter() {
+    this.db.database.ref('counters').child('PlatesPickedUp').transaction(d => {
+      if (!d) {
+        return d;
+      }
+      d.count += 1;
+      return d;
+    });
+  }
 
 }

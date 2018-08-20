@@ -1,18 +1,19 @@
 <div class="ui three column relaxed grid">
-    <div class="six wide column">
-        <!-- <app-cadet-sales-entry></app-cadet-sales-entry> -->
+    <div class="three wide column">
+        <!-- <div class="ui blue segment"> -->
+          <!-- Leave empty for spacer -->
+        <!-- </div> -->
     </div>
-    <div class="six wide column">
-        <app-sales-statistics></app-sales-statistics>
+    <div class="twelve wide center aligned column">
+      <div class="ui red segment">
+        <div class="ui huge statistic">
+          <div class="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+            {{totalPickedUpCount | async}}
+          </font></font></div>
+          <div class="label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+            Orders Picked Up
+          </font></font></div>
+        </div>
+      </div>
     </div>
-    <div class="four wide column" style="height: 10px">
-        <!-- <app-top25sellers></app-top25sellers> -->
-    </div>
-    <div class="two column row">
-            <div class="ten wide column">
-              <div class="ui red segment" style="z-index: 1000;">
-                      <app-cadet-sales-list></app-cadet-sales-list>
-                  </div>
-            </div>
-          </div>
   </div>

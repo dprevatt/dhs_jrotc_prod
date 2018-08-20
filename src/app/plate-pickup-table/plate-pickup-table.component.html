@@ -4,10 +4,36 @@
       Plate Pickup
     </div>
     <br>
-    <div class="ui icon input">
-        <i class="barcode icon"></i>
-        <input type="text" placeholder="Scan..." [(ngModel)]="query" style="width: 500px;">
-      </div>
+    <div class="ui grid">
+        <div class="eight wide column">
+          <div class="ui icon input">
+              <i class="barcode icon"></i>
+              <input type="number" placeholder="Scan..." [(ngModel)]="query" style="width: 500px;">
+            </div>
+        </div>
+        <div class="eight wide column">
+            <form class="ui form">
+                <h4 class="ui dividing header">Bulk Order Pickup</h4>
+                <br>
+                <div class="field">
+                  <div class="three fields">
+                    <div class="field">
+                      <input type="number" name="starting-ticket" [(ngModel)]="startingTicket" placeholder="Starting Ticket">
+                    </div>
+                    <div class="field">
+                        <input type="number" name="ending-ticket" [(ngModel)]="endingTicket" placeholder="Ending Ticket">
+                    </div>
+                    <div class="field">
+                        <button class="ui primary basic button" (click)="markBulkOrderReceived()">
+                            <i class="handshake outline icon"></i>
+                            Bulk Order Received
+                          </button>
+                    </div>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <br><br>
     <div class="container" *ngIf="showTable">
         <table class="ui center aligned striped tablet stackable table">
@@ -23,7 +49,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let sale of allCadetSales | async | search:'TicketNumber':query">
+              <tr *ngFor="let sale of allCadetSales | async | exactFilter:query">
                 <td>{{sale.TicketNumber}}</td>
                 <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
                 <td>{{sale.BuyerPhone}}</td>
@@ -31,7 +57,7 @@
                 <td>{{sale.SellerCompany}}</td>
                 <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
                 <td>
-                <button class="ui basic button" (click)="markOrderReceived()">
+                <button class="ui basic button" (click)="markOrderReceived(sale)">
                     <i class="handshake outline icon"></i>
                     Order Received
                   </button>
