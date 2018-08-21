@@ -1,5 +1,5 @@
 
-<!-- 
+<!--
 <div class="ui segment">
     <p>Please select a ticket range:</p>
     <div class="ui stackable two column grid">
@@ -69,7 +69,16 @@
       </div>
     </div>
     <br><br>
-    <table class="ui celled table" id="mytable" *ngIf="showResults">
+    <div class="ui blue attached message" *ngIf="showFullTextSearch" style="width: 50%">
+      <div class="header">
+        Keyword Search
+      </div>
+      <div class="ui icon input" style="width: 800px">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search..." [(ngModel)]="query">
+      </div>
+    </div>
+    <table class="ui celled table" id="mytable" *ngIf="showResults" style="height:300px;overflow-x: scroll;">
       <thead>
           <tr>
             <th>TicketNumber</th>
@@ -81,7 +90,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let cs of myData">
+          <tr *ngFor="let cs of myData | search:'TicketNumber,BuyerFirstName,BuyerLastName,BuyerPhone,Seller,SellerCompany':query">
             <td>{{cs.TicketNumber}}</td>
             <td>{{cs.Seller}}</td>
             <td>{{cs.SellerCompany}}</td>
@@ -94,7 +103,7 @@
 
 
 
-    <!-- <div class="ui modal" id="rangeParams"> 
+    <!-- <div class="ui modal" id="rangeParams">
         <i class="close icon"></i>
         <div class="header">
           Select Ticket Range:
@@ -135,6 +144,5 @@
           </div>
         </div>
       </div> -->
-        
+
       <!-- </table> -->
-  

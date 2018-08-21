@@ -24,11 +24,12 @@ dataBucket: Array<any>;
 myData: Array<any>;
 tableData: any;
 showSpinner: boolean;
-
+showFullTextSearch: boolean;
+query: any;
 
 
   ngOnInit() {
-
+    this.showFullTextSearch = false;
 
   } // End of OnInit
 
@@ -37,7 +38,7 @@ showSpinner: boolean;
   }
 
   ngAfterViewChecked() {
-    
+
 
   }
 
@@ -104,6 +105,7 @@ this.cadetSales = query.snapshotChanges().take(1).subscribe(vc => {
 
 this.myData = this.dataBucket;
 this.showResults = true;
+this.showFullTextSearch = true;
 
 }
 
