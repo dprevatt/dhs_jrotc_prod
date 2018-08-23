@@ -73,8 +73,8 @@ export class PlatePickupTableComponent implements OnInit {
 
   markBulkOrderReceived() {
     console.log('Marking bulk order received.');
-    const incCount = (this.endingTicket - this.startingTicket) + 1;
-    if (this.endingTicket <= this.startingTicket {
+    let incCount = (this.endingTicket - this.startingTicket) + 1;
+    if (this.endingTicket <= this.startingTicket) {
       alert('Invalid ticket range');
     }
     else
@@ -83,7 +83,7 @@ export class PlatePickupTableComponent implements OnInit {
         const saleDoc = this.afs.doc('CadetSales/' + z.toString());
         const docPath = 'CadetSales/' + z.toString();
         this.afs.doc<any>(docPath).valueChanges().take(1).subscribe(x => {
-          if (x.SaleComplete === true) {
+          if ((x.SaleComplete === true) && (x.PlatePickedUp === false)) {
             // alert('Hit');
             saleDoc.set({
               PlatePickedUp: true
@@ -97,10 +97,12 @@ export class PlatePickupTableComponent implements OnInit {
               return res;
             })
             .catch(err => {
+              incCount = incCount - 1;
               alert('Error occurred while setting order received: ' + err);
               return err;
             });
           } else {
+            this.dp_decrementPlatePickedUpCounter();
             alert('TicketNumber ' + z.toString() + ' has not been completed. \r\n Please submit the ticket prior to pickup.');
           }
           });
@@ -118,6 +120,16 @@ export class PlatePickupTableComponent implements OnInit {
         return d;
       }
       d.count += 1;
+      return d;
+    });
+  }
+
+  dp_decrementPlatePickedUpCounter() {
+    this.db.database.ref('counters').child('PlatesPickedUp').transaction(d => {
+      if (!d) {
+        return d;
+      }
+      d.count -= 1;
       return d;
     });
   }
