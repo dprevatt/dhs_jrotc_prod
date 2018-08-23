@@ -59,26 +59,58 @@ export class PlatePickupTableComponent implements OnInit {
   this.dp_incrementPlatePickedUpCounter();
 }
 
+// bulkOrderReceived() {
+//   if (this.endingTicket <= this.startingTicket {
+//     alert('Invalid ticket range');
+//   }
+//   else
+//   {
+//     for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
+
+//     }
+//   }
+// }
+
   markBulkOrderReceived() {
     console.log('Marking bulk order received.');
-    for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
-      const saleDoc = this.afs.doc('CadetSales/' + z.toString());
-      saleDoc.set({
-        PlatePickedUp: true
-      }, {merge: true})
-      .then(res => {
-        console.log('Marked as picked up!');
-        this.dp_incrementPlatePickedUpCounter();
-        this.startingTicket = '';
-        this.endingTicket = '';
-        return res;
-      })
-      .catch(err => {
-        alert('Error occurred while setting order received: ' + err);
-        return err;
-      });
+    const incCount = (this.endingTicket - this.startingTicket) + 1;
+    if (this.endingTicket <= this.startingTicket {
+      alert('Invalid ticket range');
     }
-  }
+    else
+    {
+      for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
+        const saleDoc = this.afs.doc('CadetSales/' + z.toString());
+        const docPath = 'CadetSales/' + z.toString();
+        this.afs.doc<any>(docPath).valueChanges().take(1).subscribe(x => {
+          if (x.SaleComplete === true) {
+            // alert('Hit');
+            saleDoc.set({
+              PlatePickedUp: true
+            }, {merge: true})
+            .then(res => {
+              // alert('Hit Then');
+              console.log('Marked as picked up!');
+              localStorage.setItem('ValidPickUp', 'true');
+              this.startingTicket = '';
+              this.endingTicket = '';
+              return res;
+            })
+            .catch(err => {
+              alert('Error occurred while setting order received: ' + err);
+              return err;
+            });
+          } else {
+            alert('TicketNumber ' + z.toString() + ' has not been completed. \r\n Please submit the ticket prior to pickup.');
+          }
+          });
+          if (localStorage.getItem('ValidPickUp') === 'true') {
+            this.dp_bulk_incrementPlatePickedUpCounter(incCount);
+            localStorage.setItem('ValidPickUp', null);
+          }
+    } // End of loop
+    } // End Of Else
+} // End of Func
 
   dp_incrementPlatePickedUpCounter() {
     this.db.database.ref('counters').child('PlatesPickedUp').transaction(d => {
@@ -86,6 +118,16 @@ export class PlatePickupTableComponent implements OnInit {
         return d;
       }
       d.count += 1;
+      return d;
+    });
+  }
+
+  dp_bulk_incrementPlatePickedUpCounter(num) {
+    this.db.database.ref('counters').child('PlatesPickedUp').transaction(d => {
+      if (!d) {
+        return d;
+      }
+      d.count += num;
       return d;
     });
   }

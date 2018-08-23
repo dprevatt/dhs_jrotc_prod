@@ -48,7 +48,7 @@ toTitleCase(str){
   }
 
   sendTab(){
-    const inputs = jQuery(':input').keypress(function(e) { 
+    const inputs = jQuery(':input').keypress(function(e) {
       if (e.which === 13) {
          e.preventDefault();
          jQuery('#buyerLast').focus();
@@ -142,7 +142,7 @@ submitBulkSale() {
             };
                 this.bulkSubmission(this, t, buyerInfo, this.validBulkSale, bCount);
 
-            } // end of for loop 
+            } // end of for loop
             if (localStorage.getItem('ValidBulkSale') === 'true'){
               this.clearForm();
               localStorage.removeItem('ValidBulkSale');
@@ -175,6 +175,7 @@ bulkSubmission(context, i, buyerInfo, vBulk, bCount) {
                           BuyerLastName: buyerInfo.buyerLast,
                           BuyerPhone: buyerInfo.buyerPhone !== undefined ? buyerInfo.buyerPhone : '',
                           SaleComplete: true,
+                          PlatePickedUp: false,
                           SaleCompletedDate: new Date().toISOString(),
                           Seller: context.enteredSale.Seller,
                           SellerCompany: context.enteredSale.SellerCompany,
@@ -216,6 +217,7 @@ submitSingleSale() {
               BuyerLastName: this.sale_buyerLast,
               BuyerPhone: this.sale_buyerPhone !== undefined ? this.sale_buyerPhone : '',
               SaleComplete: true,
+              PlatePickedUp: false,
               SaleCompletedDate: new Date().toISOString(),
               Seller: this.enteredSale.Seller,
               SellerCompany: this.enteredSale.SellerCompany,
