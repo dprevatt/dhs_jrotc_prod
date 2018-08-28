@@ -1,9 +1,11 @@
+import { tick } from '@angular/core/testing';
 import { ExactFilterPipe } from './../exact-filter.pipe';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { WriteTreeCompleteChildSource } from '@firebase/database/dist/esm/src/core/view/CompleteChildSource';
+import { isUndefined } from 'util';
 
 
 
@@ -22,6 +24,7 @@ export class PlatePickupTableComponent implements OnInit {
   startingTicket: any;
   endingTicket: any;
   query: any;
+  objArr: Array<any>;
 
   ngOnInit() {
 
@@ -33,6 +36,11 @@ export class PlatePickupTableComponent implements OnInit {
     });
 
     this.allCadetSales = this.allCadetSalesCollection.valueChanges();
+
+    this.allCadetSalesCollection.valueChanges().subscribe(xv => {
+      this.objArr = xv;
+    });
+
 
     jQuery('.message .close')
     .on('click', function() {
@@ -50,11 +58,7 @@ export class PlatePickupTableComponent implements OnInit {
   markOrderReceived(sale) {
   console.log('Marking as received');
   const ticketNumber = sale.TicketNumber;
-  console.log(ticketNumber);
-  const doc = this.afs.doc('CadetSales/' + ticketNumber);
-  doc.set({
-    PlatePickedUp: true
-  }, {merge: true});
+  this.setPlatePickedUp(ticketNumber);
   this.query = '';
   this.dp_incrementPlatePickedUpCounter();
 }
@@ -80,41 +84,21 @@ export class PlatePickupTableComponent implements OnInit {
     else
     {
       for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
-        const saleDoc = this.afs.doc('CadetSales/' + z.toString());
-        const docPath = 'CadetSales/' + z.toString();
-        this.afs.doc<any>(docPath).valueChanges().take(1).subscribe(x => {
-          if ((x.SaleComplete === true) && (x.PlatePickedUp === false)) {
-            // alert('Hit');
-            saleDoc.set({
-              PlatePickedUp: true
-            }, {merge: true})
-            .then(res => {
-              // alert('Hit Then');
-              console.log('Marked as picked up!');
-              localStorage.setItem('ValidPickUp', 'true');
-              this.startingTicket = '';
-              this.endingTicket = '';
-              return res;
-            })
-            .catch(err => {
-              incCount = incCount - 1;
-              alert('Error occurred while setting order received: ' + err);
-              return err;
-            });
-          } else {
-            this.dp_decrementPlatePickedUpCounter();
-            alert('TicketNumber ' + z.toString() + ' has not been completed. \r\n Please submit the ticket prior to pickup.');
-          }
-          });
-          if (localStorage.getItem('ValidPickUp') === 'true') {
-            this.dp_bulk_incrementPlatePickedUpCounter(incCount);
-            localStorage.setItem('ValidPickUp', null);
-          }
-    } // End of loop
+        if (this.isValidBulkEntry(this.objArr, z)) {
+          this.bulkPlatePickedUp(z);
+        } else {
+          const err = 'TicketNumber ' + z.toString() + ' can not be marked as picked up.';
+          console.log(err);
+        }
+
+      } // End of loop
     } // End Of Else
+    this.startingTicket = '';
+    this.endingTicket = '';
 } // End of Func
 
   dp_incrementPlatePickedUpCounter() {
+    console.log('Incremented!');
     this.db.database.ref('counters').child('PlatesPickedUp').transaction(d => {
       if (!d) {
         return d;
@@ -142,6 +126,33 @@ export class PlatePickupTableComponent implements OnInit {
       d.count += num;
       return d;
     });
+  }
+
+  isValidBulkEntry(items, entry) {
+    let isValid = false;
+      for (let i = 0; i <= items.length; i++) {
+        console.log('Entry is ' + entry);
+         if (items[i].TicketNumber === entry) {
+              isValid = true;
+              break;
+          } else {
+            isValid = false;
+          }
+    }
+    return isValid;
+
+  }
+
+  setPlatePickedUp(ticketNumber) {
+    const doc = this.afs.doc('CadetSales/' + ticketNumber.toString());
+    doc.set({PlatePickedUp: true}, {merge: true});
+  }
+
+  bulkPlatePickedUp(ticketNumber) {
+        // Set Sale as picked up
+        this.setPlatePickedUp(ticketNumber);
+        // Increment the counter
+        this.dp_incrementPlatePickedUpCounter();
   }
 
 }

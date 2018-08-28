@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let c of (cadets | async); let i = index" >
+    <tr *ngFor="let c of deltaData; let i = index" >
       <td>{{i + 1}}</td>
       <td>{{c.Name}}</td>
       <td>{{c.count}}</td>
