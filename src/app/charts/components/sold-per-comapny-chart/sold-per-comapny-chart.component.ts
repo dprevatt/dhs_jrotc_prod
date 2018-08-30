@@ -2,6 +2,7 @@ import { AppComponent } from './../../../app.component';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Component({
   selector: 'app-sold-per-comapny-chart',
@@ -12,21 +13,24 @@ export class SoldPerComapnyChartComponent implements OnInit {
 
   @ViewChild('chart') el: ElementRef;
 atRoot: boolean;
+companySales: Array<any>;
+otherSales: Array<any>;
 
-  constructor(private afs: AngularFirestore, private route: ActivatedRoute, private router: Router) { 
+  constructor(private afs: AngularFirestore, private route: ActivatedRoute, private router: Router, private db: AngularFireDatabase) {
       this.atRoot = true;
       console.log(this.router.url);
     }
 
   ngOnInit() {
+    this.dp_getCompanySales();
     this.basicChart();
   }
 
 
   basicChart() {
-    const query = this.afs.collection<any>('Rpt_CadetSalesByCompany').valueChanges().subscribe(x => {
+    const query = this.db.list<any>('/counters/companySales').valueChanges().subscribe(x => {
 
-    const element = this.el.nativeElement;
+      const element = this.el.nativeElement;
 
       const data = [
         {
@@ -35,7 +39,6 @@ atRoot: boolean;
           type: 'pie'
         }
       ];
-
       const style = {
         height: 600,
         width: 600,
@@ -43,6 +46,29 @@ atRoot: boolean;
       };
 
       Plotly.plot( element, data, style );
+    });
+} // End of function
+
+
+
+
+  dp_getCompanySales() {
+    const CompanySalesRef = this.db.list<any>('/counters/companySales', ref => {
+      return ref.orderByChild('count');
+    });
+    CompanySalesRef.valueChanges().subscribe(x => {
+      const myCompList = [];
+      const myOtherList = [];
+      for (let z = 0; z < x.length; z++) {
+        if (x[z].isClass === true) {
+          myCompList.push(x[z]);
+        }
+        else {
+          myOtherList.push(x[z]);
+        }
+      }
+      this.companySales = myCompList.reverse();
+      this.otherSales = myOtherList.reverse();
     });
   }
 
