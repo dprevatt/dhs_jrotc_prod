@@ -15,6 +15,7 @@ totalSalesCount: Observable<any>;
 companySales: Array<any>;
 otherSales: Array<any>;
 Rpt_CadetSales: Array<any>;
+salesGoal: number;
 
   constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
 
@@ -38,6 +39,15 @@ Rpt_CadetSales: Array<any>;
     //
     this.initializeTotalSalesCounter();
     this.initializeTotalPickedUpCounter();
+    //
+    this.setSalesGoal();
+  }
+
+  setSalesGoal() {
+    this.afs.doc('/Rpt_SalesGoal/CurrentGoal').set({
+      goal: this.salesGoal
+    });
+    console.log('SalesGoal Set!');
   }
 
   initializeTotalSalesCounter () {

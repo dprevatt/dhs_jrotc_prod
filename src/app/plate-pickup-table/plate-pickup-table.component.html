@@ -8,7 +8,7 @@
         <div class="eight wide column">
           <div class="ui icon input">
               <i class="barcode icon"></i>
-              <input type="number" placeholder="Scan..." [(ngModel)]="query" style="width: 500px;">
+              <input type="number" placeholder="Scan..." [(ngModel)]="query" style="width: 500px;" (keyup.enter)="scanTicket(query)" id="scanner">
             </div>
         </div>
         <div class="eight wide column">

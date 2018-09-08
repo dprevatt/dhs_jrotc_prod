@@ -84,12 +84,13 @@ export class PlatePickupTableComponent implements OnInit {
     else
     {
       for (let z = this.startingTicket; z <= this.endingTicket; z++ ) {
-        if (this.isValidBulkEntry(this.objArr, z)) {
-          this.bulkPlatePickedUp(z);
-        } else {
-          const err = 'TicketNumber ' + z.toString() + ' can not be marked as picked up.';
-          console.log(err);
-        }
+        // if (this.isValidBulkEntry(this.objArr, z)) {
+        //   this.bulkPlatePickedUp(z);
+        // } else {
+        //   const err = 'TicketNumber ' + z.toString() + ' can not be marked as picked up.';
+        //   console.log(err);
+        // }
+        this.scanTicket(z.toString());
 
       } // End of loop
     } // End Of Else
@@ -145,7 +146,11 @@ export class PlatePickupTableComponent implements OnInit {
 
   setPlatePickedUp(ticketNumber) {
     const doc = this.afs.doc('CadetSales/' + ticketNumber.toString());
-    doc.set({PlatePickedUp: true}, {merge: true});
+    doc.set(
+      {
+        PlatePickedUp: true,
+        PlatePickedUpDate: new Date().toISOString()
+      }, {merge: true});
   }
 
   bulkPlatePickedUp(ticketNumber) {
@@ -154,5 +159,32 @@ export class PlatePickupTableComponent implements OnInit {
         // Increment the counter
         this.dp_incrementPlatePickedUpCounter();
   }
+
+
+
+  scanTicket(ticketNum) {
+    const docRef = this.afs.collection<any>('CadetSales').doc<any>(ticketNum.toString());
+    docRef.valueChanges().take(1).subscribe(d => {
+      console.log(d);
+      if (!d) {
+        alert('Invalid Ticket Number');
+      }
+      if (d.PlatePickedUp === true) {
+        alert('Ticket number ' + d.TicketNumber + ' has already been picked up.');
+      }
+      if (d.SaleComplete === false) {
+        alert('Ticket number ' + d.TicketNumber + ' has not been marked as sold.');
+      }
+      if ( (d.PlatePickedUp === false) && (d.SaleComplete === true) ) {
+        console.log('Valid entry');
+        this.setPlatePickedUp(d.TicketNumber.toString());
+        this.dp_incrementPlatePickedUpCounter();
+      }
+    });
+    this.query = '';
+    jQuery('#sacnner').focus();
+  }
+
+
 
 }

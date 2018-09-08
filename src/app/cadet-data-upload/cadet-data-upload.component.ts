@@ -196,6 +196,7 @@ importData(type, arr) {
           SaleComplete: false,
           SaleCompletedDate: '',
           PlatePickedUp: false,
+          PlatePickedUpDate: '',
           Seller: arr[cs].Seller,
           SellerCompany: arr[cs].SellerCompany,
           SellerId: arr[cs].SellerId,

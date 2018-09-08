@@ -1,8 +1,11 @@
 <div class="container">
   <div class="ui segment">
     <p>Initialize Cadet Count</p>
+    <div class="ui input">
+      <input type="number" placeholder="Set Sales Goal..." [(ngModel)]="salesGoal">
+    </div>
     <button class="ui primary button" (click)="initializeCadetCount()">
-      Set Cadet Count
+      Initialize Counters
     </button>
   </div>
   <div class="ui segment">
