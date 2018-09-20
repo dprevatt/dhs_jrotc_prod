@@ -54,6 +54,7 @@ import { PlatePickupPageComponent } from './plate-pickup-page/plate-pickup-page.
 import { PlatePickupTableComponent } from './plate-pickup-table/plate-pickup-table.component';
 import { PlatePickupCounterComponent } from './plate-pickup-counter/plate-pickup-counter.component';
 import { ExactFilterPipe } from './exact-filter.pipe';
+import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
 
 
 
@@ -101,7 +102,8 @@ import { ExactFilterPipe } from './exact-filter.pipe';
     PlatePickupPageComponent,
     PlatePickupTableComponent,
     PlatePickupCounterComponent,
-    ExactFilterPipe
+    ExactFilterPipe,
+    PickupCounterDisplayComponent
   ],
   imports: [
     BrowserModule,

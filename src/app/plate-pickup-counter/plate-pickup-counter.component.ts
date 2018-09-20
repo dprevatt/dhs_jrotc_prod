@@ -23,4 +23,5 @@ export class PlatePickupCounterComponent implements OnInit {
     return this.totalPickedUpCount;
   }
 
+
 }

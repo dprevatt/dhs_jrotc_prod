@@ -23,11 +23,11 @@ export class PlatePickupTableComponent implements OnInit {
   showTable: boolean;
   startingTicket: any;
   endingTicket: any;
-  query: any;
+  scanCode: any;
+  queryString: any;
   objArr: Array<any>;
 
   ngOnInit() {
-
     this.showTable = true;
     this.allCadetSalesCollection = this.afs.collection('CadetSales', ref => {
       return ref.where('SaleComplete', '==', true)
@@ -59,7 +59,8 @@ export class PlatePickupTableComponent implements OnInit {
   console.log('Marking as received');
   const ticketNumber = sale.TicketNumber;
   this.setPlatePickedUp(ticketNumber);
-  this.query = '';
+  this.scanCode = '';
+  this.queryString = '';
   this.dp_incrementPlatePickedUpCounter();
 }
 
@@ -181,7 +182,7 @@ export class PlatePickupTableComponent implements OnInit {
         this.dp_incrementPlatePickedUpCounter();
       }
     });
-    this.query = '';
+    this.scanCode = '';
     jQuery('#sacnner').focus();
   }
 

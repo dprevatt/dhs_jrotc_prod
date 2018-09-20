@@ -1,3 +1,4 @@
+import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
 import { DataManagementComponent } from './data-management/data-management.component';
 import { SiteAdministrationComponent } from './site-administration/site-administration.component';
 import { DeltaSellersTableComponent } from './company-reporting/delta-sellers-table/delta-sellers-table.component';
@@ -85,6 +86,10 @@ const routes: Routes = [
     {
       path: 'PlatePickup',
       component: PlatePickupPageComponent
+    },
+    {
+      path: 'PickupCounterDisplay',
+      component: PickupCounterDisplayComponent
     }
 ];
 
