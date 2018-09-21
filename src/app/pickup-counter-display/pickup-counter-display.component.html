@@ -8,28 +8,22 @@
         <div class="ui red segment" style="width: 100%; height: 1000px">
           <div class="ui grid">
             <div class="four wide column">
-                <div class="ui statistic float left">
-                    <div class="value">
-                        <img src="../assets/images/if_Money-Increase_379342.png" class="ui circular inline image">
-                      {{totalSales}}
-                    </div>
-                    <div class="label">
-                      Tickets Sold
-                    </div>
-                  </div>
+              <div style="font-size: 40vh; position: relative; padding-top: 200px; color: green">
+                        {{totalPickedUpCount | async}}
+              </div>
+              <div style="font-size: 5vh; position: relative; padding-top: 200px; padding-left: 60px; color: green">
+                  Plates Picked Up
+              </div>
             </div>
             <div class="four wide column">
             </div>
             <div class="four wide column">
-                <div class="ui statistic float right">
-                    <div class="value">
-                      <img src="../assets/images/if_39_Trophy_2064514 (1).png" class="ui circular inline image">
-                      {{4000 - totalSales}}
-                    </div>
-                    <div class="label">
-                      Till Goal
-                    </div>
-                  </div>
+                <div style="font-size: 40vh; position: relative; padding-top: 200px">
+                    {{ (totalSalesCount | async) - (totalPickedUpCount | async) }}
+                </div>
+          <div style="font-size: 4vh; position: relative; padding-top: 200px; padding-left: 60px">
+              Plates To Be Picked Up
+          </div>
             </div>
           </div>
         </div>
