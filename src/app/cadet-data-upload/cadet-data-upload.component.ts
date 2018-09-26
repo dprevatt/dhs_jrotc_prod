@@ -171,6 +171,10 @@ public fileChanged (e){
       /* grab first sheet */
       const wsname: string = wb.SheetNames[0];
       console.log(wsname);
+      if (wsname !== 'CadetData'){
+        alert('Invalid spreadsheet!');
+        return;
+      }
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
       console.log(ws['A1'].v); // this gets the value of the cell
       // Read The Data into an JSON array
