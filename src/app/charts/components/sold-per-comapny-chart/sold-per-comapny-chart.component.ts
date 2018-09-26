@@ -34,8 +34,8 @@ otherSales: Array<any>;
 
       const data = [
         {
-          labels: [x[0].Company, x[1].Company, x[2].Company, x[3].Company,  x[4].Company,  x[5].Company],
-          values: [x[0].count, x[1].count, x[2].count, x[3].count,  x[4].count,  x[5].count],
+          labels: [x[0].Company, x[1].Company, x[2].Company, x[3].Company,  x[4].Company,  x[5].Company, x[7].Company],
+          values: [x[0].count, x[1].count, x[2].count, x[3].count,  x[4].count,  x[5].count, x[7].count],
           type: 'pie'
         }
       ];
