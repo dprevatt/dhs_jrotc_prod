@@ -8,7 +8,20 @@
       Initialize Counters
     </button>
   </div>
-  <div class="ui segment">
+  <!-- fileuploadtest -->
+  <div class="ui icon message">
+    <label for="file-upload" class="custom-file-upload">
+        <i class="cloud upload icon"></i> Cadet Upload
+    </label>
+    <input id="file-upload" type="file" (change)="fileChanged($event)"/>&nbsp;&nbsp;&nbsp;
+  <div class="content">
+    <div class="header">
+      Upload a list of Cadets here!
+    </div>
+    <p>Upload results will appear in the below tables once completed.</p>
+  </div>
+</div>
+  <!-- <div class="ui segment">
     <p>Initialize Cadet Count</p>
     <button class="ui primary button" (click)="incrementTotalSales()">Increment Total Sales</button>
     <button class="ui primary button" (click)="Create_RptCadetSales()">Test Create</button>
@@ -23,5 +36,5 @@
   <ul *ngFor="let cs of Rpt_CadetSales">
     <li>{{cs.Name}}</li>
     <li>{{cs.count}}</li>
-  </ul>
+  </ul> -->
 </div>

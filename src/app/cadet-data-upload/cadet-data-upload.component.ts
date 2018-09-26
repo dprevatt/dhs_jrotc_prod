@@ -17,6 +17,7 @@ import { Buyer } from '../models/Buyer';
 import { Cadets } from '../models/Cadets';
 import { Router, ActivatedRoute } from '@angular/router';
 import { forEach } from '@firebase/util';
+import * as XLSX from 'js-xlsx';
 
 @Component({
   selector: 'app-cadet-data-upload',
@@ -82,69 +83,142 @@ this.myCounter = 0;
   }
 
 
-  public fileChanged (e) {
-    this.createTables();
-    const cadetList = [];
-    const cadetSalesList = [];
-    this.cadetUploadFile = e.target.files[0];
-    console.log(e.target.files[0]);
-    // Code for reading CSV and uploading
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      const fileContents = fileReader.result;
-      const lines = fileContents.split('\r\n');
-      let uploadedCadetCount = 0;
-      for (let i = 1; i < lines.length; i++) {
-        if (lines[i].split(',')[0] !== 'CadetFirstName') {
-          uploadedCadetCount++;
-          const col1 = lines[i].split(',')[0];
-          const col2 = lines[i].split(',')[1];
-          const col3 = lines[i].split(',')[2];
-          const col4 = lines[i].split(',')[3];
-          const col5 = lines[i].split(',')[4];
-           // console.log('Cadet: ' + col2 + ', ' + col1 + ' Company: ' + col3);
-          // Actually post the data
-          const cadetIdentifier = uuid();
-          const cadetData = {
-            CadetId: cadetIdentifier,
-            Cadet: col2 + ', ' + col1,
-            Company: col3,
-            CreatedDate: new Date(),
-            CreatedBy: 'System',
-            ModifiedDate: '',
-            ModifiedBy: ''
-          };
+//   public fileChanged (e) {
+//     this.createTables();
+//     const cadetList = [];
+//     const cadetSalesList = [];
+//     this.cadetUploadFile = e.target.files[0];
+//     console.log(e.target.files[0]);
+//     // Code for reading CSV and uploading
+//     const fileReader = new FileReader();
+//     fileReader.onload = (e) => {
+//       const fileContents = fileReader.result;
+//       const lines = fileContents.split('\r\n');
+//       let uploadedCadetCount = 0;
+//       for (let i = 1; i < lines.length; i++) {
+//         if (lines[i].split(',')[0] !== 'CadetFirstName') {
+//           uploadedCadetCount++;
+//           const col1 = lines[i].split(',')[0];
+//           const col2 = lines[i].split(',')[1];
+//           const col3 = lines[i].split(',')[2];
+//           const col4 = lines[i].split(',')[3];
+//           const col5 = lines[i].split(',')[4];
+//            // console.log('Cadet: ' + col2 + ', ' + col1 + ' Company: ' + col3);
+//           // Actually post the data
+//           const cadetIdentifier = uuid();
+//           const cadetData = {
+//             CadetId: cadetIdentifier,
+//             Cadet: col2 + ', ' + col1,
+//             Company: col3,
+//             CreatedDate: new Date(),
+//             CreatedBy: 'System',
+//             ModifiedDate: '',
+//             ModifiedBy: ''
+//           };
 
-          const cadetSalesData = {
-            BuyerFirstName: '',
-            BuyerLastName: '',
-            BuyerPhone: '',
-            SaleComplete: false,
-            SaleCompletedDate: '',
-            Seller: col2 + ', ' + col1,
-            SellerCompany: col3,
-            SellerId: cadetIdentifier,
-            TicketNumberStart: col4,
-            TicketNumberEnd: col5
-          };
+//           const cadetSalesData = {
+//             BuyerFirstName: '',
+//             BuyerLastName: '',
+//             BuyerPhone: '',
+//             SaleComplete: false,
+//             SaleCompletedDate: '',
+//             Seller: col2 + ', ' + col1,
+//             SellerCompany: col3,
+//             SellerId: cadetIdentifier,
+//             TicketNumberStart: col4,
+//             TicketNumberEnd: col5
+//           };
 
-          cadetList.push(cadetData);
-          cadetSalesList.push(cadetSalesData);
+//           cadetList.push(cadetData);
+//           cadetSalesList.push(cadetSalesData);
 
-          //this.afs.collection('Cadets').doc(col2 + ', ' + col1).set(postData, {merge: true});
+//           //this.afs.collection('Cadets').doc(col2 + ', ' + col1).set(postData, {merge: true});
 
-        } // End of if headerRow
-      } // End of csv loop
+//         } // End of if headerRow
+//       } // End of csv loop
 
 
-    this.importData('Cadets', cadetList);
-    this.importData('CadetSales', cadetSalesList);
+//     this.importData('Cadets', cadetList);
+//     this.importData('CadetSales', cadetSalesList);
 
+//     };
+//     fileReader.readAsText(this.cadetUploadFile);
+
+// }
+
+public fileChanged (e){
+  this.createTables();
+  const cadetList = [];
+  const cadetSalesList = [];
+  this.cadetUploadFile = e.target.files[0];
+  // Code for reading CSV and uploading
+    let uploadedCadetCount = 0;
+  // this.cadetUploadFile = e.target.files[0];
+  console.log(e.target.files[0]);
+  // Code for reading CSV and uploading
+  // const fileReader = new FileReader();
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(e.target);
+    if (target.files.length !== 1) {
+      alert('Cannot upload multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      console.log(wsname);
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      console.log(ws['A1'].v); // this gets the value of the cell
+      // Read The Data into an JSON array
+      const ssData = XLSX.utils.sheet_to_row_object_array(ws);
+      for (let i = 0; i < ssData.length; i++) {
+        // console.log(ssData[i]);
+      uploadedCadetCount++;
+        const col1 = ssData[i].CadetFirstName;
+        const col2 = ssData[i].CadetLastName;
+        const col3 = ssData[i].Company;
+        const col4 = ssData[i].TicketNumberStart;
+        const col5 = ssData[i].TicketNumberEnd;
+         // console.log('Cadet: ' + col2 + ', ' + col1 + ' Company: ' + col3);
+        // Actually post the data
+        const cadetIdentifier = uuid();
+        const cadetData = {
+          CadetId: cadetIdentifier,
+          Cadet: col2 + ', ' + col1,
+          Company: col3,
+          CreatedDate: new Date(),
+          CreatedBy: 'System',
+          ModifiedDate: '',
+          ModifiedBy: ''
+        };
+
+        const cadetSalesData = {
+          BuyerFirstName: '',
+          BuyerLastName: '',
+          BuyerPhone: '',
+          SaleComplete: false,
+          SaleCompletedDate: '',
+          Seller: col2 + ', ' + col1,
+          SellerCompany: col3,
+          SellerId: cadetIdentifier,
+          TicketNumberStart: col4,
+          TicketNumberEnd: col5
+        };
+
+        cadetList.push(cadetData);
+        cadetSalesList.push(cadetSalesData);
+      } // End of loop
+
+      // Import the data
+      this.importData('Cadets', cadetList);
+      this.importData('CadetSales', cadetSalesList);
     };
-    fileReader.readAsText(this.cadetUploadFile);
-
-}
-
+    reader.readAsBinaryString(target.files[0]);
+ }
 
 importData(type, arr) {
   const cadetBatch = this.afs.firestore.batch();
