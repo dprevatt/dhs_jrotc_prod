@@ -43,12 +43,19 @@ query: any;
   }
 
 
-clickMe() {
-  const query = this.afs.collection('CadetSales', ref => {
-    return ref.orderBy('TicketNumber', 'asc')
-              .where('TicketNumber', '>=', this.startTicketParam)
-              .where('TicketNumber', '<=', this.endTicketParam);
-  });
+searchTickets() {
+  if (this.endTicketParam) {
+    const query = this.afs.collection('CadetSales', ref => {
+      return ref.orderBy('TicketNumber', 'asc')
+                .where('TicketNumber', '>=', this.startTicketParam)
+                .where('TicketNumber', '<=', this.endTicketParam);
+    });
+  } else {
+    const query = this.afs.collection('CadetSales', ref => {
+      return ref.where('TicketNumber', '==', this.startTicketParam);
+    });
+  }
+
 
 
 this.dataBucket = [];
