@@ -23,7 +23,7 @@ export class TicketAssignmentComponent implements OnInit {
   cadetCollection: AngularFirestoreCollection<any>;
   cadetIdentity: AngularFirestoreCollection<any>;
   cadets: Observable<any[]>;
-  ticketStart: any;
+  ticketStart: string;
   ticketEnd: string;
   selectedCadetId: string;
   selectedCadet: string;
@@ -55,69 +55,33 @@ export class TicketAssignmentComponent implements OnInit {
     this.selectedCadet = selection.split('|')[1];
     this.selectedCadetId = selection.split('|')[0];
     const myCadet = this.selectedCadet;
-    if (myCadet == null || ''){
+    if (myCadet == null || '') {
         alert('You must choose a cadet to assign tickets.');
     }
     else if (myCadet != null || '')
     {
       console.log(this.ticketStart + ' - ' + this.ticketEnd);
-      if (this.ticketEnd)
-      {
-      if (this.ticketEnd < this.ticketStart) {
-        alert('Invalid ticket range');
-      } else {
-        // Assign Tickets to Cadet
-        for (let t = this.ticketStart; t <= this.ticketEnd; t++ ){
-          console.log(this.selectedCadetId);
-          const cadetSalesData = {
-            BuyerFirstName: '',
-            BuyerLastName: '',
-            BuyerPhone: '',
-            SaleComplete: false,
-            SaleCompletedDate: '',
-            Seller: myCadet,
-            SellerCompany: this.selectedCadetCompany,
-            SellerId: this.selectedCadetId,
-            TicketNumber: t
-          };
-          this.afs.collection('CadetSales').doc(t.toString()).set(cadetSalesData, {merge: true});
-        }
-        // Clear the form
-        this.ticketStart = '';
-        this.ticketEnd = '';
-        // jQuery('#dp').dropdown('clear');
-        // jQuery('#dp').dropdown('destroy');
-        jQuery('#dp').dropdown('restore defaults');
-        alert('Tickets Assigned Successfully');
-      }
-    }
-    else {
-      // assign single ticket
-      const cadetSalesData = {
-        BuyerFirstName: '',
-        BuyerLastName: '',
-        BuyerPhone: '',
-        SaleComplete: false,
-        SaleCompletedDate: '',
-        Seller: myCadet,
-        SellerCompany: this.selectedCadetCompany,
-        SellerId: this.selectedCadetId,
-        TicketNumber: this.ticketStart
-      };
-      this.afs.collection('CadetSales').doc(this.ticketStart.toString()).set(cadetSalesData, {merge: true});
+      if (this.ticketEnd) {
+        localStorage.setItem('TicketEnd', this.ticketEnd);
+        if (parseInt(this.ticketEnd) < parseInt(this.ticketStart)) {
+            alert('Invalid ticket range');
+            } else {
+              // Loop thru Tickets to assign
+              for (let t = parseInt(this.ticketStart); t <= parseInt(this.ticketEnd); t++ ) {
+              console.log(this.selectedCadetId);
 
-      // Clear the form
-      this.ticketStart = '';
-      this.ticketEnd = '';
-      // jQuery('#dp').dropdown('clear');
-      // jQuery('#dp').dropdown('destroy');
-      jQuery('#dp').dropdown('restore defaults');
-      alert('Ticket Assigned Successfully');
+              // Check if ticket already exists
+              this.ticketAlreadyExists(t.toString());
+
+              } // End of the loop
+              localStorage.setItem('TicketEnd', null);
+            } // end of valid ticket range else
+        } else {
+            // Check if ticket already exists
+            this.ticketAlreadyExists(this.ticketStart.toString());
+      } // end of else
     }
-    
-    }
-    
-    
+
   }
 
 
@@ -130,11 +94,53 @@ export class TicketAssignmentComponent implements OnInit {
 
   }
 
-  setCadetClick(cadet, cadetId, cadetCompany){
+  setCadetClick(cadet, cadetId, cadetCompany) {
     this.selectedCadet = cadet;
     this.selectedCadetId = cadetId;
     this.selectedCadetCompany = cadetCompany;
     console.log(this.selectedCadetCompany);
+  }
+
+  ticketAlreadyExists(ticketNumber) {
+    this.afs.firestore.doc('/CadetSales/' + ticketNumber.toString()).get()
+    .then(docSnapshot => {
+      if (docSnapshot.exists) {
+        alert('Ticket ' + ticketNumber.toString() + ' is already assigned');
+        // Clear the form
+        this.ticketStart = '';
+        this.ticketEnd = '';
+        // jQuery('#dp').dropdown('clear');
+        // jQuery('#dp').dropdown('destroy');
+        jQuery('#dp').dropdown('restore defaults');
+      } else {
+          console.log('Ticket ' + ticketNumber.toString() + ' does not exist, now to create it.');
+          this.afs.collection('CadetSales').doc(ticketNumber.toString()).set({
+            BuyerFirstName: '',
+            BuyerLastName: '',
+            BuyerPhone: '',
+            SaleComplete: false,
+            SaleCompletedDate: '',
+            Seller: this.selectedCadet,
+            SellerCompany: this.selectedCadetCompany,
+            SellerId: this.selectedCadetId,
+            TicketNumber: parseInt(ticketNumber)
+        })
+        .then(function() {
+          if (!localStorage.getItem('TicketEnd')) {
+            console.log('hgere2');
+            alert('Tickets Assigned Successfully!');
+          } else {
+            if (ticketNumber.toString() === localStorage.getItem('TicketEnd')) {
+              console.log('hgeresefsaedf');
+              alert('Tickets Assigned Successfully!');
+            }
+          }
+        })
+        .catch(function(error) {
+            alert('Error writing document: ' + error);
+        });
+      }
+    });
   }
 
 
