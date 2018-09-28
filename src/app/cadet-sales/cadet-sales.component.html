@@ -111,23 +111,36 @@
     <br/>
     <div class="ui icon input">
         <i class="search icon"></i>
-        <input type="text" placeholder="Search Sales..." [(ngModel)]="query" style="width: 500px;">
+        <input type="text" placeholder="Search Sales..." [(ngModel)]="query" id="ticketQuery" style="width: 500px;">
       </div>
+      <div class="ui labeled button" tabindex="0" style="margin-left: 2%">
+          <div class="ui blue button" (click)="showOnlySoldTickets()">
+            Show Sold Tickets
+          </div>
+          <a class="ui basic left pointing blue label" (click)="showOnlyOpenTickets()">
+            Show Open Tickets
+          </a>
+          <a class="ui left pointing blue label" (click)="showAllTickets()">
+              Show All
+            </a>
+        </div>
     <table class="ui center aligned striped tablet stackable table">
         <thead>
           <tr>
             <th>TicketNumber</th>
             <th>Buyer</th>
             <th>BuyerPhone</th>
+            <th>Ticket Status</th>
             <th>SaleCompletedDate</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let sale of sales | async | search:'TicketNumber,BuyerFirstName,BuyerLastName':query">
+          <tr *ngFor="let sale of sales | async | search:'TicketNumber,BuyerFirstName,BuyerLastName,SaleComplete':query">
             <td>{{sale.TicketNumber}}</td>
             <td>{{sale.BuyerFirstName + ' ' + sale.BuyerLastName}}</td>
             <td>{{sale.BuyerPhone}}</td>
+            <td>{{sale.SaleComplete ? 'Sold' : 'Open'}}</td>
             <td>{{sale.SaleCompletedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
             <td>
             <button class="ui basic button" (click)="editSale(sale)" *ngIf="userLoggedIn">
@@ -186,4 +199,3 @@
             </div>
           </div>
         </div>
-      

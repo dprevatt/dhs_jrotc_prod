@@ -54,6 +54,7 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
   loggedInUser: Subscription;
   currentUser: string;
   userLoggedIn: boolean;
+  query: any;
   /*
   */
 
@@ -65,7 +66,7 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
    }
-  
+
 
 
   ngOnInit() {
@@ -84,9 +85,9 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
 
     // Get Sales for tableview
     this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
-      return ref.where('SellerId', '==', this.id).where('SaleComplete', '==', true);
+      return ref.where('SellerId', '==', this.id)
     });
-    
+
     this.sales = this.cadetSalesCollection.valueChanges();
 
     // Get total assigned Tickets
@@ -136,7 +137,7 @@ setCurrentCadet(x) {
     this.edit_TicketNumber = sale.TicketNumber;
     this.edit_Seller = sale.Seller;
     jQuery('#editModal').modal('show');
-  
+
 }
 
 updateSale(ticket){
@@ -167,12 +168,12 @@ phoneMask(){
 		const jQueryphone = jQuery(this);
     // Don't let them remove the starting '('
     if (jQueryphone.val().length === 1 && (key === 8 || key === 46)) {
-			jQueryphone.val('('); 
+			jQueryphone.val('(');
       return false;
-		} 
+		}
     // Reset if they highlight and type over first char.
     else if (jQueryphone.val().charAt(0) !== '(') {
-			jQueryphone.val('('+String.fromCharCode(e.keyCode)+''); 
+			jQueryphone.val('('+String.fromCharCode(e.keyCode)+'');
 		}
 		// Auto-format- do not expose the mask as the user begins to type
 		if (key !== 8 && key !== 9) {
@@ -181,21 +182,21 @@ phoneMask(){
 			}
 			if (jQueryphone.val().length === 5) {
 				jQueryphone.val(jQueryphone.val() + ' ');
-			}			
+			}
 			if (jQueryphone.val().length === 9) {
 				jQueryphone.val(jQueryphone.val() + '-');
 			}
 		}
 		// Allow numeric (and tab, backspace, delete) keys only
-		return (key == 8 || 
+		return (key == 8 ||
 				key == 9 ||
 				key == 46 ||
 				(key >= 48 && key <= 57) ||
-				(key >= 96 && key <= 105));	
+				(key >= 96 && key <= 105));
 	})
 	.bind('focus click', function () {
 		const jQueryphone = jQuery(this);
-		
+
 		if (jQueryphone.val().length === 0) {
 			jQueryphone.val('(');
 		}
@@ -206,7 +207,7 @@ phoneMask(){
 	})
 	.blur(function () {
 		const jQueryphone = jQuery(this);
-		
+
 		if (jQueryphone.val() === '(') {
 			jQueryphone.val('');
 		}
@@ -224,6 +225,24 @@ phoneMask(){
         this.userLoggedIn = false;
       }
     }
+
+
+    showOnlySoldTickets() {
+      this.query = 'true';
+      jQuery('#ticketQuery').fadeOut();
+    }
+
+    showOnlyOpenTickets() {
+      this.query = 'false';
+      jQuery('#ticketQuery').fadeOut();
+    }
+
+    showAllTickets() {
+      jQuery('#ticketQuery').fadeIn();
+      this.query = '';
+      jQuery('#ticketQuery').focus();
+    }
+
 
 
 } //  end of class
