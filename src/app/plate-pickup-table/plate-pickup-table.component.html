@@ -7,6 +7,7 @@
     <div class="ui four column grid">
       <div class="row">
         <div class="eight wide column">
+            <h3>Search Ticket Barcode:</h3>
           <div class="ui icon input">
             <i class="barcode icon"></i>
             <input type="number" placeholder="Scan..." [(ngModel)]="scanCode" style="width: 500px;" (keyup.enter)="scanTicket(scanCode)" id="scanner">
@@ -37,9 +38,10 @@
           </div>
       </div>
       <div class="eight wide column">
+        <h3>Search by Name or Number:</h3>
         <div class="ui icon input">
           <i class="search icon"></i>
-          <input type="text" placeholder="Search Names..." [(ngModel)]="queryString" style="width: 500px;"  id="queryTextBox">
+          <input type="text" placeholder="Search Names or number..." [(ngModel)]="queryString" style="width: 500px;"  id="queryTextBox">
         </div>
       </div>
     </div>
@@ -58,7 +60,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let sale of allCadetSales | async | search:'Seller,BuyerLastName,BuyerFirstName,BuyerPhone,SellerCompany':queryString">
+              <tr *ngFor="let sale of allCadetSales | async | search:'Seller,BuyerLastName,BuyerFirstName,BuyerPhone,SellerCompany,TicketNumber':queryString">
                 <td>{{sale.TicketNumber}}</td>
                 <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
                 <td>{{sale.BuyerPhone}}</td>
