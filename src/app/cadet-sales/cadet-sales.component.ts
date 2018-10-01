@@ -85,7 +85,8 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
 
     // Get Sales for tableview
     this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
-      return ref.where('SellerId', '==', this.id)
+      return ref.orderBy('TicketNumber', 'asc')
+                .where('SellerId', '==', this.id);
     });
 
     this.sales = this.cadetSalesCollection.valueChanges();
@@ -123,8 +124,8 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
 
 
 setCurrentCadet(x) {
-  console.log('From set current cadet');
-  console.log(x.Seller);
+  // console.log('From set current cadet');
+  // console.log(x.Seller);
   this.currentCadet = x.Seller;
   }
 
@@ -228,18 +229,44 @@ phoneMask(){
 
 
     showOnlySoldTickets() {
-      this.query = 'true';
-      jQuery('#ticketQuery').fadeOut();
+      // this.query = 'true';
+      // jQuery('#ticketQuery').fadeOut();
+      this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
+        return ref.orderBy('TicketNumber', 'asc')
+                  .where('SellerId', '==', this.id)
+                  .where('SaleComplete', '==', true);
+      });
+
+      this.sales = this.cadetSalesCollection.valueChanges();
+
+      jQuery('#ticketQuery').focus();
     }
 
     showOnlyOpenTickets() {
-      this.query = 'false';
-      jQuery('#ticketQuery').fadeOut();
+      // this.query = 'false';
+      // jQuery('#ticketQuery').fadeOut();
+      this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
+        return ref.orderBy('TicketNumber', 'asc')
+                  .where('SellerId', '==', this.id)
+                  .where('SaleComplete', '==', false);
+      });
+
+      this.sales = this.cadetSalesCollection.valueChanges();
+
+      jQuery('#ticketQuery').focus();
     }
 
     showAllTickets() {
-      jQuery('#ticketQuery').fadeIn();
-      this.query = '';
+      // jQuery('#ticketQuery').fadeIn();
+      // this.query = '';
+      // jQuery('#ticketQuery').focus();
+      this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
+        return ref.orderBy('TicketNumber', 'asc')
+                  .where('SellerId', '==', this.id);
+      });
+
+      this.sales = this.cadetSalesCollection.valueChanges();
+
       jQuery('#ticketQuery').focus();
     }
 

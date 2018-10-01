@@ -4,6 +4,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database-deprecated';
+import { v4 as uuid } from 'uuid';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,14 +20,30 @@ companySales: Array<any>;
 otherSales: Array<any>;
 Rpt_CadetSales: Array<any>;
 salesGoal: number;
+deleteApplicationDataStatus: string;
+importApplicationDataStatus: string;
+cadetUploadFile: any;
+authCode: string;
 
-  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
+  constructor(private afs: AngularFirestore, private db: AngularFireDatabase, private router: Router) { }
 
   ngOnInit() {
+    jQuery('#authorizationModal')
+    .modal('setting', 'closable', false)
+    .modal('show');
     this.incrementTotalSales();
     this.getTotalSalesCount();
     this.getCompanySales();
     this.getRpt_CadetSales();
+  }
+
+  validateAuth() {
+    if (this.authCode === 'DHS_JROTC_Admin') {
+      jQuery('#authorizationModal').modal('hide');
+    } else {
+      alert('Permission Denied');
+      this.router.navigate(['/']);
+    }
   }
 
   initializeCadetCount() {
@@ -43,6 +61,7 @@ salesGoal: number;
     this.initializeTotalPickedUpCounter();
     //
     this.setSalesGoal();
+    alert('Sales goal set successfully!');
   }
 
   setSalesGoal() {
@@ -310,74 +329,275 @@ salesGoal: number;
     });
   }
 
-  // public fileChanged (e){
-  //   this.createTables();
-  //   const cadetList = [];
-  //   const cadetSalesList = [];
-  //   this.cadetUploadFile = e.target.files[0];
-  //   // Code for reading CSV and uploading
-  //     let uploadedCadetCount = 0;
-  //   // this.cadetUploadFile = e.target.files[0];
-  //   console.log(e.target.files[0]);
-  //   // Code for reading CSV and uploading
-  //   const fileReader = new FileReader();
-  //     /* wire up file reader */
-  //     const target: DataTransfer = <DataTransfer>(e.target);
-  //     if (target.files.length !== 1) {
-  //       alert('Cannot upload multiple files');
-  //     }
-  //     const reader: FileReader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       /* read workbook */
-  //       const bstr: string = e.target.result;
-  //       const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+  public fileChanged (e) {
+    // this.createTables();
+    const cadetList = [];
+    const cadetSalesList = [];
+    this.cadetUploadFile = e.target.files[0];
+      console.log('Reading from file: ' + e.target.files[0]);
+      const target: DataTransfer = <DataTransfer>(e.target);
+      if (target.files.length !== 1) {
+        alert('Cannot upload multiple files');
+      }
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: any) => {
+        jQuery('#importDataDataModal').modal('show');
+        /* read workbook */
+        const bstr: string = e.target.result;
+        const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+        /* grab first sheet */
+        const wsname: string = wb.SheetNames[0];
+        console.log(wsname);
+        if (wsname !== 'CadetData') {
+          alert('Invalid spreadsheet!');
+          return;
+        }
+        const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+        // console.log(ws['A1'].v); // this gets the value of the cell
+        // Read The Data into an JSON array
+        const ssData = XLSX.utils.sheet_to_row_object_array(ws);
+        console.log(ssData);
+        for (let i = 0; i < ssData.length; i++) {
+           // console.log('Cadet: ' + col2 + ', ' + col1 + ' Company: ' + col3);
+          // Actually post the data
+          const cadetIdentifier = uuid();
+          const cadetData = {
+            CadetId: cadetIdentifier,
+            Cadet: ssData[i].CadetLastName + ', ' + ssData[i].CadetFirstName,
+            Company: ssData[i].Company,
+            CreatedDate: new Date().toISOString(),
+            CreatedBy: 'System',
+            ModifiedDate: '',
+            ModifiedBy: ''
+          };
 
-  //       /* grab first sheet */
-  //       const wsname: string = wb.SheetNames[0];
-  //       console.log(wsname);
-  //       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-  //       console.log(ws['A1'].v); // this gets the value of the cell
-  //       // Read The Data into an JSON array
-  //       const ssData = XLSX.utils.sheet_to_row_object_array(ws);
-  //       for (let i = 0; i < ssData.length; i++) {
-  //         // console.log(ssData[i]);
-  //       uploadedCadetCount++;
-  //         const col1 = ssData[i].CadetFirstName;
-  //         const col2 = ssData[i].CadetLastName;
-  //         const col3 = ssData[i].Company;
-  //         const col4 = ssData[i].TicketNumberStart;
-  //         const col5 = ssData[i].TicketNumberEnd;
-  //          // console.log('Cadet: ' + col2 + ', ' + col1 + ' Company: ' + col3);
-  //         // Actually post the data
-  //         const cadetIdentifier = uuid();
-  //         const cadetData = {
-  //           CadetId: cadetIdentifier,
-  //           Cadet: col2 + ', ' + col1,
-  //           Company: col3,
-  //           CreatedDate: new Date(),
-  //           CreatedBy: 'System',
-  //           ModifiedDate: '',
-  //           ModifiedBy: ''
-  //         };
+          const cadetSalesData = {
+            BuyerFirstName: '',
+            BuyerLastName: '',
+            BuyerPhone: '',
+            SaleComplete: false,
+            SaleCompletedDate: '',
+            Seller: ssData[i].CadetLastName + ', ' + ssData[i].CadetFirstName,
+            SellerCompany: ssData[i].Company,
+            SellerId: cadetIdentifier,
+            TicketNumberStart: ssData[i].TicketNumberStart,
+            TicketNumberEnd: ssData[i].TicketNumberEnd
+          };
 
-  //         const cadetSalesData = {
-  //           BuyerFirstName: '',
-  //           BuyerLastName: '',
-  //           BuyerPhone: '',
-  //           SaleComplete: false,
-  //           SaleCompletedDate: '',
-  //           Seller: col2 + ', ' + col1,
-  //           SellerCompany: col3,
-  //           SellerId: cadetIdentifier,
-  //           TicketNumberStart: col4,
-  //           TicketNumberEnd: col5
-  //         };
+          // tslint:disable-next-line:max-line-length
+          if ( (ssData[i].CadetFirstName.toString().length > 2) && (ssData[i].CadetLastName.toString().length > 2) && (ssData[i].Company.toString().length > 2) ) {
+            cadetList.push(cadetData);
+          } else {
+            alert(ssData[i].CadetLastName.toString() + ', ' + ssData[i].CadetFirstName.toString()
+            + ' will not be added. Insufficient Data Supplied.');
+          }
 
-  //         cadetList.push(cadetData);
-  //         cadetSalesList.push(cadetSalesData);
-  //       }
-  //     };
-  //     reader.readAsBinaryString(target.files[0]);
-  //  }
+          // tslint:disable-next-line:max-line-length
+          if ( (ssData[i].CadetFirstName.toString().length > 2) && (ssData[i].CadetLastName.toString().length > 2) && (ssData[i].Company.toString().length > 2) && (cadetSalesData.TicketNumberStart) && (cadetSalesData.TicketNumberEnd) ) {
+            cadetSalesList.push(cadetSalesData);
+          } else {
+            alert('Tickets for ' + ssData[i].CadetLastName.toString() + ', ' + ssData[i].CadetFirstName.toString() +
+            ' will not be added. Insufficient Data Supplied.' );
+          }
+        } // End of loop
+
+        // Import the data
+        this.importData('Cadets', cadetList);
+        this.importData('CadetSales', cadetSalesList);
+      };
+      reader.readAsBinaryString(target.files[0]);
+   }
+
+
+
+
+
+
+
+
+  deleteApplicationData() {
+    jQuery('#cleanAppDataModal').modal('show');
+    jQuery('#appDataPrcCompBtn').fadeOut();
+    jQuery('#deleteAppDataLoader').fadeIn();
+    // <------------------------ Delete RealTimeDB CadetStats --------------------------- >
+    this.db.list('Rpt_CadetSalesByCadet').remove()
+    .then(x => {
+      console.log('Rpt_CadetSalesByCadet has been removed successfully');
+    }).catch(err => {
+      alert('An error occurred: ' + err.message);
+    });
+    this.db.object('counters').remove()
+    .then(x => {
+      console.log('Counters has been removed successfully');
+    }).catch(err => {
+      alert('An error occurred: ' + err.message);
+    });
+    // <------------------------ Delete Cadet Sales --------------------------- >
+    const ticketsCollection = this.afs.firestore.collection('CadetSales');
+    ticketsCollection.get().then(snapshot => {
+
+      snapshot.forEach(doc => {
+        this.deleteDoc(doc.ref.path, 'Ticket Number');
+      });
+    }).then(x => {
+      this.deleteApplicationDataStatus = 'Tickets removed successfully!';
+    });
+    // <------------------------ Delete Cadets --------------------------- >
+    const cadetCollection = this.afs.firestore.collection('Cadets');
+    cadetCollection.get().then(snapshot => {
+
+      snapshot.forEach(doc => {
+        this.deleteDoc(doc.ref.path, 'Cadet');
+      });
+    }).then(x => {
+      this.deleteApplicationDataStatus = 'Cadets removed successfully!';
+    });
+    // <------------------------ Delete Sales Companies --------------------------- >
+    const companyCollection = this.afs.firestore.collection('Rpt_CadetSalesByCompany');
+    companyCollection.get().then(snapshot => {
+
+      snapshot.forEach(doc => {
+        this.deleteDoc(doc.ref.path, 'Companies');
+      });
+      this.deleteDoc('/Rpt_SalesGoal/CurrentGoal', 'Sales Goal');
+      this.deleteDoc('/Rpt_CadetSalesByStatus/Completed', 'Stats');
+      this.deleteDoc('/Rpt_CadetSalesByStatus/Incomplete', 'Stats');
+      this.deleteApplicationDataStatus = 'Application Data removed successfully';
+    }).then(x => {
+      this.deleteApplicationDataStatus = 'Cadets removed successfully!';
+    });
+  }
+
+
+
+// <-------------------------------- Helper Methods -------------------------------- >
+
+deleteDoc(docX, itemType) {
+  const dataEle = docX.split('/')[1];
+  this.deleteApplicationDataStatus = 'Removing ' + itemType + ': ' + dataEle;
+  this.afs.doc(docX).delete().then(v => {
+    console.log(docX);
+    if (docX === '/Rpt_CadetSalesByStatus/Incomplete') {
+      this.deleteApplicationDataStatus = 'Application Data removed successfully';
+      jQuery('#deleteAppDataLoader').fadeOut();
+      jQuery('#appDataPrcCompBtn').fadeIn();
+    } else {
+      this.deleteApplicationDataStatus = itemType +  ': ' + dataEle + ' removed successfully';
+    }
+  }).catch(err => {
+    this.deleteApplicationDataStatus = err.message;
+    alert(err.message);
+  });
+}
+
+deleteRTDBDoc(docX) {
+  const deleteFn = this.db.object(docX).remove()
+  .then(x => {
+    console.log(docX + 'removed successfully.');
+  }).catch(err => {
+    alert('An error occurred: ' + err.message);
+  });
+}
+
+deleteRtDBTest() {
+  this.db.list('Rpt_CadetSalesByCadet').remove();
+}
+
+// <--------------------------------- Import Data Function ----------------------------------->
+
+importData(type, arr) {
+  jQuery('#importAppDataPrcCompBtn').fadeOut();
+  jQuery('#importAppDataLoader').fadeIn();
+  if (type === 'Cadets') {
+    console.log('Importing Cadets');
+    this.importApplicationDataStatus = 'Beginning Cadet Import';
+    for (let c = 0; c < arr.length; c++) {
+      const cadetBatch = this.afs.firestore.batch();
+      const compBatch = this.afs.firestore.batch();
+      const Rpt_CadetSalesByCadet_Batch = this.afs.firestore.batch();
+      const cadetDocRef = this.afs.firestore.doc('Cadets/' + arr[c].Cadet.toString());
+      cadetDocRef.get()
+      .then(docSnapshot => {
+        if (docSnapshot.exists) {
+          alert('Cadet ' + arr[c].Cadet.toString() + ' already exists');
+        } else {
+          this.importApplicationDataStatus = 'Imported ' + arr[c].Cadet.toString() + ' successfully.';
+          cadetBatch.set(cadetDocRef, arr[c], {merge: true});
+          const cadetCounter = {
+            Name: arr[c].Cadet.toString(),
+            Company: arr[c].Company.toString(),
+            count: 0
+            };
+
+          const rptDocRef = this.db.object('Rpt_CadetSalesByCadet/' + arr[c].Cadet.toString()).set({
+            Name: arr[c].Cadet.toString(),
+            Company: arr[c].Company.toString(),
+            count: 0
+            });
+
+            cadetBatch.commit();
+
+          }
+        }).catch(err => {
+          alert(err.message);
+        });
+    } // end of loop
+  } else {
+    console.log('In Cadet Sales');
+    this.importApplicationDataStatus = 'Beginning cadet ticket import.';
+    for (let cs = 0; cs < arr.length; cs++) {
+      // console.log(arr[cs].TicketNumberStart);
+      for (let t = arr[cs].TicketNumberStart; t <= arr[cs].TicketNumberEnd; t++ ) {
+        const cadetSalesBatch = this.afs.firestore.batch();
+        const cadetSalesData = {
+          BuyerFirstName: '',
+          BuyerLastName: '',
+          BuyerPhone: '',
+          SaleComplete: false,
+          SaleCompletedDate: '',
+          PlatePickedUp: false,
+          PlatePickedUpDate: '',
+          Seller: arr[cs].Seller,
+          SellerCompany: arr[cs].SellerCompany,
+          SellerId: arr[cs].SellerId,
+          TicketNumber: parseInt(t.toString(), null)
+        };
+
+        // <-------------------------------------------------------------------------
+        const cadetSalesDocRef = this.afs.firestore.doc('CadetSales/' + t.toString());
+        cadetSalesDocRef.get()
+      .then(docSnapshot => {
+        if (docSnapshot.exists) {
+          alert('TicketNumber ' + t.toString() + ' has already been assigned.');
+        } else {
+          cadetSalesBatch.set(cadetSalesDocRef, cadetSalesData, {merge: true});
+          // Commit the batch
+          cadetSalesBatch.commit()
+          .then(res => {
+            this.importApplicationDataStatus = 'Assigning tickets for ' + arr[cs].Seller;
+            if ((cs + 1) === arr.length) {
+              this.importApplicationDataStatus = 'Application Data import complete.';
+              jQuery('#importAppDataLoader').fadeOut();
+              jQuery('#importAppDataPrcCompBtn').fadeIn();
+            }
+            console.log('batch submitted successfully for ' + arr[cs].Seller);
+          }).catch(err => {
+            alert(err);
+          });
+        }
+      }).catch(err => {
+        alert('An error occurred processing ticket number ' + t.toString() + ': ' + err.message);
+      });
+    }
+  }
+
+  }
+
+
+} // end of import-data function
+
+
+// <-------------------------------- Helper Methods -------------------------------- >
+
 
   }

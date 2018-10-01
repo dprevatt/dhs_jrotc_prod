@@ -1,3 +1,4 @@
+
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
@@ -43,36 +44,44 @@ query: any;
   }
 
 
-searchTickets() {
-  if (this.endTicketParam) {
-    const query = this.afs.collection('CadetSales', ref => {
-      return ref.orderBy('TicketNumber', 'asc')
-                .where('TicketNumber', '>=', this.startTicketParam)
-                .where('TicketNumber', '<=', this.endTicketParam);
-    });
-  } else {
-    const query = this.afs.collection('CadetSales', ref => {
-      return ref.where('TicketNumber', '==', this.startTicketParam);
-    });
-  }
+  searchTickets() {
+    if (this.endTicketParam) {
+      const query = this.afs.collection('CadetSales', ref => {
+        return ref.orderBy('TicketNumber', 'asc')
+                  .where('TicketNumber', '>=', this.startTicketParam)
+                  .where('TicketNumber', '<=', this.endTicketParam);
+      });
 
+      this.dataBucket = [];
+      this.cadetSales = query.snapshotChanges().take(1).subscribe(vc => {
+        console.log('Check');
+        console.log(vc);
+        this.tableExportInit();
+        for (let d = 0; d < vc.length; d++) {
+          this.dataBucket.push(vc[d].payload.doc.data());
+        }
+      });
+      this.myData = this.dataBucket;
+      this.showResults = true;
 
+    } else {
+      const query = this.afs.collection('CadetSales', ref => {
+        return ref.where('TicketNumber', '==', this.startTicketParam);
+      });
 
-this.dataBucket = [];
-this.cadetSales = query.snapshotChanges().take(1).subscribe(vc => {
-  console.log('Check');
-  console.log(vc)
-  this.tableExportInit();
-  for (let d = 0; d < vc.length; d++) {
-    this.dataBucket.push(vc[d].payload.doc.data());
-  }
-});
+      this.dataBucket = [];
+      this.cadetSales = query.snapshotChanges().take(1).subscribe(vc => {
+        console.log('Check');
+        console.log(vc);
+        this.tableExportInit();
+        for (let d = 0; d < vc.length; d++) {
+          this.dataBucket.push(vc[d].payload.doc.data());
+        }
+      });
+      this.myData = this.dataBucket;
+      this.showResults = true;
 
-this.myData = this.dataBucket;
-this.showResults = true;
-
-
-
+    }
 
 }
 
