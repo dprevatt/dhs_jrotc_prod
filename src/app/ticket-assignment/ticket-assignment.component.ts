@@ -23,8 +23,8 @@ export class TicketAssignmentComponent implements OnInit {
   cadetCollection: AngularFirestoreCollection<any>;
   cadetIdentity: AngularFirestoreCollection<any>;
   cadets: Observable<any[]>;
-  ticketStart: string;
-  ticketEnd: string;
+  ticketStart: number;
+  ticketEnd: number;
   selectedCadetId: string;
   selectedCadet: string;
   selectedCadetIdentity: string;
@@ -62,23 +62,23 @@ export class TicketAssignmentComponent implements OnInit {
     {
       console.log(this.ticketStart + ' - ' + this.ticketEnd);
       if (this.ticketEnd) {
-        localStorage.setItem('TicketEnd', this.ticketEnd);
-        if (parseInt(this.ticketEnd) < parseInt(this.ticketStart)) {
+        localStorage.setItem('TicketEnd', this.ticketEnd.toString());
+        if (this.ticketEnd < this.ticketStart) {
             alert('Invalid ticket range');
             } else {
               // Loop thru Tickets to assign
-              for (let t = parseInt(this.ticketStart); t <= parseInt(this.ticketEnd); t++ ) {
+              for (let t = this.ticketStart; t <= this.ticketEnd; t++ ) {
               console.log(this.selectedCadetId);
 
               // Check if ticket already exists
-              this.ticketAlreadyExists(t.toString());
+              this.ticketAlreadyExists(t.toString(), this.ticketEnd, this);
 
               } // End of the loop
               localStorage.setItem('TicketEnd', null);
             } // end of valid ticket range else
         } else {
             // Check if ticket already exists
-            this.ticketAlreadyExists(this.ticketStart.toString());
+            this.ticketAlreadyExists(this.ticketStart.toString(), null, this);
       } // end of else
     }
 
@@ -101,14 +101,14 @@ export class TicketAssignmentComponent implements OnInit {
     console.log(this.selectedCadetCompany);
   }
 
-  ticketAlreadyExists(ticketNumber) {
+  ticketAlreadyExists(ticketNumber, ticketEnd, context) {
     this.afs.firestore.doc('/CadetSales/' + ticketNumber.toString()).get()
     .then(docSnapshot => {
       if (docSnapshot.exists) {
         alert('Ticket ' + ticketNumber.toString() + ' is already assigned');
         // Clear the form
-        this.ticketStart = '';
-        this.ticketEnd = '';
+        this.ticketStart = null;
+        this.ticketEnd = null;
         // jQuery('#dp').dropdown('clear');
         // jQuery('#dp').dropdown('destroy');
         jQuery('#dp').dropdown('restore defaults');
@@ -123,16 +123,18 @@ export class TicketAssignmentComponent implements OnInit {
             Seller: this.selectedCadet,
             SellerCompany: this.selectedCadetCompany,
             SellerId: this.selectedCadetId,
-            TicketNumber: parseInt(ticketNumber)
+            TicketNumber: ticketNumber
         })
         .then(function() {
-          if (!localStorage.getItem('TicketEnd')) {
+          if (!ticketEnd) {
             console.log('hgere2');
             alert('Tickets Assigned Successfully!');
+            context.resetFields();
           } else {
-            if (ticketNumber.toString() === localStorage.getItem('TicketEnd')) {
+            if (ticketNumber.toString() === ticketEnd.toString()) {
               console.log('hgeresefsaedf');
               alert('Tickets Assigned Successfully!');
+              context.resetFields();
             }
           }
         })
@@ -141,6 +143,11 @@ export class TicketAssignmentComponent implements OnInit {
         });
       }
     });
+  }
+
+  resetFields() {
+    this.ticketStart = null;
+    this.ticketEnd = null;
   }
 
 
