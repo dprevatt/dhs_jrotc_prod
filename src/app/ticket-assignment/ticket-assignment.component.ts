@@ -123,12 +123,12 @@ export class TicketAssignmentComponent implements OnInit {
             Seller: this.selectedCadet,
             SellerCompany: this.selectedCadetCompany,
             SellerId: this.selectedCadetId,
-            TicketNumber: ticketNumber
+            TicketNumber: parseInt(ticketNumber, null)
         })
         .then(function() {
           if (!ticketEnd) {
             console.log('hgere2');
-            alert('Tickets Assigned Successfully!');
+            // alert('Tickets Assigned Successfully!');
             context.resetFields();
           } else {
             if (ticketNumber.toString() === ticketEnd.toString()) {
@@ -149,6 +149,5 @@ export class TicketAssignmentComponent implements OnInit {
     this.ticketStart = null;
     this.ticketEnd = null;
   }
-
 
 }

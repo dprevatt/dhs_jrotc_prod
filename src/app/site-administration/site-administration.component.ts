@@ -31,10 +31,10 @@ authCode: string;
     jQuery('#authorizationModal')
     .modal('setting', 'closable', false)
     .modal('show');
-    this.incrementTotalSales();
-    this.getTotalSalesCount();
-    this.getCompanySales();
-    this.getRpt_CadetSales();
+    // this.incrementTotalSales();
+    // this.getTotalSalesCount();
+    // this.getCompanySales();
+    // this.getRpt_CadetSales();
   }
 
   validateAuth() {
@@ -596,8 +596,182 @@ importData(type, arr) {
 
 } // end of import-data function
 
-
 // <-------------------------------- Helper Methods -------------------------------- >
+
+// <--------------------------------Import Refactor ---------------------------------->
+
+public fileChanged2 (e) {
+  // this.createTables();
+  const cadetList = [];
+  const cadetSalesList = [];
+  this.cadetUploadFile = e.target.files[0];
+    console.log('Reading from file: ' + e.target.files[0]);
+    const target: DataTransfer = <DataTransfer>(e.target);
+    if (target.files.length !== 1) {
+      alert('Cannot upload multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      jQuery('#importDataDataModal').modal('show');
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      console.log(wsname);
+      if (wsname !== 'CadetData') {
+        alert('Invalid spreadsheet!');
+        return;
+      }
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      // console.log(ws['A1'].v); // this gets the value of the cell
+      // Read The Data into an JSON array
+      const ssData = XLSX.utils.sheet_to_row_object_array(ws);
+      console.log(ssData);
+      for (let i = 0; i < ssData.length; i++) {
+        this.sleep(500);
+        this.importCadetData(ssData[i].CadetLastName, ssData[i].CadetFirstName, ssData[i].Company);
+      } // end of loop
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }
+
+
+  importCadetData(CadetLastName, CadetFirstName, Company) {
+    const cadetData = {
+      CadetId: CadetLastName + ', ' + CadetFirstName,
+      Cadet: CadetLastName + ', ' + CadetFirstName,
+      Company: Company,
+      CreatedDate: new Date().toISOString(),
+      CreatedBy: 'System',
+      ModifiedDate: '',
+      ModifiedBy: ''
+    };
+
+    const docRef = this.afs.collection('Cadets').doc(CadetLastName + ', ' + CadetFirstName);
+    return this.afs.firestore.runTransaction(function(transaction) {
+      // This code may get re-run multiple times if there are conflicts.
+      return transaction.get(docRef.ref).then(function(xDoc) {
+          if (xDoc.exists) {
+              alert('Cadet ' + CadetLastName + ', ' + CadetFirstName + ' already exists!');
+          }
+
+          transaction.set(docRef.ref, cadetData);
+      });
+  }).then(function() {
+      console.log('Cadet: ' + CadetLastName + ', ' + CadetFirstName + ' created successfully');
+  }).catch(function(error) {
+      alert('Transaction failed: ' + error);
+  });
+
+  }
+
+
+  sleep(milliseconds) {
+    const start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+      if ( (new Date().getTime() - start > milliseconds)) {
+        break;
+      }
+    }
+  }
+
+  public fileChanged3 (e) {
+    // this.createTables();
+    const cadetList = [];
+    const cadetSalesList = [];
+    this.cadetUploadFile = e.target.files[0];
+      console.log('Reading from file: ' + e.target.files[0]);
+      const target: DataTransfer = <DataTransfer>(e.target);
+      if (target.files.length !== 1) {
+        alert('Cannot upload multiple files');
+      }
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: any) => {
+        jQuery('#importDataDataModal').modal('show');
+        /* read workbook */
+        const bstr: string = e.target.result;
+        const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+        /* grab first sheet */
+        const wsname: string = wb.SheetNames[0];
+        console.log(wsname);
+        if (wsname !== 'CadetData') {
+          alert('Invalid spreadsheet!');
+          return;
+        }
+        const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+        // console.log(ws['A1'].v); // this gets the value of the cell
+        // Read The Data into an JSON array
+        const ssData = XLSX.utils.sheet_to_row_object_array(ws);
+        console.log(ssData);
+        for (let i = 0; i < ssData.length; i++) {
+          // this.sleep(500);
+          // let cadet = ;
+          if (ssData[i].TicketNumberStart) {
+            for (let x = ssData[i].TicketNumberStart; x <= ssData[i].TicketNumberEnd; x++) {
+              this.importCadetTicketData(ssData[i].CadetLastName, ssData[i].CadetFirstName, ssData[i].Company, x);
+            }
+          }
+        } // end of loop
+      };
+      reader.readAsBinaryString(target.files[0]);
+    }
+
+
+    importCadetTicketData(CadetLastName, CadetFirstName, Company, TicketNumber) {
+      const cadetSalesData = {
+        BuyerFirstName: '',
+        BuyerLastName: '',
+        BuyerPhone: '',
+        SaleComplete: false,
+        SaleCompletedDate: '',
+        PlatePickedUp: false,
+        PlatePickedUpDate: '',
+        Seller: CadetLastName + ', ' + CadetFirstName,
+        SellerCompany: Company,
+        SellerId: CadetLastName + ', ' + CadetFirstName,
+        TicketNumber: parseInt(TicketNumber.toString(), null)
+      };
+
+      const docRef = this.afs.doc('CadetSales/' + TicketNumber);
+      return this.afs.firestore.runTransaction(function(transaction) {
+        // This code may get re-run multiple times if there are conflicts.
+        return transaction.get(docRef.ref).then(function(xDoc) {
+            if (xDoc.exists) {
+                alert('Ticket Number ' + TicketNumber + ' already exists!');
+            }
+
+            transaction.set(docRef.ref, cadetSalesData);
+        });
+    }).then(function() {
+        console.log('TicketNumber: ' + TicketNumber + ' created successfully');
+    }).catch(function(error) {
+        alert('Transaction failed: ' + error);
+    });
+
+    }
+
+
+    getCadetId(cadetLastName, cadetFirstName) {
+      const docRef = this.afs.firestore.doc('Cadets/' + cadetLastName + ', ' + cadetFirstName);
+      docRef.get().then(function(doc) {
+          if (doc.exists) {
+            console.log(doc.data());
+            console.log(doc.data().CadetId);
+            return doc.data();
+              // console.log("Document data:", doc.data());
+          } else {
+              // doc.data() will be undefined in this case
+              console.log('No such document!');
+          }
+      }).catch(function(error) {
+          console.log('Error getting document:', error);
+      });
+}
+
+
+// <--------------------------------Import Refactor ---------------------------------->
+
 
 
   }
