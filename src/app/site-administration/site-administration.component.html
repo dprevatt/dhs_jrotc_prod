@@ -128,6 +128,56 @@
   </div>
 
 
+  <!-- Ticket Removal -->
+  <div class="ui grid">
+    <div class="one wide column"></div>
+    <div class="six wide column">
+        <div class="ui red raised segment">
+            <div class="image content">
+              <div class="description">
+                  <form class="ui form">
+                        <h2>Ticket Removal</h2>
+                        <div class="ui stackable two column grid">
+                            <div class="column">
+                              <div class="field">
+                                  <label>Starting Ticket Number</label>
+                                  <div class="ui labeled input">
+                                      <div class="ui label">
+                                        <i class="ticket alternate icon"></i>
+                                      </div>
+                                      <input type="number" placeholder="Ticket Assigned" tabindex="2" id="ticketNumberStart" name="ticket-start" [(ngModel)]="tickDelStart">
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label>Ending Ticket Number</label>
+                                    <div class="ui labeled input">
+                                        <div class="ui label">
+                                          <i class="sort numeric down icon"></i>
+                                        </div>
+                                        <input type="number" placeholder="Ticket Assigned" tabindex="3" name="ticket-end" [(ngModel)]="tickDelEnd">
+                                      </div>
+                                </div>
+                            </div>
+                          </div>
+                          <br/>
+                    </form>
+              </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <button class="ui labeled icon button" (click)="removeTickets()">
+              <i class="trash icon"></i>
+              Remove Tickets
+            </button>
+      </div>
+    </div>
+  </div>
+  
+
+
 <!-------------------------------- Modals ---------------------------------------->
                       <!-- # Delete Data Modal -->
 <div class="ui modal" id="cleanAppDataModal">

@@ -24,6 +24,8 @@ deleteApplicationDataStatus: string;
 importApplicationDataStatus: string;
 cadetUploadFile: any;
 authCode: string;
+tickDelStart: number;
+tickDelEnd: number;
 
   constructor(private afs: AngularFirestore, private db: AngularFireDatabase, private router: Router) { }
 
@@ -771,6 +773,50 @@ public fileChanged2 (e) {
 
 
 // <--------------------------------Import Refactor ---------------------------------->
+
+
+
+// <--------------------------------Ticket Removal ---------------------------------->
+
+removeTickets() {
+  if (this.tickDelEnd) {
+    for (let i = this.tickDelStart;  i <= this.tickDelEnd; i++) {
+      this.removeTicket(i, this.tickDelEnd);
+    }
+  } else {
+    this.removeTicket(this.tickDelStart, null);
+  }
+}
+
+removeTicket(ticket, ticketEnd) {
+
+  const docRef = this.afs.doc('CadetSales/' + ticket);
+  return this.afs.firestore.runTransaction(function(transaction) {
+    // This code may get re-run multiple times if there are conflicts.
+    return transaction.get(docRef.ref).then(function(xDoc) {
+        if (!xDoc.exists) {
+            alert('Ticket Number ' + ticket + ' does not exist, or is not assigned!');
+        }
+        console.log('removing ticxket: ' + ticket);
+        transaction.delete(docRef.ref);
+    });
+    }).then(function() {
+      if (!ticketEnd) {
+        console.log('TicketNumber: ' + ticket + ' removed successfully');
+        alert('Tickets removed successfully');
+      } else {
+        if (ticket === ticketEnd) {
+          console.log('TicketNumber: ' + ticket + ' removed successfully');
+          alert('Tickets removed successfully');
+        }
+      }
+    }).catch(function(error) {
+        alert('Transaction failed: ' + error);
+    });
+
+}
+
+// <--------------------------------Ticket Removal  ---------------------------------->
 
 
 

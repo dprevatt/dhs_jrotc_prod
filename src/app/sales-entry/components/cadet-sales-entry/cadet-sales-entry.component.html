@@ -42,7 +42,7 @@
                             <br/>
                         <div class="field">
                             <label>Phone Number</label>
-                            <input class="myPhone" id="phone-number" type="text" maxlength="14" tabindex="4''" placeholder="(XXX) XXX-XXXX" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="sale_buyerPhone" required>
+                            <input class="myPhone" id="phone-number" type="text" maxlength="14" tabindex="4''" placeholder="(XXX) XXX-XXXX" name="buyer-phone" placeholder="Buyer Phone" [(ngModel)]="sale_buyerPhone" (keydown.enter)="submitSale()">
                           </div>
                       </form>
                 </div>
