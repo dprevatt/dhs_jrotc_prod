@@ -149,6 +149,11 @@ FormValidation() {
 
 editSale(sale) {
   console.log(sale);
+      this.edit_BuyerFirst = null;
+      this.edit_BuyerLast = null;
+      this.edit_BuyerPhone = null;
+      this.edit_TicketNumberStart = null;
+      this.edit_Seller = null;
     this.edit_BuyerFirst = sale.BuyerFirstName;
     this.edit_BuyerLast = sale.BuyerLastName;
     this.edit_BuyerPhone = sale.BuyerPhone;

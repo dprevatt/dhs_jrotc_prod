@@ -141,18 +141,39 @@ setCurrentCadet(x) {
 
 }
 
-updateSale(ticket){
-  console.log(ticket);
+updateSale(ticket, buyerFirst, buyerLast, buyerPhone){
   const updatedSale = {
-    BuyerFirstName: this.edit_BuyerFirst,
-    BuyerLastName: this.edit_BuyerLast,
-    BuyerPhone: this.edit_BuyerPhone,
-    TicketNumber: this.edit_TicketNumber,
-    SaleComplete: true,
-    SaleModifiedDate: new Date()
+    BuyerFirstName: buyerFirst,
+    BuyerLastName: buyerLast,
+    BuyerPhone: buyerPhone,
+    SaleModifiedDate: new Date().toISOString(),
   };
-  this.afs.collection('CadetSales').doc(ticket.toString()).set(updatedSale, {merge: true});
+  // this.afs.collection('CadetSales').doc(ticket.toString()).set(updatedSale, {merge: true});
+  const docRef = this.afs.doc('CadetSales/' + ticket.toString());
+  return this.afs.firestore.runTransaction(function(transaction) {
+    // This code may get re-run multiple times if there are conflicts.
+    return transaction.get(docRef.ref).then(function(xDoc) {
+        if (!xDoc.exists) {
+            alert('An error occurred updating ticket.');
+        }
+        console.log('Updating Ticket : ' + ticket.toString());
+        transaction.update(docRef.ref, updatedSale);
+    });
+    }).then(function() {
+      console.log('Ticket: ' + ticket.toString() + ' updated successfully');
+      ticket = null;
+      buyerLast = null;
+      buyerPhone = null;
+      buyerFirst = null;
+    }).catch(function(error) {
+        alert('Transaction failed: ' + error);
+        ticket = null;
+        buyerLast = null;
+        buyerPhone = null;
+        buyerFirst = null;
+    });
 }
+
 
 
 removeSale(event, tickNum) {
