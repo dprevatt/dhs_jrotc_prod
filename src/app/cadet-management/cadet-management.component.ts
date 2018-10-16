@@ -41,12 +41,13 @@ export class CadetManagementComponent implements OnInit {
   constructor(private afs: AngularFirestore, private cadetService: CadetService, private route: ActivatedRoute, private router: Router, private firebaseAuth: AngularFireAuth, private db: AngularFireDatabase) { }
 
   ngOnInit() {
+    jQuery('#searchCadetsTB').focus();
     this.cadetCollection = this.afs.collection('Cadets');
     this.cadets = this.cadetCollection.valueChanges();
     jQuery('#dp').dropdown();
     jQuery('#company_Drop').dropdown();
     jQuery('#company_Drop_add').dropdown();
-    
+
 
     // Get the user information
     const isLoggedIn = this.firebaseAuth.authState.pipe(first()).subscribe(x => {

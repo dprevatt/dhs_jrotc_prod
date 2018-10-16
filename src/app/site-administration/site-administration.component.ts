@@ -650,6 +650,12 @@ public fileChanged2 (e) {
       ModifiedBy: ''
     };
 
+    this.db.object('Rpt_CadetSalesByCadet/' + CadetLastName + ', ' + CadetFirstName).set({
+      Name: CadetLastName + ', ' + CadetFirstName,
+      Company: Company,
+      count: 0
+    });
+
     const docRef = this.afs.collection('Cadets').doc(CadetLastName + ', ' + CadetFirstName);
     return this.afs.firestore.runTransaction(function(transaction) {
       // This code may get re-run multiple times if there are conflicts.

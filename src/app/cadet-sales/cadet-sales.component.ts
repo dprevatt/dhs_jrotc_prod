@@ -2,7 +2,7 @@ import { CadetSalesQuickLinkComponent } from './../cadet-sales-quick-link/cadet-
 import { Sale } from './../models/Sale';
 import { Buyer } from './../models/Buyer';
 import { Cadets } from './../models/Cadets';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -25,7 +25,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './cadet-sales.component.html',
   styleUrls: ['./cadet-sales.component.css']
 })
-export class CadetSalesComponent implements OnInit, AfterViewInit {
+export class CadetSalesComponent implements OnInit, AfterViewInit, OnDestroy {
   id: string;
   cadetSalesCollection: AngularFirestoreCollection<Sale[]>;
   cadetTicketsSoldCollection: AngularFirestoreCollection<Sale[]>;
@@ -40,7 +40,7 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
   buyerLast: String;
   buyerPhone: String;
   ticketNumber: string;
-  cadetName: String;
+  // cadetName: String;
   currentCadet: String;
   cadetCompany: String;
   cadetId: String;
@@ -67,7 +67,9 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
    }
 
-
+ngOnDestroy() {
+  // this.salesCount.unsubscribe();
+}
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -75,6 +77,7 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
     });
     console.log(this.id + 'From sales');
 
+    jQuery('#querySalesTB').focus();
 
     // Get the user information
     this.loggedInUser = this.firebaseAuth.authState.pipe(first()).subscribe(x => {
@@ -89,14 +92,14 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
                 .where('SellerId', '==', this.id);
     });
 
-    this.sales = this.cadetSalesCollection.valueChanges();
+    this.sales = this.cadetSalesCollection.valueChanges().take(1);
 
     // Get total assigned Tickets
     this.cadetTicketsSoldCollection = this.afs.collection('CadetSales', ref => {
       return ref.where('SellerId', '==', this.id).where('SaleComplete', '==', true);
     });
 
-    const tickSold = this.cadetTicketsSoldCollection.valueChanges().subscribe(tx => {
+    const tickSold = this.cadetTicketsSoldCollection.valueChanges().take(1).subscribe(tx => {
       this.ticketsSold = tx.length;
       return tx.length;
     });
@@ -106,19 +109,26 @@ export class CadetSalesComponent implements OnInit, AfterViewInit {
       return ref.where('SellerId', '==', this.id);
     });
 
-    const tickAssigned = this.cadetTotalTicketsCollection.valueChanges().subscribe(tx => {
+    const tickAssigned = this.cadetTotalTicketsCollection.valueChanges().take(1).subscribe(tx => {
       this.ticketsAssigned = tx.length;
       return tx.length;
     });
 
-    const cadetName = this.cadetSalesCollection.valueChanges().subscribe(c => {
+    const cadetName = this.cadetSalesCollection.valueChanges().take(1).subscribe(c => {
       return c.map(x => {
         this.setCurrentCadet(x);
         return x;
-      })
-    })
+      });
+    });
 
     this.phoneMask();
+
+
+    this.edit_BuyerFirst = null;
+    this.edit_BuyerLast = null;
+    this.edit_BuyerPhone = null;
+    this.edit_TicketNumber = null;
+    this.edit_Seller = null;
 
 } // end of onInit
 

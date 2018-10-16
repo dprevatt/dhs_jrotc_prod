@@ -19,6 +19,7 @@ import { JsonPipe } from '@angular/common';
 import { removeSummaryDuplicates } from '@angular/compiler';
 import { Subscription } from 'rxjs/Subscription';
 import { MessagingService } from '../messaging.service';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Component({
   selector: 'app-sales-entry',
@@ -43,7 +44,7 @@ export class SalesEntryComponent implements OnInit, OnDestroy {
   buyerLast: String;
   buyerPhone: String;
   ticketNumber: string;
-  cadetName: String;
+  // cadetName: String;
   currentCadet: String;
   cadetCompany: String;
   cadetId: String;
@@ -67,7 +68,8 @@ export class SalesEntryComponent implements OnInit, OnDestroy {
   dpizzle: Subscription;
   cadetCounterDoc: AngularFirestoreDocument<any>;
 
-  constructor(private route: ActivatedRoute, private afs: AngularFirestore, private msgService: MessagingService) { }
+  // tslint:disable-next-line:max-line-length
+  constructor(private route: ActivatedRoute, private afs: AngularFirestore, private msgService: MessagingService, private db: AngularFireDatabase) { }
 
 
 ngOnDestroy(){
@@ -79,6 +81,17 @@ ngOnDestroy(){
     this.msgService.getPermission();
     this.msgService.receiveMessage();
     this.message = this.msgService.currentMessage;
+
+
+
+    const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
+    for (let i = 0; i < companies.length; i ++) {
+      this.verifyCompanyCounter(companies[i]);
+    }
+
+    this.verifyCadetCounters();
+    this.verifyTotalSalesCounter();
+
   }
 
   closeNotification() {
@@ -86,283 +99,84 @@ ngOnDestroy(){
     jQuery('#errNotification').transition('fade');
   }
 
-//   addSale(name) {
-//     console.log(name);
-//     console.log('Sale Added for ' + this.sale_buyerLast + ', ' + this.sale_buyerFirst);
 
-//     const newSale =  {
-//         BuyerFirstName: this.toTitleCase(this.sale_buyerFirst),
-//         BuyerLastName: this.toTitleCase(this.sale_buyerLast),
-//         BuyerPhone: this.sale_buyerPhone !== undefined ? this.sale_buyerPhone : '',
-//         Seller: this.currentCadet,
-//         TicketNumber: this.sale_ticketNumberStart,
-//         SaleComplete: true,
-//         SaleCompletedDate: new Date()
-//     };
-  
-//       console.log(newSale);
+  verifyCadetCounters() {
+    const cadetCounterCol = this.afs.collection<any>('Cadets').snapshotChanges().take(1).subscribe(c => {
+      c.forEach(cadet => {
+        // console.log(cadet.payload.doc.data().Cadet);
+        const cadetName = cadet.payload.doc.data().Cadet;
+        this.afs.collection('CadetSales', refz => {
+          return refz.where('Seller', '==', cadetName).where('SaleComplete', '==', true);
+        }).valueChanges().take(1).subscribe(xd => {
+          this.dp_increment_RptCadetSales(cadetName, xd.length);
+        });
+      });
+    });
+    cadetCounterCol.unsubscribe();
+  }
 
-
-
-//     this.afs.collection('CadetSales').doc(this.sale_ticketNumberStart.toString()).set(newSale, {merge: true});
-//     this.incrementCounters(name);
-
-//     this.sale_buyerFirst = '';
-//     this.sale_buyerLast = '';
-//     this.sale_buyerPhone = '';
-//     this.sale_ticketNumberStart = '';
-//     jQuery('#ticketNumberStart').focus();
-
-// }
-
-// removeSale(event, tickNum) {
-//   const saleToDel = 'CadetSales/' + tickNum;
-//   console.log(saleToDel);
-//   this.afs.doc(saleToDel).delete();
-//   this.totalSoldCount = (this.totalSoldCount - 1);
-// }
-
-// submitBulkOrder(name){
-//   console.log('bulk submitted for ' + name);
-//   if (this.sale_ticketNumberEnd <= this.sale_ticketNumberStart){
-//     alert('Invalid ticket range');
-//   }
-//   else{
-//     for (let t = this.sale_ticketNumberStart; t <= this.sale_ticketNumberEnd; t++){
-//       console.log(this.sale_ticketNumberStart + ' thru ' + this.sale_ticketNumberEnd);
-
-//       const newBulkSale =  {
-//         // CadetId: this.cadetId,
-//       // Cadet: this.cadetName,
-//       // Company: this.cadetCompany,
-//         BuyerFirstName: this.toTitleCase(this.sale_buyerFirst),
-//         BuyerLastName: this.toTitleCase(this.sale_buyerLast),
-//         BuyerPhone: this.sale_buyerPhone !== undefined ? this.sale_buyerPhone : '',
-//         TicketNumber: t,
-//         Seller: this.currentCadet,
-//         SaleComplete: true,
-//         SaleCompletedDate: new Date()
-//     };
-      
-//       this.afs.collection('CadetSales').doc(t.toString()).set(newBulkSale, {merge: true});
-//       this.totalSoldCount = this.totalSoldCount + 1;
-
-//     } // End Of Loop
-//     // Clear the Modal Form
-//       this.sale_buyerLast = '';
-//       this.sale_buyerFirst = '';
-//       this.sale_buyerPhone = '';
-//       this.sale_ticketNumberStart = '';
-//       this.sale_ticketNumberEnd = '';
-//       jQuery('#ticketNumberStart').focus();
-//   }
-// }
-
-// CreateSale(name) {
-//   this.validateSale();
-//   if (this.showValidationError !== true) {
-//       if (!this.sale_ticketNumberEnd) {
-//         this.addSale(name);
-//     } else {
-//         this.submitBulkOrder(name);
-//     }
-//   }
-// }
+    // Update Sales Per Cadet Counter
+    dp_increment_RptCadetSales(cadet, count) {
+      const cadetSalesRef = this.db.object('Rpt_CadetSalesByCadet/' + cadet.toString());
+      cadetSalesRef.snapshotChanges().take(1).subscribe(a => {
+          this.db.database.ref('Rpt_CadetSalesByCadet').child(cadet.toString()).transaction(dx => {
+            if (!dx) {
+              return dx;
+            }
+            console.log('Setting CadetSaleCounter: ' + cadet + ' to: ' + count);
+            dx.count = count;
+            return dx;
+          });
+        return a;
+      });
+    }
 
 
-// validateSale(){
-//   if (!this.sale_buyerFirst) {
-//     this.showValidationError = true;
-//     jQuery('#buyerFirst').focus();
-//   } else if (!this.sale_ticketNumberStart) {
-//     this.showValidationError = true;
-//     jQuery('#ticketNumberStart').focus();
-//   } else {
-//     this.showValidationError = false;
-//   }
-// }
+    verifyTotalSalesCounter() {
+      const cadetSalesCol = this.afs.collection('CadetSales', refv => {
+        return refv.where('SaleComplete', '==', true);
+      });
+      cadetSalesCol.valueChanges().take(1).subscribe(b => {
+        // Set The counter
+        this.dp_incrementTotalSales(b.length);
+      });
+    }
 
-// dismissError() {
-//   this.showValidationError = false;
-//   if (!this.sale_buyerFirst) {
-//     this.showValidationError = true;
-//     jQuery('.message .close').closest('.message').transition('fade');
-//     jQuery('#buyerFirst').focus();
-//   } else if (!this.sale_ticketNumberStart) {
-//     this.showValidationError = true;
-//     jQuery('.message .close').closest('.message').transition('fade');
-//     jQuery('#ticketNumberStart').focus();
-//   } else {
-//     this.showValidationError = false;
-//   }
-// }
+    dp_incrementTotalSales(count) {
+      const counterRef = this.db.database.ref('counters').child('totalSales');
+      counterRef.transaction(dv => {
+        if (!dv) {
+          return dv;
+        }
+        console.log('Setting total sales counter to ' + count);
+        dv.count = count;
+        return dv;
+      });
+    }
 
 
-// setCurrentCadet(x) {
-//   console.log('From set current cadet');
-//   console.log(x.Seller);
-//   this.currentCadet = x.Seller;
-
-// }
-
-// onBlur(tickNum){
-  
-//   if (this.sale_ticketNumberStart !== '')
-//   {
-//     this.saleDoc = this.afs.doc('CadetSales/' + tickNum).valueChanges();
-//     const currentSeller = this.afs.collection('CadetSales').doc(tickNum.toString()).valueChanges().subscribe(x => {
-//        if (x != null){
-//          this.setCurrentCadet(x)
-//        } else if (this.sale_ticketNumberStart !== '') {
-//          alert('Invalid Ticket! The ticket number provided has not been assigned.')
-//          this.sale_ticketNumberStart = '';
-//          jQuery('#ticketNumberStart').focus();
-//        }
-//      });
-//   }
-// }
+    // Verify Campany Counters
+    verifyCompanyCounter(company) {
+      this.afs.collection('CadetSales', refx => {
+        return refx.where('SellerCompany', '==', company).where('SaleComplete', '==', true);
+      }).valueChanges().take(1).subscribe(v => {
+        // Set the count
+        this.dp_incrementCompanySales(company, v.length);
+      });
+    }
 
 
-// editSale(sale){
-//     this.edit_BuyerFirst = this.toTitleCase(sale.BuyerFirstName);
-//     this.edit_BuyerLast = this.toTitleCase(sale.BuyerLastName);
-//     this.edit_BuyerPhone = sale.BuyerPhone;
-//     this.edit_TicketNumber = sale.TicketNumber;
-//     this.edit_Seller = sale.Seller;
-//     jQuery('#editModal').modal('show');
-  
-// }
+    dp_incrementCompanySales(company, count) {
+      this.db.database.ref('counters').child('companySales').child(company.toString()).transaction(dt => {
+        if (!dt) {
+          return dt;
+        }
+        dt.count = count;
+        dt.AvgSoldPerCadet = parseFloat((count / dt.CadetCount).toFixed(2));
+        console.log('Setting CompanySalesCounter for ' + company + ' to ' + count);
+        return dt;
+      });
+    }
 
-// updateSale(ticket){
-//   console.log(ticket);
-//   const updatedSale = {
-//     BuyerFirstName: this.toTitleCase(this.edit_BuyerFirst),
-//     BuyerLastName: this.toTitleCase(this.edit_BuyerLast),
-//     BuyerPhone: this.edit_BuyerPhone,
-//     TicketNumber: this.edit_TicketNumber,
-//     SaleComplete: true,
-//     SaleModifiedDate: new Date()
-//   };
-//   this.afs.collection('CadetSales').doc(ticket.toString()).set(updatedSale, {merge: true});
-// }
-
-
-// phoneMask(){
-//   jQuery('.myPhone')
-// 	.keydown(function (e) {
-// 		const key = e.which || e.charCode || e.keyCode || 0;
-// 		const jQueryphone = jQuery(this);
-//     // Don't let them remove the starting '('
-//     if (jQueryphone.val().length === 1 && (key === 8 || key === 46)) {
-// 			jQueryphone.val('('); 
-//       return false;
-// 		} 
-//     // Reset if they highlight and type over first char.
-//     else if (jQueryphone.val().charAt(0) !== '(') {
-// 			jQueryphone.val('('+String.fromCharCode(e.keyCode)+''); 
-// 		}
-// 		// Auto-format- do not expose the mask as the user begins to type
-// 		if (key !== 8 && key !== 9) {
-// 			if (jQueryphone.val().length === 4) {
-// 				jQueryphone.val(jQueryphone.val() + ')');
-// 			}
-// 			if (jQueryphone.val().length === 5) {
-// 				jQueryphone.val(jQueryphone.val() + ' ');
-// 			}			
-// 			if (jQueryphone.val().length === 9) {
-// 				jQueryphone.val(jQueryphone.val() + '-');
-// 			}
-// 		}
-// 		// Allow numeric (and tab, backspace, delete) keys only
-// 		return (key == 8 || 
-// 				key == 9 ||
-// 				key == 46 ||
-// 				(key >= 48 && key <= 57) ||
-// 				(key >= 96 && key <= 105));	
-// 	})
-// 	.bind('focus click', function () {
-// 		const jQueryphone = jQuery(this);
-		
-// 		if (jQueryphone.val().length === 0) {
-// 			jQueryphone.val('(');
-// 		}
-// 		else {
-// 			var val = jQueryphone.val();
-// 			jQueryphone.val('').val(val); // Ensure cursor remains at the end
-// 		}
-// 	})
-// 	.blur(function () {
-// 		const jQueryphone = jQuery(this);
-		
-// 		if (jQueryphone.val() === '(') {
-// 			jQueryphone.val('');
-// 		}
-// 	});
-// }
-
-
-// toTitleCase(str) {
-//     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-// }
-
-
-// setTotalSales(sCount){
-//   this.totalSales = sCount;
-// }
-
-// increaseTotalSales(){
-//   this.totalSales = this.totalSales + 1;
-// }
-
-// decreaseTotalSales(){
-//   this.totalSales = this.totalSales - 1;
-// }
-
-
-// // Build Reporting Function
-// incrementCounters(name) {
-//   this.totalSoldCount = (this.totalSoldCount + 1);
-//   this.cadetCounterDoc = this.afs.doc<any>('/Rpt_CadetSalesByCadet/' + name);
-
-//     this.dpizzle = this.cadetCounterDoc.valueChanges().subscribe(vx => {
-//       this.setProperty(vx.count, name);
-//       return vx.count;
-//     });
-  
-
-
-
-//   // 
-
-// }
-
-// getCadetCounter(x){
-//   if (x){
-//     this.cadetSaleCounter = x.count;
-//   }
-//   else{
-//     this.cadetSaleCounter = 0;
-//   }
-// }
-
-// setProperty(val, name){
-//     this.cadetSaleCounter = val;
-//     console.log(this.cadetSaleCounter);
-//     var cCounter = (this.cadetSaleCounter + 1);
-//     console.log(cCounter);
-//     this.afs.doc('/Rpt_CadetSalesByCadet/' + name).set({count: cCounter}, {merge: true});
-//   this.dpizzle.unsubscribe();
-// }
-
-
-// docExists(datadoc){
-//   const data = datadoc.snapshotChanges().map(action => {
-//     if (action.payload.exists === true) {
-//         return true;
-//     } else {
-//       return false;
-//   }
-// });
-// }
 
 } // End of Code
