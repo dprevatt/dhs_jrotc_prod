@@ -69,6 +69,7 @@ export class CadetSalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
 ngOnDestroy() {
   // this.salesCount.unsubscribe();
+
 }
 
   ngOnInit() {
@@ -130,6 +131,8 @@ ngOnDestroy() {
     this.edit_TicketNumber = null;
     this.edit_Seller = null;
 
+    this.showAllTickets();
+
 } // end of onInit
 
 
@@ -141,13 +144,21 @@ setCurrentCadet(x) {
 
 
 
-  editSale(sale){
+  editSale(sale) {
+    this.edit_BuyerFirst = null;
+    this.edit_BuyerLast = null;
+    this.edit_BuyerPhone = null;
+    this.edit_TicketNumber = null;
+    this.edit_Seller = null;
+
+
+    jQuery('#editModal').modal('show');
+
     this.edit_BuyerFirst = sale.BuyerFirstName;
     this.edit_BuyerLast = sale.BuyerLastName;
     this.edit_BuyerPhone = sale.BuyerPhone;
     this.edit_TicketNumber = sale.TicketNumber;
     this.edit_Seller = sale.Seller;
-    jQuery('#editModal').modal('show');
 
 }
 
