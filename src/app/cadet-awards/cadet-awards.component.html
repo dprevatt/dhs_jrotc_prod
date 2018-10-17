@@ -21,6 +21,7 @@
                         </div>
                       </h4></td>
                     </tr>
+                    <hr>
               </table>
           </div>
     </div>
@@ -46,6 +47,7 @@
                         </div>
                       </h4></td>
                     </tr>
+                    <hr>
               </table>
           </div>
     </div>
@@ -71,6 +73,7 @@
                         </div>
                       </h4></td>
                     </tr>
+                    <hr>
               </table>
           </div>
     </div>
@@ -92,10 +95,22 @@
                           <div class="content">
                             {{p.Name}} | {{p.count}}
                             <div class="sub header">{{p.Company}}
+                                <div class="ui circular labels">
+                                    <a class="ui red label" *ngIf="p.count >= 500">
+                                      500 Club
+                                    </a>
+                                    <a class="ui blue label" *ngIf="p.count >= 125">
+                                      125 Club
+                                    </a>
+                                    <a class="ui yellow label" *ngIf="p.count >= 100">
+                                      100 Club
+                                    </a>
+                                  </div>
                           </div>
                         </div>
                       </h4></td>
                     </tr>
+                    <hr>
               </table>
           </div>
     </div>
