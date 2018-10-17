@@ -154,14 +154,16 @@ editSale(sale) {
       this.edit_BuyerPhone = null;
       this.edit_TicketNumberStart = null;
       this.edit_Seller = null;
+
+    jQuery('#editModal').modal('show', {
+      keyboardShortcuts: false
+    });
+
     this.edit_BuyerFirst = sale.BuyerFirstName;
     this.edit_BuyerLast = sale.BuyerLastName;
     this.edit_BuyerPhone = sale.BuyerPhone;
     this.edit_TicketNumberStart = sale.TicketNumber;
     this.edit_Seller = sale.Seller;
-    jQuery('#editModal').modal('show', {
-      keyboardShortcuts: false
-    });
 }
 
 

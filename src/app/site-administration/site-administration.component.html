@@ -69,19 +69,19 @@
                 </div>
                 <div class="field">
                   <label>Bronze Award</label>
-                  <input type="text" name="bronze_Award" placeholder="Bronze Award..">
+                  <input type="text" name="bronze_Award" placeholder="Bronze Award.." [(ngModel)]="bronzeAward">
                 </div>
                 <div class="field">
                     <label>Silver Award</label>
-                    <input type="text" name="silver_Award" placeholder="Silver Award..">
+                    <input type="text" name="silver_Award" placeholder="Silver Award.." [(ngModel)]="silverAward">
                   </div>
                 <div class="field">
                     <label>Gold Award</label>
-                    <input type="text" name="gold_Award" placeholder="Gold Award..">
+                    <input type="text" name="gold_Award" placeholder="Gold Award.." [(ngModel)]="goldAward">
                   </div>
                   <div class="field">
                     <label>Platinum Award</label>
-                    <input type="text" name="platinum_Award" placeholder="Platinum Award..">
+                    <input type="text" name="platinum_Award" placeholder="Platinum Award.." [(ngModel)]="platinumAward">
                   </div>
                 <button class="ui primary button" type="submit" (click)="initializeCadetCount()">Set Goals</button>
               </form>
@@ -175,7 +175,7 @@
       </div>
     </div>
   </div>
-  
+
 
 
 <!-------------------------------- Modals ---------------------------------------->

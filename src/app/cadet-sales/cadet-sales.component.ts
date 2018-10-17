@@ -90,14 +90,14 @@ ngOnDestroy() {
     // Get Sales for tableview
     this.cadetSalesCollection = this.afs.collection('CadetSales', ref => {
       return ref.orderBy('TicketNumber', 'asc')
-                .where('SellerId', '==', this.id);
+                .where('Seller', '==', this.id);
     });
 
     this.sales = this.cadetSalesCollection.valueChanges().take(1);
 
     // Get total assigned Tickets
     this.cadetTicketsSoldCollection = this.afs.collection('CadetSales', ref => {
-      return ref.where('SellerId', '==', this.id).where('SaleComplete', '==', true);
+      return ref.where('Seller', '==', this.id).where('SaleComplete', '==', true);
     });
 
     const tickSold = this.cadetTicketsSoldCollection.valueChanges().take(1).subscribe(tx => {
@@ -107,7 +107,7 @@ ngOnDestroy() {
 
     // Get total of tickets assigned
     this.cadetTotalTicketsCollection = this.afs.collection('CadetSales', ref => {
-      return ref.where('SellerId', '==', this.id);
+      return ref.where('Seller', '==', this.id);
     });
 
     const tickAssigned = this.cadetTotalTicketsCollection.valueChanges().take(1).subscribe(tx => {

@@ -26,6 +26,10 @@ cadetUploadFile: any;
 authCode: string;
 tickDelStart: number;
 tickDelEnd: number;
+bronzeAward: string;
+silverAward: string;
+goldAward: string;
+platinumAward: string;
 
   constructor(private afs: AngularFirestore, private db: AngularFireDatabase, private router: Router) { }
 
@@ -70,7 +74,13 @@ tickDelEnd: number;
     this.afs.doc('/Rpt_SalesGoal/CurrentGoal').set({
       goal: this.salesGoal
     });
-    console.log('SalesGoal Set!');
+    this.afs.doc('/Rpt_SalesAward/Awards').set({
+      BronzeAward: this.bronzeAward,
+      SilverAward: this.silverAward,
+      GoldAward: this.goldAward,
+      PlatinumAward: this.platinumAward
+    });
+    console.log('SalesGoals Set!');
   }
 
   initializeTotalSalesCounter () {

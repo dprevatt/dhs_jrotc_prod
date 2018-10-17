@@ -1,23 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-cadet-awards',
   templateUrl: './cadet-awards.component.html',
   styleUrls: ['./cadet-awards.component.css']
 })
-export class CadetAwardsComponent implements OnInit {
+export class CadetAwardsComponent implements OnInit, OnDestroy {
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFireDatabase, private afs: AngularFirestore) { }
 
   bronzeSales: Array<any>;
   silverSales: Array<any>;
   goldSales: Array<any>;
   platinumSales: Array<any>;
 
+  bronzeAward: string;
+  silverAward: string;
+  goldAward: string;
+  platinumAward: string;
+
+  awardsSubscription: Subscription;
+
   ngOnInit() {
     this.getSales();
-    console.log(this.bronzeSales);
+    this.getAwards();
+    console.log(this.bronzeAward);
+  }
+
+  ngOnDestroy() {
+    this.awardsSubscription.unsubscribe();
   }
 
   getSales() {
@@ -49,6 +63,16 @@ export class CadetAwardsComponent implements OnInit {
       this.silverSales = silverCadets.reverse();
       this.goldSales = goldCadets.reverse();
       this.platinumSales = platinumCadets.reverse();
+    });
+  }
+
+  getAwards() {
+    this.awardsSubscription = this.afs.doc<any>('/Rpt_SalesAward/Awards').valueChanges().subscribe(aw => {
+      console.log(aw);
+      this.bronzeAward = aw.BronzeAward;
+      this.silverAward = aw.SilverAward;
+      this.goldAward = aw.GoldAward;
+      this.platinumAward = aw.PlatinumAward;
     });
   }
 

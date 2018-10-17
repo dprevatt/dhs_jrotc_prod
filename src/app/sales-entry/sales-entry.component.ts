@@ -112,7 +112,6 @@ ngOnDestroy(){
         });
       });
     });
-    cadetCounterCol.unsubscribe();
   }
 
     // Update Sales Per Cadet Counter
