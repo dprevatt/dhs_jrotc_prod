@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   messaging;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private afs: AngularFirestore, private firebaseAuth: AngularFireAuth, public route: ActivatedRoute, private router: Router, private msgService: MessagingService) { 
+  constructor(private afs: AngularFirestore, private firebaseAuth: AngularFireAuth, public route: ActivatedRoute, private router: Router, private msgService: MessagingService) {
     // this.messaging = firebase.messaging();
   }
 
@@ -75,7 +75,7 @@ ngOnDestroy() {
       }
     });
 
-      
+
 
       // jQuery('.ui.menu a.item').on('click', function() {
       //   jQuery(this).addClass('active');
@@ -143,6 +143,10 @@ ngOnDestroy() {
 
   navigateToEchoReports() {
     this.router.navigate(['./Echo-Reporting']);
+  }
+
+  navigateToCadetAwards() {
+    this.router.navigate(['./Cadet-Awards']);
   }
 
 

@@ -55,6 +55,7 @@ import { PlatePickupTableComponent } from './plate-pickup-table/plate-pickup-tab
 import { PlatePickupCounterComponent } from './plate-pickup-counter/plate-pickup-counter.component';
 import { ExactFilterPipe } from './exact-filter.pipe';
 import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
+import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
 
 
 
@@ -103,7 +104,8 @@ import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-c
     PlatePickupTableComponent,
     PlatePickupCounterComponent,
     ExactFilterPipe,
-    PickupCounterDisplayComponent
+    PickupCounterDisplayComponent,
+    CadetAwardsComponent
   ],
   imports: [
     BrowserModule,

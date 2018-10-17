@@ -1,3 +1,4 @@
+import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
 import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
 import { DataManagementComponent } from './data-management/data-management.component';
 import { SiteAdministrationComponent } from './site-administration/site-administration.component';
@@ -90,6 +91,10 @@ const routes: Routes = [
     {
       path: 'PickupCounterDisplay',
       component: PickupCounterDisplayComponent
+    },
+    {
+      path: 'Cadet-Awards',
+      component: CadetAwardsComponent
     }
 ];
 

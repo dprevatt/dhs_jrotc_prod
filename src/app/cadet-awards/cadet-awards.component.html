@@ -1,0 +1,102 @@
+<div class="ui grid">
+    <div class="four wide column">
+        <div class="ui red segment">
+            <h2 class="ui header">
+                <img src="..\assets\images\badge1_t2.png">
+                <div class="content">
+                  Bronze
+                  <div class="sub header">Bronze Award</div>
+                </div>
+              </h2>
+              <hr>
+              <table *ngFor="let b of bronzeSales">
+                  <tr>
+                      <td>
+                        <h4 class="ui image header">
+                            <i class="us flag"></i>
+                          <div class="content">
+                            {{b.Name}} | {{b.count}}
+                            <div class="sub header">{{b.Company}}
+                          </div>
+                        </div>
+                      </h4></td>
+                    </tr>
+              </table>
+          </div>
+    </div>
+    <div class="four wide column">
+        <div class="ui red segment">
+            <h2 class="ui header">
+                <img src="..\assets\images\badge2.png">
+                <div class="content">
+                  Silver
+                  <div class="sub header">Silver Award</div>
+                </div>
+              </h2>
+              <hr>
+              <table *ngFor="let s of silverSales">
+                  <tr>
+                      <td>
+                        <h4 class="ui image header">
+                            <i class="us flag"></i>
+                          <div class="content">
+                            {{s.Name}} | {{s.count}}
+                            <div class="sub header">{{s.Company}}
+                          </div>
+                        </div>
+                      </h4></td>
+                    </tr>
+              </table>
+          </div>
+    </div>
+    <div class="four wide column">
+        <div class="ui red segment">
+            <h2 class="ui header">
+                <img src="..\assets\images\gold_trophy1.png">
+                <div class="content">
+                  Gold
+                  <div class="sub header">Gold Award</div>
+                </div>
+              </h2>
+              <hr>
+              <table *ngFor="let g of goldSales">
+                  <tr>
+                      <td>
+                        <h4 class="ui image header">
+                            <i class="us flag"></i>
+                          <div class="content">
+                            {{g.Name}} | {{g.count}}
+                            <div class="sub header">{{g.Company}}
+                          </div>
+                        </div>
+                      </h4></td>
+                    </tr>
+              </table>
+          </div>
+    </div>
+    <div class="four wide column">
+        <div class="ui red segment">
+            <h2 class="ui header">
+                <img src="..\assets\images\icons8-medal-48.png">
+                <div class="content">
+                  Platinum
+                  <div class="sub header">Platinum Award</div>
+                </div>
+              </h2>
+              <hr>
+              <table *ngFor="let p of platinumSales">
+                  <tr>
+                      <td>
+                        <h4 class="ui image header">
+                            <i class="us flag"></i>
+                          <div class="content">
+                            {{p.Name}} | {{p.count}}
+                            <div class="sub header">{{p.Company}}
+                          </div>
+                        </div>
+                      </h4></td>
+                    </tr>
+              </table>
+          </div>
+    </div>
+  </div>
