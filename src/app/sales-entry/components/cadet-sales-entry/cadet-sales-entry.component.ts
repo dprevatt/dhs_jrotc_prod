@@ -514,4 +514,11 @@ dp_incrementCompanySales(company) {
     });
   }
 
+
+  bulkSaleTab() {
+    jQuery('#buyerLast').focus();
+  }
+
+
+
 } // End of component function
