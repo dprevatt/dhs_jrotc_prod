@@ -147,7 +147,7 @@
               <i class="pencil alternate icon"></i>
                 Edit
               </button>
-              <button class="ui basic button" (click)="removeSale($event, sale)" *ngIf="userLoggedIn">
+              <button class="ui basic button" (click)="removeSale(sale.TicketNumber)" *ngIf="userLoggedIn">
                 <i class="trash alternate outline icon"></i>
                   Delete
               </button>

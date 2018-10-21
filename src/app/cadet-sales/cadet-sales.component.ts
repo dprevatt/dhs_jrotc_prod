@@ -197,10 +197,26 @@ updateSale(ticket, buyerFirst, buyerLast, buyerPhone){
 
 
 
-removeSale(event, tickNum) {
+removeSale(tickNum) {
   const saleToDel = 'CadetSales/' + tickNum;
   console.log(saleToDel);
   this.afs.doc(saleToDel).delete();
+
+  const tickSold = this.cadetTicketsSoldCollection.valueChanges().take(1).subscribe(tx => {
+    this.ticketsSold = tx.length;
+    return tx.length;
+  });
+
+  // Get total of tickets assigned
+  this.cadetTotalTicketsCollection = this.afs.collection('CadetSales', ref => {
+    return ref.where('Seller', '==', this.id);
+  });
+
+  const tickAssigned = this.cadetTotalTicketsCollection.valueChanges().take(1).subscribe(tx => {
+    this.ticketsAssigned = tx.length;
+    return tx.length;
+  });
+
 }
 
 

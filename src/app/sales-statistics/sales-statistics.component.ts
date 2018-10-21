@@ -66,7 +66,7 @@ getTotalSalesCount() {
 
 dp_getCompanySales() {
   const CompanySalesRef = this.db.list<any>('/counters/companySales', ref => {
-    return ref.orderByChild('count');
+    return ref.orderByChild('AvgSoldPerCadet');
   });
   CompanySalesRef.valueChanges().subscribe(x => {
     const myCompList = [];
