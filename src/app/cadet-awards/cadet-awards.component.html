@@ -9,13 +9,13 @@
                 </div>
               </h2>
               <hr>
-              <table *ngFor="let b of bronzeSales">
+              <table *ngFor="let b of bronzeSales; let i = index">
                   <tr>
                       <td>
                         <h4 class="ui image header">
                             <i class="us flag"></i>
                           <div class="content">
-                            {{b.Name}} | {{b.count}}
+                            {{(i + 1) + '. ' + b.Name}} | {{b.count}}
                             <div class="sub header">{{b.Company}}
                           </div>
                         </div>
@@ -35,13 +35,13 @@
                 </div>
               </h2>
               <hr>
-              <table *ngFor="let s of silverSales">
+              <table *ngFor="let s of silverSales; let i = index">
                   <tr>
                       <td>
                         <h4 class="ui image header">
                             <i class="us flag"></i>
                           <div class="content">
-                            {{s.Name}} | {{s.count}}
+                            {{(i + 1) + '. ' + s.Name}} | {{s.count}}
                             <div class="sub header">{{s.Company}}
                           </div>
                         </div>
@@ -61,13 +61,13 @@
                 </div>
               </h2>
               <hr>
-              <table *ngFor="let g of goldSales">
+              <table *ngFor="let g of goldSales; let i=index">
                   <tr>
                       <td>
                         <h4 class="ui image header">
                             <i class="us flag"></i>
                           <div class="content">
-                            {{g.Name}} | {{g.count}}
+                            {{(i + 1) + '. ' + g.Name}} | {{g.count}}
                             <div class="sub header">{{g.Company}}
                           </div>
                         </div>
@@ -87,13 +87,13 @@
                 </div>
               </h2>
               <hr>
-              <table *ngFor="let p of platinumSales">
+              <table *ngFor="let p of platinumSales; let i = index">
                   <tr>
                       <td>
                         <h4 class="ui image header">
                             <i class="us flag"></i>
                           <div class="content">
-                            {{p.Name}} | {{p.count}}
+                            {{(i + 1) + '. ' + p.Name}} | {{p.count}}
                             <div class="sub header">{{p.Company}}
                                 <div class="ui circular labels">
                                     <a class="ui red label" *ngIf="p.count >= 500">
