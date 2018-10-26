@@ -26,12 +26,12 @@ export class PlatePickupPageComponent implements OnInit {
   }
 
   VerifyTotalSalesPickupCounter(count) {
-    const counterRef = this.db.database.ref('counters').child('totalSales');
+    const counterRef = this.db.database.ref('counters').child('PlatesPickedUp');
     counterRef.transaction(dv => {
       if (!dv) {
         return dv;
       }
-      console.log('Setting total sales counter to ' + count);
+      console.log('Setting PlatesPickedUp counter to ' + count);
       dv.count = count;
       return dv;
     });

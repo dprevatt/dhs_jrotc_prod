@@ -26,6 +26,7 @@ export class PlatePickupTableComponent implements OnInit {
   scanCode: any;
   queryString: any;
   objArr: Array<any>;
+  successNotificationMsg: string;
 
   ngOnInit() {
     this.showTable = true;
@@ -49,7 +50,7 @@ export class PlatePickupTableComponent implements OnInit {
       .transition('fade');
     });
 
-  }
+  } // End of On Init
 
   hideTable() {
     this.showTable = false;
@@ -179,11 +180,27 @@ export class PlatePickupTableComponent implements OnInit {
       if ( (d.PlatePickedUp === false) && (d.SaleComplete === true) ) {
         console.log('Valid entry');
         this.setPlatePickedUp(d.TicketNumber.toString());
+
+        // tslint:disable-next-line:max-line-length
+        const notificationMsg = 'TicketNumber: ' + d.TicketNumber + ' picked up successfully by ' + d.BuyerLastName + ', ' + d.BuyerFirstName + ' !';
+        this.showCompletionNotification(notificationMsg);
+
         this.dp_incrementPlatePickedUpCounter();
       }
     });
     this.scanCode = '';
     jQuery('#sacnner').focus();
+  }
+
+  showCompletionNotification(notification) {
+    this.successNotificationMsg = null;
+    this.successNotificationMsg = notification;
+    console.log('Showing Modal');
+    jQuery('#successModal').modal('show', function () {
+      console.log('Showing success modal');
+    }, setTimeout(function() {
+      jQuery('#successModal').modal('hide');
+    }, 2000));
   }
 
 
