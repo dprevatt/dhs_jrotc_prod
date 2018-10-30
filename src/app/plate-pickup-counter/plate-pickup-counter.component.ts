@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 @Component({
   selector: 'app-plate-pickup-counter',
@@ -9,7 +11,14 @@ import { Observable } from 'rxjs/Observable';
 })
 export class PlatePickupCounterComponent implements OnInit {
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFireDatabase, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+   }
   totalPickedUpCount: Observable<any>;
 
   ngOnInit() {

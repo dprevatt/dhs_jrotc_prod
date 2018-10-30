@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { Sale } from '../../../models/Sale';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 
 @Component({
@@ -12,7 +14,14 @@ import { Sale } from '../../../models/Sale';
 })
 export class CadetSalesListComponent implements OnInit {
 
-  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
+  constructor(private afs: AngularFirestore, private db: AngularFireDatabase, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+   }
 
   allCadetSalesCollection: AngularFirestoreCollection<any[]>;
   allCadetSales: Observable<any[]>;

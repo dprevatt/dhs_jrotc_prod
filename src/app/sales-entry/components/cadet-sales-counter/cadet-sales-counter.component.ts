@@ -10,6 +10,8 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/do';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 @Component({
   selector: 'app-cadet-sales-counter',
@@ -18,7 +20,14 @@ import 'rxjs/add/operator/do';
 })
 export class CadetSalesCounterComponent implements OnInit {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+   }
 
   totalSalesDoc: AngularFirestoreDocument<TotalCount>;
   assignedTicketDoc: AngularFirestoreDocument<TotalCount>;

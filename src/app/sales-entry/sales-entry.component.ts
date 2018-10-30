@@ -20,6 +20,8 @@ import { removeSummaryDuplicates } from '@angular/compiler';
 import { Subscription } from 'rxjs/Subscription';
 import { MessagingService } from '../messaging.service';
 import { AngularFireDatabase } from 'angularfire2/database';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 @Component({
   selector: 'app-sales-entry',
@@ -69,7 +71,14 @@ export class SalesEntryComponent implements OnInit, OnDestroy {
   cadetCounterDoc: AngularFirestoreDocument<any>;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private route: ActivatedRoute, private afs: AngularFirestore, private msgService: MessagingService, private db: AngularFireDatabase) { }
+  constructor(private route: ActivatedRoute, private afs: AngularFirestore, private msgService: MessagingService, private db: AngularFireDatabase, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+   }
 
 
 ngOnDestroy(){

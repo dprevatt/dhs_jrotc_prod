@@ -6,6 +6,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { WriteTreeCompleteChildSource } from '@firebase/database/dist/esm/src/core/view/CompleteChildSource';
 import { isUndefined } from 'util';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 
 
@@ -16,7 +18,14 @@ import { isUndefined } from 'util';
 })
 export class PlatePickupTableComponent implements OnInit {
 
-  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
+  constructor(private afs: AngularFirestore, private db: AngularFireDatabase, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+  }
 
   allCadetSalesCollection: AngularFirestoreCollection<any[]>;
   allCadetSales: Observable<any[]>;

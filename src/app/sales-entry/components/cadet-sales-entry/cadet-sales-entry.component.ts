@@ -14,6 +14,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/first';
 import * as firebase from 'firebase';
 import { post } from '../../../../../node_modules/@types/selenium-webdriver/http';
+declare let ga: Function;
+import {Router, NavigationEnd} from '@angular/router';
 
 
 @Component({
@@ -23,7 +25,14 @@ import { post } from '../../../../../node_modules/@types/selenium-webdriver/http
 })
 export class CadetSalesEntryComponent implements OnInit {
 
-  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
+  constructor(private afs: AngularFirestore, private db: AngularFireDatabase, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+   }
 
 enteredTicket: any;
 enteredSale: CadetSales;
