@@ -1,13 +1,14 @@
 import { tick } from '@angular/core/testing';
 import { ExactFilterPipe } from './../exact-filter.pipe';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { WriteTreeCompleteChildSource } from '@firebase/database/dist/esm/src/core/view/CompleteChildSource';
 import { isUndefined } from 'util';
 declare let ga: Function;
 import {Router, NavigationEnd} from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 
 
@@ -16,7 +17,7 @@ import {Router, NavigationEnd} from '@angular/router';
   templateUrl: './plate-pickup-table.component.html',
   styleUrls: ['./plate-pickup-table.component.css']
 })
-export class PlatePickupTableComponent implements OnInit {
+export class PlatePickupTableComponent implements OnInit, OnDestroy {
 
   constructor(private afs: AngularFirestore, private db: AngularFireDatabase, public router: Router) {
     this.router.events.subscribe(event => {
@@ -36,6 +37,7 @@ export class PlatePickupTableComponent implements OnInit {
   queryString: any;
   objArr: Array<any>;
   successNotificationMsg: string;
+  allCadetSalesCollectionSub: Subscription;
 
   ngOnInit() {
     this.showTable = true;
@@ -47,7 +49,7 @@ export class PlatePickupTableComponent implements OnInit {
 
     this.allCadetSales = this.allCadetSalesCollection.valueChanges();
 
-    this.allCadetSalesCollection.valueChanges().subscribe(xv => {
+    this.allCadetSalesCollectionSub = this.allCadetSalesCollection.valueChanges().subscribe(xv => {
       this.objArr = xv;
     });
 
@@ -60,6 +62,10 @@ export class PlatePickupTableComponent implements OnInit {
     });
 
   } // End of On Init
+
+  ngOnDestroy() {
+    this.allCadetSalesCollectionSub.unsubscribe();
+  }
 
   hideTable() {
     this.showTable = false;
