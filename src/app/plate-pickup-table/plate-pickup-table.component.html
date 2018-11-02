@@ -60,7 +60,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let sale of allCadetSales | async | search:'Seller,BuyerLastName,BuyerFirstName,BuyerPhone,SellerCompany,TicketNumber':queryString | slice:0:20">
+              <tr *ngFor="let sale of allCadetSales | async | search:'Seller,BuyerLastName,BuyerFirstName,BuyerPhone,SellerCompany,TicketNumber':queryString | slice:0:10">
                 <td>{{sale.TicketNumber}}</td>
                 <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
                 <td>{{sale.BuyerPhone}}</td>

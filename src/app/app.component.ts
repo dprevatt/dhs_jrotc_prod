@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { async } from '@angular/core/testing';
 import { AngularFirestoreModule, AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { JsonPipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
@@ -23,7 +23,7 @@ import { jsonEval } from '../../node_modules/@firebase/util';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   title = 'app';
 
   cadetCollection: AngularFirestoreCollection<Cadets>;
@@ -75,18 +75,26 @@ ngOnDestroy() {
       }
     });
 
+      // Function for sticky NavBar
 
+      window.onscroll = function() {myFunction()};
 
-      // jQuery('.ui.menu a.item').on('click', function() {
-      //   jQuery(this).addClass('active');
-      // });
+      const navbar = document.getElementById('navTopBar');
+      const sticky = navbar.offsetTop;
 
-
-
-
-    //console.log(this.route.events.subscribe((url: any) => console.log(url)));
+      function myFunction() {
+        if (window.pageYOffset >= sticky) {
+          navbar.classList.add('sticky');
+        } else {
+          navbar.classList.remove('sticky');
+        }
+      }
 
   } // end of OnInit
+
+  ngAfterViewInit() {
+
+  }
 
 
   setUser(user){

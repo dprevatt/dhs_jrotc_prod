@@ -1,6 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<!-- <div id="example1" style="visibility: fixed"> -->
 <div class="container">
-<div class="ui tablet stackable menu">
+<div class="ui tablet stackable inverted menu" id="navTopBar">
     <div class="header item" [routerLink]="['/']">
       Dothan High JROTC
     </div>
@@ -54,38 +55,13 @@
 <app-sold-per-comapny-chart *ngIf="route.children.length === 0"></app-sold-per-comapny-chart>
   <router-outlet></router-outlet>
   <div style="margin-left: 90%">
-      <h3 style="color: mediumblue">v1.0.1.0</h3>
+      <h3 style="color: mediumblue">v1.0.1.1</h3>
   </div>
-<!-- <br/>
-<br/>
-<br/>
-<div *ngFor="let cad of cadets | async">
-  {{cad | json}}
-</div>
-<br/>
-<br/>
-<br/>
-<div *ngFor="let sale of singleCadetSales | async">
-    {{sale | json}}
-  </div>
-  <br/>
-  <br/>
-  <table class="ui fixed single line celled table">
-      <thead>
-        <th>Ticket Number</th>
-        <th>Buyer</th>
-        <th>Phone Number</th>
-        <th>Email Address</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let sale of singleCadetSales | async">
-          <td>{{sale.TicketNumber}}</td>
-          <td>{{sale.Buyer.Name}}</td>
-          <td>{{sale.Buyer.ContactInformation.Phone}}</td>
-          <td>{{sale.Buyer.ContactInformation.Email}}</td>
-        </tr>
-      </tbody>
-    </table> -->
+<!-- </div> end sticky -->
+
+
+
+
     <div class="ui modal" id="loginModal">
         <i class="close icon"></i>
         <div class="header" *ngIf="userLoggedIn">

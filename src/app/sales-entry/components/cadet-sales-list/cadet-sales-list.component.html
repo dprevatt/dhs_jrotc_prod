@@ -20,7 +20,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let sale of allCadetSales | async | search:'TicketNumber':query">
+                <tr *ngFor="let sale of allCadetSales | async | search:'TicketNumber':query | slice:0:10">
                   <td>{{sale.TicketNumber}}</td>
                   <td>{{sale.BuyerLastName + ', ' + sale.BuyerFirstName}}</td>
                   <td>{{sale.BuyerPhone}}</td>
