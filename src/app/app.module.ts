@@ -111,7 +111,7 @@ import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
     BrowserModule,
     FormsModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AppRoutingModule
   ],
   exports: [

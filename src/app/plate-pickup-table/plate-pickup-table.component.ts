@@ -78,6 +78,9 @@ export class PlatePickupTableComponent implements OnInit, OnDestroy {
   this.scanCode = '';
   this.queryString = '';
   this.dp_incrementPlatePickedUpCounter();
+  // tslint:disable-next-line:max-line-length
+  const notificationMsg = 'TicketNumber: ' + sale.TicketNumber + ' picked up successfully by ' + sale.BuyerLastName + ', ' + sale.BuyerFirstName + ' !';
+  this.showCompletionNotification(notificationMsg);
 }
 
 // bulkOrderReceived() {
