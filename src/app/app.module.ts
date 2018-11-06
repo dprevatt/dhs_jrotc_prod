@@ -56,6 +56,10 @@ import { PlatePickupCounterComponent } from './plate-pickup-counter/plate-pickup
 import { ExactFilterPipe } from './exact-filter.pipe';
 import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
 import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
+import { BronzeAwardsComponent } from './cadet-awards/bronze-awards/bronze-awards.component';
+import { SilverAwardsComponent } from './cadet-awards/silver-awards/silver-awards.component';
+import { GoldAwardsComponent } from './cadet-awards/gold-awards/gold-awards.component';
+import { PlatinumAwardsComponent } from './cadet-awards/platinum-awards/platinum-awards.component';
 
 
 
@@ -105,7 +109,11 @@ import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
     PlatePickupCounterComponent,
     ExactFilterPipe,
     PickupCounterDisplayComponent,
-    CadetAwardsComponent
+    CadetAwardsComponent,
+    BronzeAwardsComponent,
+    SilverAwardsComponent,
+    GoldAwardsComponent,
+    PlatinumAwardsComponent
   ],
   imports: [
     BrowserModule,

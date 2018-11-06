@@ -26,10 +26,6 @@
           <div class="item" (click)="navigateToCharlieReports()">Charlie</div>
           <div class="item" (click)="navigateToDeltaReports()">Delta</div>
           <div class="item" (click)="navigateToEchoReports()">Echo</div>
-          <div class="item" (click)="navigateToCadetAwards()">
-              <i class="star icon"></i>
-              Cadet Awards
-          </div>
         </div>
       </div>
     </div>
@@ -40,6 +36,21 @@
   <a class="item" [routerLink]="['/PlatePickup']" *ngIf="userLoggedIn" id="dataManagement"><i class="utensils icon"></i>
     Plate Pickup
   </a>
+  <div class="ui dropdown icon item">
+    <i class="star icon"> Cadet Awards</i>
+    <div class="menu">
+      <div class="item">
+        <i class="dropdown icon"></i>
+        <span class="text">Award Tiers</span>
+        <div class="menu">
+          <div class="item" (click)="navigateToBronzeAwards()">Bronze Awards</div>
+          <div class="item" (click)="navigateToSilverAwards()">Silver Awards</div>
+          <div class="item" (click)="navigateToGoldAwards()">Gold Awards</div>
+          <div class="item" (click)="navigateToPlatinumAwards()">Platinum Awards</div>
+        </div>
+      </div>
+    </div>
+  </div>
 <div class="right menu">
     <a class="item" (click)="displaySignIn()" *ngIf="!userLoggedIn">
         <i class="sign in alternate icon"></i>
@@ -55,7 +66,7 @@
 <app-sold-per-comapny-chart *ngIf="route.children.length === 0"></app-sold-per-comapny-chart>
   <router-outlet></router-outlet>
   <div style="margin-left: 90%">
-      <h3 style="color: mediumblue">v1.0.1.2</h3>
+      <h3 style="color: mediumblue">v1.0.1.3</h3>
   </div>
 <!-- </div> end sticky -->
 

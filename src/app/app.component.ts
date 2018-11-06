@@ -157,5 +157,21 @@ ngOnDestroy() {
     this.router.navigate(['./Cadet-Awards']);
   }
 
+  navigateToBronzeAwards() {
+    this.router.navigate(['./Bronze-Awards']);
+  }
+
+  navigateToSilverAwards() {
+    this.router.navigate(['./Silver-Awards']);
+  }
+
+  navigateToGoldAwards() {
+    this.router.navigate(['./Gold-Awards']);
+  }
+
+  navigateToPlatinumAwards() {
+    this.router.navigate(['./Platinum-Awards']);
+  }
+
 
 } // end of func

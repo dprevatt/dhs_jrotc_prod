@@ -19,6 +19,10 @@ import { ReportingComponent } from './reporting/reporting.component';
 import { AlphaSellersTableComponent } from './company-reporting/alpha-sellers-table/alpha-sellers-table.component';
 import { EchoSellersTableComponent } from './company-reporting/echo-sellers-table/echo-sellers-table.component';
 import { PlatePickupPageComponent } from './plate-pickup-page/plate-pickup-page.component';
+import { BronzeAwardsComponent } from './cadet-awards/bronze-awards/bronze-awards.component';
+import { SilverAwardsComponent } from './cadet-awards/silver-awards/silver-awards.component';
+import { GoldAwardsComponent } from './cadet-awards/gold-awards/gold-awards.component';
+import { PlatinumAwardsComponent } from './cadet-awards/platinum-awards/platinum-awards.component';
 // import { HomeComponent } from './home/home.component';     // Add your component here
 // import { AboutComponent } from './about/about.component';  // Add your component here
 
@@ -95,6 +99,22 @@ const routes: Routes = [
     {
       path: 'Cadet-Awards',
       component: CadetAwardsComponent
+    },
+    {
+      path: 'Bronze-Awards',
+      component: BronzeAwardsComponent
+    },
+    {
+      path: 'Silver-Awards',
+      component: SilverAwardsComponent
+    },
+    {
+      path: 'Gold-Awards',
+      component: GoldAwardsComponent
+    },
+    {
+      path: 'Platinum-Awards',
+      component: PlatinumAwardsComponent
     }
 ];
 

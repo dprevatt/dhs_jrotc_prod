@@ -1,0 +1,29 @@
+<div class="ui one column stackable center aligned page grid">
+  <div class="column twelve wide">
+      <div class="ui red segment">
+          <h2 class="ui header" style="padding-right: 10%">
+            <img src="..\assets\images\badge2.png">
+              <div class="content">
+                Silver
+                <div class="sub header">{{silverAward}}</div>
+              </div>
+            </h2>
+            <hr>
+            <div class="center aligned container">
+              <table *ngFor="let b of silverSales; let i = index" style="padding-left: 40%">
+                <tr>
+                    <td>
+                      <h4 class="ui image header">
+                          <i class="us flag"></i>
+                        <div class="content">
+                          {{(i + 1) + '. ' + b.Name}} | {{b.count}}
+                          <div class="sub header">{{b.Company}}
+                        </div>
+                      </div>
+                    </h4></td>
+                  </tr>
+                  <hr>
+            </table>
+            </div>
+        </div>
+  </div>
