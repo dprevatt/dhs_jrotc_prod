@@ -8,8 +8,55 @@
                 <div class="sub header">{{bronzeAward}}</div>
               </div>
             </h2>
+            <div style="padding-left: 90%">
+              <button class="ui basic icon button" (click)="export()">
+                <i class="file excel icon"></i>
+              </button>
+            </div>
             <hr>
+            <!-- table start -->
             <div class="center aligned container">
+              <table class="ui celled table" id="mytable">
+                <thead>
+                  <tr><th>Rank</th>
+                  <th>Cadet</th>
+                  <th>Company</th>
+                  <th>Tickets Sold</th>
+                </tr></thead>
+                <tbody>
+                  <tr *ngFor="let b of bronzeSales; let i = index">
+                    <td data-label="Rank">{{i + 1}}</td>
+                    <td data-label="Cadet">{{b.Name}}</td>
+                    <td data-label="Company">{{b.Company}}</td>
+                    <td data-label="TicketsSold">{{b.count}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <table class="ui very basic collapsing celled table" id="mytable">
+                <thead>
+                  <tr><th>Cadet</th>
+                  <th>Number of Sales</th>
+                </tr></thead>
+                <tbody>
+                  <tr *ngFor="let b of bronzeSales; let i = index">
+                    <td>
+                      <h4 class="ui image header">
+                        <img src="..\assets\images\badge1_t2.png" class="ui mini rounded image">
+                        <div class="content">
+                          {{b.Name}}
+                          <div class="sub header">{{b.Company}}
+                        </div>
+                      </div>
+                    </h4></td>
+                    <td>
+                      {{b.count}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table> -->
+            </div>
+            <!-- table end -->
+            <!-- <div class="center aligned container">
               <table *ngFor="let b of bronzeSales; let i = index" style="padding-left: 40%">
                 <tr>
                     <td>
@@ -24,6 +71,8 @@
                   </tr>
                   <hr>
             </table>
-            </div>
+            </div> -->
         </div>
   </div>
+
+
