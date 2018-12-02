@@ -1,29 +1,39 @@
-<div class="ui one column stackable center aligned page grid">
-  <div class="column twelve wide">
-      <div class="ui red segment">
-          <h2 class="ui header" style="padding-right: 10%">
-            <img src="..\assets\images\badge2.png">
-              <div class="content">
-                Silver
-                <div class="sub header">{{silverAward}}</div>
+
+  <div class="ui one column stackable center aligned page grid">
+    <div class="column twelve wide">
+        <div class="ui red segment">
+            <h2 class="ui header" style="padding-right: 10%">
+              <img src="..\assets\images\badge2.png">
+                <div class="content">
+                  Silver
+                  <div class="sub header">{{silverAward}}</div>
+                </div>
+              </h2>
+              <div style="padding-left: 90%">
+                <button class="ui basic icon button" (click)="export()">
+                  <i class="file excel icon"></i>
+                </button>
               </div>
-            </h2>
-            <hr>
-            <div class="center aligned container">
-              <table *ngFor="let b of silverSales; let i = index" style="padding-left: 40%">
-                <tr>
-                    <td>
-                      <h4 class="ui image header">
-                          <i class="us flag"></i>
-                        <div class="content">
-                          {{(i + 1) + '. ' + b.Name}} | {{b.count}}
-                          <div class="sub header">{{b.Company}}
-                        </div>
-                      </div>
-                    </h4></td>
-                  </tr>
-                  <hr>
-            </table>
-            </div>
-        </div>
-  </div>
+              <hr>
+              <!-- table start -->
+              <div class="center aligned container">
+                <table class="ui celled table" id="mytable">
+                  <thead>
+                    <tr><th>Rank</th>
+                    <th>Cadet</th>
+                    <th>Company</th>
+                    <th>Tickets Sold</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr *ngFor="let b of silverSales; let i = index">
+                      <td data-label="Rank">{{i + 1}}</td>
+                      <td data-label="Cadet">{{b.Name}}</td>
+                      <td data-label="Company">{{b.Company}}</td>
+                      <td data-label="TicketsSold">{{b.count}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+    </div>
+
