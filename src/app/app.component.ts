@@ -173,5 +173,9 @@ ngOnDestroy() {
     this.router.navigate(['./Platinum-Awards']);
   }
 
+  navigateToLessThanFive() {
+    this.router.navigate(['./Less-Than-Five']);
+  }
+
 
 } // end of func

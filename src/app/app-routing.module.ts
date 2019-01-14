@@ -1,3 +1,4 @@
+import { LessthanfiveComponent } from './cadet-awards/lessthanfive/lessthanfive.component';
 import { CadetAwardsComponent } from './cadet-awards/cadet-awards.component';
 import { PickupCounterDisplayComponent } from './pickup-counter-display/pickup-counter-display.component';
 import { DataManagementComponent } from './data-management/data-management.component';
@@ -115,6 +116,10 @@ const routes: Routes = [
     {
       path: 'Platinum-Awards',
       component: PlatinumAwardsComponent
+    },
+    {
+      path: 'Less-Than-Five',
+      component: LessthanfiveComponent
     }
 ];
 

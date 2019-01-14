@@ -60,6 +60,7 @@ import { BronzeAwardsComponent } from './cadet-awards/bronze-awards/bronze-award
 import { SilverAwardsComponent } from './cadet-awards/silver-awards/silver-awards.component';
 import { GoldAwardsComponent } from './cadet-awards/gold-awards/gold-awards.component';
 import { PlatinumAwardsComponent } from './cadet-awards/platinum-awards/platinum-awards.component';
+import { LessthanfiveComponent } from './cadet-awards/lessthanfive/lessthanfive.component';
 
 
 
@@ -113,7 +114,8 @@ import { PlatinumAwardsComponent } from './cadet-awards/platinum-awards/platinum
     BronzeAwardsComponent,
     SilverAwardsComponent,
     GoldAwardsComponent,
-    PlatinumAwardsComponent
+    PlatinumAwardsComponent,
+    LessthanfiveComponent
   ],
   imports: [
     BrowserModule,
