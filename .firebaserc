@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "dhsrotc-dhn"
+    "default": "dhsrotc-dhn",
+    "DHS-Prod": "dhs-rotc-steak-sale-app"
   }
 }
