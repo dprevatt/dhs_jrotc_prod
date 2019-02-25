@@ -32,7 +32,7 @@
 
 <div class="ui grid">
     <div class="four wide column">
-        <div class="ui red segment">
+        <!-- <div class="ui red segment">
           <h3>Cadet Data Import</h3>
           <br>
           <p>Please click the button below to begin importing application data using the import template file.</p>
@@ -54,6 +54,27 @@
                 <i class="cloud upload icon"></i> Cadet Data Import
             </label>
             <input id="file-upload" type="file" (change)="fileChanged($event)"/>
+        </div> -->
+        <div class="four wide column">
+          <div class="ui red segment">
+            <h3>Cadet Data Import</h3>
+            <p>Click <a href="https://firebasestorage.googleapis.com/v0/b/dhsrotc-dhn.appspot.com/o/CadetImport%20-%20Template.xlsx?alt=media&token=04b2896e-160e-497f-bbbe-011243819646" download id="download">here</a> to download the template</p>
+            <br>
+            <label for="file-upload" class="custom-file-upload">
+              <i class="cloud upload icon"></i> Cadet Data Import
+          </label>
+          <div class="ui bulleted list">
+            <div class="item">
+              <div><b>Validation Rules</b></div>
+              <div class="list">
+                <div class="item" style="color: red">First Name is required.</div>
+                <div class="item" style="color: red">Last Name is required.</div>
+                <div class="item" style="color: red">Company is required.</div>
+              </div>
+            </div>
+          </div>
+          <input id="file-upload" type="file" (change)="fileChanged2($event)"/>
+          </div>
         </div>
     </div>
     <div class="six wide column">
@@ -105,7 +126,7 @@
 
 
   <div class="ui grid">
-    <div class="four wide column">
+    <!-- <div class="four wide column">
         <div class="ui red segment">
           <h3>Cadet Data Import</h3>
           <p>Click <a href="https://firebasestorage.googleapis.com/v0/b/dhsrotc-dhn.appspot.com/o/CadetImport%20-%20Template.xlsx?alt=media&token=04b2896e-160e-497f-bbbe-011243819646" download id="download">here</a> to download the template</p>
@@ -113,10 +134,21 @@
           <label for="file-upload" class="custom-file-upload">
             <i class="cloud upload icon"></i> Cadet Data Import TEST
         </label>
+        <div class="ui bulleted list">
+          <div class="item">
+            <div><b>Validation Rules</b></div>
+            <div class="list">
+              <div class="item" style="color: red">First Name is required.</div>
+              <div class="item" style="color: red">Last Name is required.</div>
+              <div class="item" style="color: red">Company is required.</div>
+            </div>
+          </div>
+        </div>
         <input id="file-upload" type="file" (change)="fileChanged2($event)"/>
         </div>
-      </div>
-      <div class="four wide column">
+      </div> -->
+
+      <!-- <div class="four wide column" hidden>
         <div class="ui red segment">
           <h3>Cadet Ticket Import TEST</h3>
           <br>
@@ -125,7 +157,7 @@
         </label>
         <input id="file-upload" type="file" (change)="fileChanged3($event)"/>
         </div>
-      </div>
+      </div> -->
   </div>
 
 

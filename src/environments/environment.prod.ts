@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: 'AIzaSyDuPuzE7O1J4Tyh-Yv2H0tdwGFUmslBNWQ',
-    authDomain: 'dhsrotc-dhn.firebaseapp.com',
-    databaseURL: 'https://dhsrotc-dhn.firebaseio.com',
-    projectId: 'dhsrotc-dhn',
-    storageBucket: 'dhsrotc-dhn.appspot.com',
-    messagingSenderId: '200678268949'
+    apiKey: 'AIzaSyArQi4dHbevB3YHZovzo2nYOM7kam0p7dA',
+    authDomain: 'dhs-rotc-steak-sale-app.firebaseapp.com',
+    databaseURL: 'https://dhs-rotc-steak-sale-app.firebaseio.com',
+    projectId: 'dhs-rotc-steak-sale-app',
+    storageBucket: 'dhs-rotc-steak-sale-app.appspot.com',
+    messagingSenderId: '236784312343'
   }
 };
