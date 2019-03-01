@@ -60,12 +60,15 @@ export class TicketAssignmentComponent implements OnInit {
     }
     else if (myCadet != null || '')
     {
+      jQuery('#progressModal').modal('show');
       console.log(this.ticketStart + ' - ' + this.ticketEnd);
       if (this.ticketEnd) {
         localStorage.setItem('TicketEnd', this.ticketEnd.toString());
         if (this.ticketEnd < this.ticketStart) {
             alert('Invalid ticket range');
             } else {
+              // Show the Modal
+              jQuery('#progressModal').modal();
               // Loop thru Tickets to assign
               for (let t = this.ticketStart; t <= this.ticketEnd; t++ ) {
               console.log(this.selectedCadetId);
@@ -81,7 +84,7 @@ export class TicketAssignmentComponent implements OnInit {
             this.ticketAlreadyExists(this.ticketStart.toString(), null, this);
       } // end of else
     }
-
+    jQuery('#progressModal').modal('hide');
   }
 
 

@@ -67,7 +67,7 @@
 <app-sold-per-comapny-chart *ngIf="route.children.length === 0"></app-sold-per-comapny-chart>
   <router-outlet></router-outlet>
   <div style="margin-left: 90%">
-      <h3 style="color: mediumblue">v1.0.1.7</h3>
+      <h3 style="color: mediumblue">v1.0.1.8</h3>
   </div>
 <!-- </div> end sticky -->
 
@@ -119,5 +119,14 @@
       <div class="ui vertical footer segment">
         <div class="ui container">
             <a [routerLink]="['/Site-Administration']" style="color: mediumblue">Administration</a>
+        </div>
+    </div>
+
+
+    <!-- Loader Progress Display -->
+    <div class="ui basic modal" id="progressModal">
+        <div class="ui icon header">
+          <div class="loader"></div>
+          Assigning Tickets for {{selectedCadet}}
         </div>
     </div>

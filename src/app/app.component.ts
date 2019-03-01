@@ -16,6 +16,7 @@ import { Cadets } from './models/Cadets';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { jsonEval } from '../../node_modules/@firebase/util';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   messaging;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private afs: AngularFirestore, private firebaseAuth: AngularFireAuth, public route: ActivatedRoute, private router: Router, private msgService: MessagingService) {
+  constructor(private afs: AngularFirestore, private firebaseAuth: AngularFireAuth, public route: ActivatedRoute, private router: Router, private msgService: MessagingService, private db: AngularFireDatabase) {
     // this.messaging = firebase.messaging();
   }
 
@@ -90,12 +91,104 @@ ngOnDestroy() {
         }
       }
 
+
+//<-- Recount Function //-->
+jQuery('#progressModal').modal('show');
+const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
+    for (let i = 0; i < companies.length; i ++) {
+      this.verifyCompanyCounter(companies[i]);
+    }
+
+    this.verifyCadetCounters();
+    this.verifyTotalSalesCounter();
+    jQuery('#progressModal').modal('hide');
+
+
   } // end of OnInit
 
   ngAfterViewInit() {
 
   }
 
+   //---------------------------------> Recount Functions <---------------------------------- //
+   verifyCadetCounters() {
+    const cadetCounterCol = this.afs.collection<any>('Cadets').snapshotChanges().take(1).subscribe(c => {
+      c.forEach(cadet => {
+        // console.log(cadet.payload.doc.data().Cadet);
+        const cadetName = cadet.payload.doc.data().Cadet;
+        this.afs.collection('CadetSales', refz => {
+          return refz.where('Seller', '==', cadetName).where('SaleComplete', '==', true);
+        }).valueChanges().take(1).subscribe(xd => {
+          this.dp_increment_RptCadetSales(cadetName, xd.length);
+        });
+      });
+    });
+  }
+
+    // Update Sales Per Cadet Counter
+    dp_increment_RptCadetSales(cadet, count) {
+      const cadetSalesRef = this.db.object('Rpt_CadetSalesByCadet/' + cadet.toString());
+      cadetSalesRef.snapshotChanges().take(1).subscribe(a => {
+          this.db.database.ref('Rpt_CadetSalesByCadet').child(cadet.toString()).transaction(dx => {
+            if (!dx) {
+              return dx;
+            }
+            console.log('Setting CadetSaleCounter: ' + cadet + ' to: ' + count);
+            dx.count = count;
+            return dx;
+          });
+        return a;
+      });
+    }
+
+
+    verifyTotalSalesCounter() {
+      const cadetSalesCol = this.afs.collection('CadetSales', refv => {
+        return refv.where('SaleComplete', '==', true);
+      });
+      cadetSalesCol.valueChanges().take(1).subscribe(b => {
+        // Set The counter
+        this.dp_incrementTotalSales(b.length);
+      });
+    }
+
+    dp_incrementTotalSales(count) {
+      const counterRef = this.db.database.ref('counters').child('totalSales');
+      counterRef.transaction(dv => {
+        if (!dv) {
+          return dv;
+        }
+        console.log('Setting total sales counter to ' + count);
+        dv.count = count;
+        return dv;
+      });
+    }
+
+
+    // Verify Campany Counters
+    verifyCompanyCounter(company) {
+      this.afs.collection('CadetSales', refx => {
+        return refx.where('SellerCompany', '==', company).where('SaleComplete', '==', true);
+      }).valueChanges().take(1).subscribe(v => {
+        // Set the count
+        this.dp_incrementCompanySales(company, v.length);
+      });
+    }
+
+
+    dp_incrementCompanySales(company, count) {
+      this.db.database.ref('counters').child('companySales').child(company.toString()).transaction(dt => {
+        if (!dt) {
+          return dt;
+        }
+        dt.count = count;
+        dt.AvgSoldPerCadet = parseFloat((count / dt.CadetCount).toFixed(2));
+        console.log('Setting CompanySalesCounter for ' + company + ' to ' + count);
+        return dt;
+      });
+    }
+
+    //---------------------------------> Recount Functions <---------------------------------- //
 
   setUser(user){
     this.currentUser = user;

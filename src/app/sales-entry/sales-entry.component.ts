@@ -93,13 +93,13 @@ ngOnDestroy(){
 
 
 
-    const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
-    for (let i = 0; i < companies.length; i ++) {
-      this.verifyCompanyCounter(companies[i]);
-    }
+    // const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
+    // for (let i = 0; i < companies.length; i ++) {
+    //   this.verifyCompanyCounter(companies[i]);
+    // }
 
-    this.verifyCadetCounters();
-    this.verifyTotalSalesCounter();
+    // this.verifyCadetCounters();
+    // this.verifyTotalSalesCounter();
 
   }
 
