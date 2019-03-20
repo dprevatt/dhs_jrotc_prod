@@ -11,7 +11,10 @@ import { FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/d
 })
 export class SalesStatisticsComponent implements OnInit {
 
-  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) { }
+  constructor(private afs: AngularFirestore, private db: AngularFireDatabase) {
+
+
+  }
 
 totalSales: number;
 salesGoal: number;
@@ -26,6 +29,22 @@ otherSales: Array<any>;
 
 
   ngOnInit() {
+
+
+      // Setting Total Sales Counter
+      const soldArray = [];
+      this.afs.collection('CadetSales').ref.get().then((data) => {
+        console.log(data.size);
+        data.forEach(sale => {
+           if (sale.data().SaleComplete === true) {
+            soldArray.push(sale);
+           }
+        });
+        this.setTotalSalesCounter(soldArray.length);
+      }).catch(function (error) {
+        alert('An error occurred getting sales count: ' + error);
+      });
+
     // this.avgPerCadetCollection = this.afs.collection<any>('Rpt_CadetSalesByCompany', ref => {
     //   return ref.where('isClass', '==', true)
     //             .orderBy('AvgSoldPerCadet', 'desc');
@@ -58,6 +77,7 @@ otherSales: Array<any>;
 
 /* ===================================================================== */
 
+
 getTotalSalesCount() {
   const totalSalesCounterRef = '/counters/totalSales/count';
   this.totalSalesCount = this.db.object<any>(totalSalesCounterRef).valueChanges();
@@ -82,6 +102,20 @@ dp_getCompanySales() {
     this.companySales = myCompList.reverse();
     this.otherSales = myOtherList.reverse();
   });
+}
+
+setTotalSalesCounter(cnt) {
+    jQuery('#counterProgressModal').modal('show');
+    // Reseting Counter
+    const counterRef = this.db.database.ref('counters').child('totalSales');
+    counterRef.transaction(dv => {
+      if (!dv) {
+        return dv;
+      }
+      console.log('Setting total sales counter to ' + cnt);
+      dv.count = cnt;
+      return dv;
+    });
 }
 
 

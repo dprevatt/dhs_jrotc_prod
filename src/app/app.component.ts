@@ -1,3 +1,4 @@
+import { Sale } from './models/Sale';
 import { MessagingService } from './messaging.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   title = 'app';
 
   cadetCollection: AngularFirestoreCollection<Cadets>;
+  cadetTicketsSoldCollection: AngularFirestoreCollection<Sale[]>;
   cadets: Observable<Cadets[]>;
   singleCadetSales: Observable<Cadets>;
   userEmail: string;
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   url: string;
   message;
   messaging;
+  cadetCount: number;
 
   // tslint:disable-next-line:max-line-length
   constructor(private afs: AngularFirestore, private firebaseAuth: AngularFireAuth, public route: ActivatedRoute, private router: Router, private msgService: MessagingService, private db: AngularFireDatabase) {
@@ -93,18 +96,33 @@ ngOnDestroy() {
 
 
 //<-- Recount Function //-->
-jQuery('#progressModal').modal('show');
-const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
+    jQuery('#progressModal').modal('show');
+    const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SGM', 'Other'];
     for (let i = 0; i < companies.length; i ++) {
       this.verifyCompanyCounter(companies[i]);
     }
 
+    // Set CadetCount
+    this.afs.collection('Cadets').valueChanges().first().subscribe(cc => {
+      console.log('CadetCount ' + cc.length);
+      this.cadetCount = cc.length;
+    });
+
     this.verifyCadetCounters();
-    this.verifyTotalSalesCounter();
-    jQuery('#progressModal').modal('hide');
+    //this.verifyTotalSalesCounter();
+
 
 
   } // end of OnInit
+
+
+  // setTotalSales() {
+  //   let d = this.afs.collection('CadetSales', ref => ref.where('SaleComplete', '==', true)).valueChanges().first().subscribe(x => {
+  //     console.log(x.length);
+  //     this.dp_incrementTotalSales(x.length);
+  //   });
+  // }
+
 
   ngAfterViewInit() {
 
@@ -112,14 +130,20 @@ const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SG
 
    //---------------------------------> Recount Functions <---------------------------------- //
    verifyCadetCounters() {
+     let z = 0;
     const cadetCounterCol = this.afs.collection<any>('Cadets').snapshotChanges().take(1).subscribe(c => {
       c.forEach(cadet => {
         // console.log(cadet.payload.doc.data().Cadet);
         const cadetName = cadet.payload.doc.data().Cadet;
         this.afs.collection('CadetSales', refz => {
           return refz.where('Seller', '==', cadetName).where('SaleComplete', '==', true);
-        }).valueChanges().take(1).subscribe(xd => {
+        }).valueChanges().first().subscribe(xd => {
+          z++;
           this.dp_increment_RptCadetSales(cadetName, xd.length);
+          if (z === this.cadetCount)
+          {
+            this.hideModal();
+          }
         });
       });
     });
@@ -128,7 +152,7 @@ const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SG
     // Update Sales Per Cadet Counter
     dp_increment_RptCadetSales(cadet, count) {
       const cadetSalesRef = this.db.object('Rpt_CadetSalesByCadet/' + cadet.toString());
-      cadetSalesRef.snapshotChanges().take(1).subscribe(a => {
+      cadetSalesRef.valueChanges().first().subscribe(a => {
           this.db.database.ref('Rpt_CadetSalesByCadet').child(cadet.toString()).transaction(dx => {
             if (!dx) {
               return dx;
@@ -141,6 +165,9 @@ const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SG
       });
     }
 
+    hideModal() {
+      jQuery('#progressModal').modal('hide');
+    }
 
     verifyTotalSalesCounter() {
       const cadetSalesCol = this.afs.collection('CadetSales', refv => {
@@ -148,6 +175,7 @@ const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SG
       });
       cadetSalesCol.valueChanges().take(1).subscribe(b => {
         // Set The counter
+        console.log('TotalCount: ' + b.length);
         this.dp_incrementTotalSales(b.length);
       });
     }
@@ -169,7 +197,7 @@ const companies = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Bn Staff', 'SG
     verifyCompanyCounter(company) {
       this.afs.collection('CadetSales', refx => {
         return refx.where('SellerCompany', '==', company).where('SaleComplete', '==', true);
-      }).valueChanges().take(1).subscribe(v => {
+      }).valueChanges().first().subscribe(v => {
         // Set the count
         this.dp_incrementCompanySales(company, v.length);
       });

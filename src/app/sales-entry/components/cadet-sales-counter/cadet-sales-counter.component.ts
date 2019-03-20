@@ -38,6 +38,7 @@ export class CadetSalesCounterComponent implements OnInit {
   ngOnInit() {
     this.totalSalesDoc = this.afs.doc<TotalCount>('Rpt_CadetSalesByStatus/Completed');
     const d = this.totalSalesDoc.valueChanges().subscribe(x => {
+      console.log('Hit!');
       this.totalSales = x.count;
     });
 
