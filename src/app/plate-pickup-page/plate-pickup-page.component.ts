@@ -16,6 +16,21 @@ export class PlatePickupPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.verifyTotalSalesPickeupCounter();
+
+      // Setting Total Picked Up Counter
+      const pickedUpArray = [];
+      this.afs.collection('CadetSales').ref.get().then((data) => {
+        console.log(data.size);
+        data.forEach(sale => {
+           if (sale.data().PlatePickedUp === true) {
+            pickedUpArray.push(sale);
+           }
+        });
+        this.setTotalPickedUpCounter(pickedUpArray.length);
+      }).catch(function (error) {
+        alert('An error occurred getting plate picked up count: ' + error);
+      });
+
   }
 
   ngOnDestroy() {
@@ -40,6 +55,20 @@ export class PlatePickupPageComponent implements OnInit, OnDestroy {
       }
       console.log('Setting PlatesPickedUp counter to ' + count);
       dv.count = count;
+      return dv;
+    });
+  }
+
+
+  setTotalPickedUpCounter(cnt) {
+    // Reseting Counter
+    const counterRef = this.db.database.ref('counters').child('PlatesPickedUp');
+    counterRef.transaction(dv => {
+      if (!dv) {
+        return dv;
+      }
+      console.log('Setting platesPickedUp  counter to ' + cnt);
+      dv.count = cnt;
       return dv;
     });
   }
